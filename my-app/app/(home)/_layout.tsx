@@ -26,6 +26,7 @@ export default function TabLayout() {
         name="login"
         options={{
           title: 'login',
+          
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
