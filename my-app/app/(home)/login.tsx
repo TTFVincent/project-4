@@ -12,8 +12,7 @@ import {
   Center,
   NativeBaseProvider,
 } from "native-base";
-import { useForm, Controller, Form } from "react-hook-form";
-// import { env } from "../../env";
+import { useForm, } from "react-hook-form";
 
 type FormData = {
   email: string;
@@ -26,11 +25,10 @@ type Value = {
 };
 const SubmitLogin = () => {
   const [value, setValue] = useState<Value>({email:"", password: ""});
-  const temp = useRef();
   const { handleSubmit } = useForm<FormData>();
   const onSubmit = async (data: FormData) => {
     console.log(JSON.stringify(data));
-    const response = await fetch("http://localhost:3100/login", {
+    const response = await fetch(`${process.env.BACK_SERVER_ADDRESS}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -77,7 +75,6 @@ const SubmitLogin = () => {
           <FormControl>
             <FormControl.Label>Email ID</FormControl.Label>
             <Input
-              ref={temp}
               onChange={(event)=>updateFormValue(event, "email")}
             />
           </FormControl>
@@ -118,7 +115,7 @@ const SubmitLogin = () => {
                 fontWeight: "medium",
                 fontSize: "sm",
               }}
-              href="#"
+              href=""
             >
               Sign Up
             </Link>
@@ -138,3 +135,4 @@ export default () => {
     </NativeBaseProvider>
   );
 };
+
