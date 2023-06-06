@@ -21,7 +21,6 @@ export class LoginController {
   create(@Body() data: any){
     console.log(data)
     for(let user of users){
-      console.log(user)
       
       if(user.password==data.password && user.email==data.email){
         console.log("success")
