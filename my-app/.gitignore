@@ -1,4 +1,4 @@
-google_map_key.json
+
 node_modules/
 .expo/
 dist/
@@ -16,3 +16,4 @@ web-build/
 
 # Temporary files created by Metro to check the health of the file watcher
 .metro-health-check*
+google_map_key

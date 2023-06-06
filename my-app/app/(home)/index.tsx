@@ -1,142 +1,146 @@
+import React, { useRef, useState } from "react";
 import { StyleSheet } from "react-native";
-import { Icon, VStack } from "native-base";
-import { Text, View } from "../../components/Themed";
+import { useRouter } from "expo-router";
 import {
-  Button,
-  Center,
-  HStack,
+  Box,
+  Text,
   Heading,
+  VStack,
+  FormControl,
   Input,
+  Button,
+  HStack,
+  Center,
   NativeBaseProvider,
-  Stack,
+  Link,
 } from "native-base";
-import React, { useRef, useState ,useEffect} from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faTrashCan, faCirclePlus } from "@fortawesome/free-solid-svg-icons";
-import { border } from "native-base/lib/typescript/theme/styled-system";
-import { useForm } from "react-hook-form";
+import { useForm, } from "react-hook-form";
 
-type Input = {
-  id: number;
-  text: string;
+type FormData = {
+  email: string;
+  password: string;
 };
-function CreateInputTab() {
-  const inputValue = useRef<Input[]>([]);
-  const [changed, updateChanged] = useState<boolean>(false)
 
-  const onSubmit = async (inputValue: Input[]) => {
-    console.log(`${process.env}`)
-    const response = await fetch(`http://localhost:3100/login`, {
+type Value = {
+  email: String;
+  password: String;
+};
+const SubmitLogin = () => {
+  const router = useRouter();
+  const [value, setValue] = useState<Value>({email:"", password: ""});
+  const { handleSubmit } = useForm<FormData>();
+  const onSubmit = async (data: FormData) => {
+    console.log(JSON.stringify(data));
+    const response = await fetch(`https://ttfvincent.online/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ inputValue }),
+      body: JSON.stringify(value),
     });
     const result = await response.json();
     console.log(result);
   };
 
-  const addInput = () => {
-    let id: number = inputValue.current[0]
-      ? inputValue.current[inputValue.current.length -1].id + 1
-      : 0;
-
-    inputValue.current = [...inputValue.current, { id, text: "" }];
-    updateChanged(!changed)
-    console.log(inputValue.current)
-    // setInputs([...inputs, newInput]);
-  };
-
-  const deleteInput = (id: number) => {
-    const updatedList = inputValue.current.filter((listItem)=>{
-      return listItem.id !== id
-    })
-    inputValue.current = updatedList
-    updateChanged(!changed)
-  };
-
-  const inputText = (event: any, id: number) => {
-    const value = event.target.value;
-    const newInput = { id: id, text: value };
-    const updatedList = inputValue.current.map((listItem)=>{
-      return listItem.id === id? newInput: listItem;
-    })
-    inputValue.current = updatedList
-
-  };
+  const updateFormValue = (event:any, param:string) => {
+    let originalInput = value
+    let newInput: string =  event.target.value
+    originalInput[param as keyof Value] = newInput
+    setValue(originalInput)
+  }
 
   return (
-    <>
-      <Stack pt="5" space={3} alignItems="center" style={styles.mainContainer}>
-        {inputValue.current.map((input: Input) => (
-          <HStack
-            key={String(input.id)}
-            width="80%"
-            pl="10%"
-            space={3}
-            alignItems="center"
-          >
+    <Center w="100%">
+      <Box safeArea p="2" py="8" w="90%" maxW="290">
+        <Heading
+          size="lg"
+          fontWeight="600"
+          color="coolGray.800"
+          _dark={{
+            color: "warmGray.50",
+          }}
+        >
+          Welcome
+        </Heading>
+        <Heading
+          mt="1"
+          _dark={{
+            color: "warmGray.200",
+          }}
+          color="coolGray.600"
+          fontWeight="medium"
+          size="xs"
+        >
+          Sign in to continue!
+        </Heading>
+
+        <VStack space={3} mt="5">
+          <FormControl>
+            <FormControl.Label>Email ID</FormControl.Label>
             <Input
-              flexWrap={"wrap"}
-              width="80%"
-              type="text"
-              placeholder="Description"
-              isFullWidth={true}
-              onChange={(event) => {
-                inputText(event, input.id);
-              }}
+              onChange={(event)=>updateFormValue(event, "email")}
             />
-            <Button
-              ml={0}
-              style={styles.deleteButton}
-              roundedRight="md"
-              onPress={() => deleteInput(input.id)}
+          </FormControl>
+          <FormControl>
+            <FormControl.Label>Password</FormControl.Label>
+            <Input
+              onChange={(event)=>updateFormValue(event, "password")}
+              type="password"
+            />
+            <Link
+              _text={{
+                fontSize: "xs",
+                fontWeight: "500",
+                color: "indigo.500",
+              }}
+              alignSelf="flex-end"
+              mt="1"
             >
-              <FontAwesomeIcon icon={faTrashCan} size={20} />
-            </Button>
+              Forget Password?
+            </Link>
+          </FormControl>
+          <Button onPress={handleSubmit(onSubmit)} mt="2" colorScheme="indigo">
+            Sign in
+          </Button>
+          <HStack mt="6" justifyContent="center">
+            <Text
+              fontSize="sm"
+              color="coolGray.600"
+              _dark={{
+                color: "warmGray.200",
+              }}
+            >
+              Do not have an account.{" "}
+            </Text>
+            <Text
+        onPress={() => {
+          router.push("/register");
+        }}
+      >
+        Settings
+      </Text>
           </HStack>
-        ))}
-      </Stack>
-      <HStack space={3} alignItems="center" style={styles.mainContainer2}>
-        <Button onPress={async()=> onSubmit(inputValue.current)} >Plan Trip</Button>
-
-        <Button style={styles.addInputButton} onPress={addInput}>
-          <FontAwesomeIcon icon={faCirclePlus} size={40} />
-        </Button>
-      </HStack>
-    </>
+        </VStack>
+      </Box>
+    </Center>
   );
-}
-
-export default function TabOneScreen() {
-  return (
-    <NativeBaseProvider>
-    <CreateInputTab />
-    </NativeBaseProvider>
-  );
-}
+};
 
 const styles = StyleSheet.create({
-  mainContainer2: {
-    height: "15%",
-  },
-  mainContainer: {
-    borderWidth: 2,
-    height: "85%",
-    overflowY: "scroll",
-  },
-  addInputButton: {
-    position: "absolute",
-    backgroundColor: "#fff",
-    bottom: 5,
-  },
-  deleteButton: {
-    backgroundColor: "#fff",
-  },
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+
+_text:{
+  color: "indigo.500",
+  fontWeight: "normal",
+  fontSize: 6,
+}
+})
+export default () => {
+  return (
+    <NativeBaseProvider>
+      <Center flex={1} px="3">
+        <SubmitLogin />
+      </Center>
+    </NativeBaseProvider>
+  );
+};
+
