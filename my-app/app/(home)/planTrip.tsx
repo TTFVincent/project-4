@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faTrashCan, faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import { usePromptStore } from "../../zustand/usePromptStore"
 import { colour_constainer_bg } from "../../components/css/colors";
+import { SERVER_ADDRESS } from "@env";
 
 type Input = {
   id: number;
@@ -28,7 +29,7 @@ function CreateInputTab() {
   const prompt = usePromptStore((state:any)=>state.savePrompt)
 
   const onSubmit = async (inputValue: Input[]) => {
-    const response = await fetch(`https://ttfvincent.online/login`, {
+    const response = await fetch(`${SERVER_ADDRESS}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

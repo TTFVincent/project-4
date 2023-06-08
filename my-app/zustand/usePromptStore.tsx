@@ -1,11 +1,11 @@
 import { create } from 'zustand'
 interface UsePromptStore {
-  promptList: {}
+  promptList: string
   savePrompt: (prompt: any) => void
 }
 
 export const usePromptStore = create<UsePromptStore>((set) => ({
-  promptList: {},
+  promptList: "",
   savePrompt: (prompt: any) => set(() => ({promptList: prompt})),
 }))
 
