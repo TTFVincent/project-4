@@ -14,24 +14,29 @@ import {
   NativeBaseProvider,
   Link,
 } from "native-base";
+import * as bcrypt from "bcryptjs";
 import { useForm, } from "react-hook-form";
+import { hashPassword } from "../../components/authentication/hash";
+import { SERVER_ADDRESS } from "@env";
 
-type FormData = {
-  email: string;
-  password: string;
-};
 
 type Value = {
-  email: String;
-  password: String;
+  email: string;
+  password: string;
 };
 const SubmitLogin = () => {
   const router = useRouter();
   const [value, setValue] = useState<Value>({email:"", password: ""});
-  const { handleSubmit } = useForm<FormData>();
-  const onSubmit = async (data: FormData) => {
-    console.log(JSON.stringify(data));
-    const response = await fetch(`https://ttfvincent.online/login`, {
+  const { handleSubmit } = useForm<Value>();
+
+  
+  const onSubmit = async () => {
+
+    value.password = await hashPassword(value.password)
+
+
+
+    const response = await fetch(`${SERVER_ADDRESS}/auth/sign-in`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
