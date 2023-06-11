@@ -5,6 +5,7 @@ import { Text, View } from "../../components/Themed";
 import { usePromptStore } from "../../zustand/usePromptStore"
 import { colour_constainer_bg } from "../../components/css/colors";
 import { useRegisterStore } from "../../zustand/useRegisterStore";
+import { useTokenStore } from "../../zustand/useTokenStore";
 
 
 
@@ -24,15 +25,17 @@ import { useRegisterStore } from "../../zustand/useRegisterStore";
 //         }
       
 export default function TabTwoScreen() {
-  console.log(Platform.OS);
+
   const prompt = usePromptStore((state:any)=>state.promptList);
   const showDate = useRegisterStore((state:any)=>state.showDate);
+  const token = useTokenStore((state:any)=>state.access_token);
 
   return (
     <View style={styles.container}>
     {/* <Map /> */}
       <Text style={styles.text}>{prompt}</Text>
       <Text style={styles.text}>{showDate.day}-{showDate.month}-{showDate.year}</Text>
+      <Text style={styles.text}>token: {token}</Text>
       
     </View>
   );

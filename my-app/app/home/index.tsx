@@ -18,6 +18,8 @@ import * as bcrypt from "bcryptjs";
 import { useForm, } from "react-hook-form";
 import { hashPassword } from "../../components/authentication/hash";
 import { SERVER_ADDRESS } from "@env";
+import { useTokenStore } from "../../zustand/useTokenStore";
+import axios from "axios"
 
 
 type Value = {
@@ -28,23 +30,18 @@ const SubmitLogin = () => {
   const router = useRouter();
   const [value, setValue] = useState<Value>({email:"", password: ""});
   const { handleSubmit } = useForm<Value>();
+  const saveToken = useTokenStore((state:any)=>state.saveToken)
 
   
   const onSubmit = async () => {
+    
+    console.log('login password: ',value.password)
+    
+    const result = await axios.post(`${SERVER_ADDRESS}/auth/sign-in`, value)
 
-    value.password = await hashPassword(value.password)
-
-
-
-    const response = await fetch(`${SERVER_ADDRESS}/auth/sign-in`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(value),
-    });
-    const result = await response.json();
-    console.log(result);
+    saveToken({access_token: result.data.access_token, user_id: result.data.user_id})
+    axios.defaults.headers.common['Authorization'] = `Bearer ${result.data.access_token}`
+    console.log(result.data.access_token);
   };
 
   const updateFormValue = (event:any, param:string) => {

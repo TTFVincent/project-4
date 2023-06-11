@@ -133,10 +133,8 @@ const Register = () => {
       let testUser = {
         username: formInfo.current.user_name,
         email: formInfo.current.email,
-        password: "",
+        password: formInfo.current.password,
       };
-
-      testUser.password = await hashPassword(formInfo.current.password);
 
       console.log(testUser);
       const response = await fetch(`${SERVER_ADDRESS}/auth/sign-up`, {
@@ -147,7 +145,9 @@ const Register = () => {
         body: JSON.stringify(testUser),
       });
       const result = await response.json();
-      console.log(result.message);
+
+      console.log(result);
+
     }
   };
 
