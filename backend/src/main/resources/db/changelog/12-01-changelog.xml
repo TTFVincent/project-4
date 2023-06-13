@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1686556919226-1" author="manho (generated)">
+        <createSequence incrementBy="50" sequenceName="location_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1686556919226-2" author="manho (generated)">
+        <createSequence incrementBy="50" sequenceName="trip_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1686556919226-3" author="manho (generated)">
+        <createSequence incrementBy="50" sequenceName="user_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1686556919226-4" author="manho (generated)">
+        <createTable tableName="location">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_location"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location" type="VARCHAR(255)"/>
+            <column name="obsolete" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1686556919226-5" author="manho (generated)">
+        <createTable tableName="trip">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_trip"/>
+            </column>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1686556919226-6" author="manho (generated)">
+        <createTable tableName="trip_locations">
+            <column name="locations_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_trip_locations"/>
+            </column>
+            <column name="trip_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_trip_locations"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1686556919226-7" author="manho (generated)">
+        <createTable tableName="user">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user"/>
+            </column>
+            <column name="role" type="VARCHAR(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password_hash" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="VARCHAR(255)"/>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1686556919226-8" author="manho (generated)">
+        <addUniqueConstraint columnNames="email" constraintName="uc_user_email" tableName="user"/>
+    </changeSet>
+    <changeSet id="1686556919226-9" author="manho (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="trip" constraintName="FK_TRIP_ON_USER"
+                                 referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet id="1686556919226-10" author="manho (generated)">
+        <addForeignKeyConstraint baseColumnNames="locations_id" baseTableName="trip_locations"
+                                 constraintName="fk_triloc_on_location" referencedColumnNames="id"
+                                 referencedTableName="location"/>
+    </changeSet>
+    <changeSet id="1686556919226-11" author="manho (generated)">
+        <addForeignKeyConstraint baseColumnNames="trip_id" baseTableName="trip_locations"
+                                 constraintName="fk_triloc_on_trip" referencedColumnNames="id"
+                                 referencedTableName="trip"/>
+    </changeSet>
+    <changeSet id="1686579116259-1" author="manho (generated)">
+        <dropNotNullConstraint columnDataType="datetime" columnName="created_at" tableName="user"/>
+    </changeSet>
+    <changeSet id="1686579116259-2" author="manho (generated)">
+        <dropNotNullConstraint columnDataType="datetime" columnName="updated_at" tableName="user"/>
+    </changeSet>
+    <changeSet id="1686580485845-1" author="manho (generated)">
+        <addDefaultValue columnDataType="timestamp" columnName="created_at" defaultValueComputed="now()"
+                         tableName="user"/>
+    </changeSet>
+    <changeSet id="1686580485845-2" author="manho (generated)">
+        <addDefaultValue columnDataType="timestamp" columnName="updated_at" defaultValueComputed="now()"
+                         tableName="user"/>
+    </changeSet>
+    <changeSet id="1686580485850-1" author="manho (generated)">
+        <addDefaultValue columnDataType="timestamp" columnName="created_at" defaultValueComputed="CURRENT_TIMESTAMP"
+                         tableName="user"/>
+    </changeSet>
+    <changeSet id="1686580485850-2" author="manho (generated)">
+        <addDefaultValue columnDataType="timestamp" columnName="updated_at" defaultValueComputed="CURRENT_TIMESTAMP"
+                         tableName="user"/>
+    </changeSet>
+    <changeSet id="1686580485851-1" author="manho (generated)">
+        <addDefaultValue columnDataType="timestamp" columnName="created_at" defaultValueComputed="CURRENT_TIMESTAMP"
+                         tableName="user"/>
+    </changeSet>
+    <changeSet id="1686580485851-2" author="manho (generated)">
+        <addDefaultValue columnDataType="timestamp" columnName="updated_at" defaultValueComputed="CURRENT_TIMESTAMP"
+                         tableName="user"/>
+    </changeSet>
+    <changeSet id="1686580485852-1" author="manho (generated)">
+        <addDefaultValue columnDataType="varchar(16)" columnName="role" defaultValueComputed="'user'"
+                         tableName="user"/>
+    </changeSet>
+</databaseChangeLog>

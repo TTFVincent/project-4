@@ -1,13 +1,15 @@
 package com.server.backend.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Generated;
 
 import java.sql.Timestamp;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "user")
+@Table(name = "\"user\"")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -29,10 +31,14 @@ public class User {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Generated
     private Timestamp created_at;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Generated
     private Timestamp updated_at;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
