@@ -4,6 +4,7 @@ import { Pressable, useColorScheme } from "react-native";
 // import { createStackNavigator } from '@react-navigation/stack';
 import Colors from "../../constants/Colors";
 import { useTokenStore } from "../../zustand/useTokenStore";
+import { color_header_backGround } from "../../components/css/colors";
 // import Index from "./index"
 // import { Keyboard } from "react-native";
 // import { KeyboardAvoidingView } from "react-native";
@@ -54,10 +55,11 @@ export default function TabLayout() {
         name="(sidenav)"
         options={{
           // href: isLoginToken ? "/planTrip" : "/",
+          headerStyle: { backgroundColor: color_header_backGround },
           headerShown: false,
           headerTitleAlign: "center",
-          title: "User Profile",
-          tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
+          title: "Plan Trip",
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
 
@@ -68,6 +70,7 @@ export default function TabLayout() {
           // href: isLoginToken ? "/googleMap" : "/",
 
           headerShown: true,
+          tabBarIcon: ({ color }) => <TabBarIcon name="map" color={color} />,
           tabBarIcon: ({ color }) => <TabBarIcon name="map" color={color} />,
         }}
       />

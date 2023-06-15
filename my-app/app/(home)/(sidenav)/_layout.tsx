@@ -6,8 +6,10 @@ import {
 } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import { Button, View } from "react-native";
-import PlanTripScreen from "./planTrip";
+import PlanTrip from "./planTrip";
 import { useTokenStore } from "../../../zustand/useTokenStore";
+import { useRouter } from "expo-router";
+import { color_header_backGround } from "../../../components/css/colors";
 
 function HomeScreen({ navigation }: any) {
   return (
@@ -20,12 +22,8 @@ function HomeScreen({ navigation }: any) {
   );
 }
 
-function NotificationsScreen({ navigation }: any) {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Button onPress={() => navigation.goBack()} title="Go back home" />
-    </View>
-  );
+function Logout() {
+  return <View></View>;
 }
 
 const Drawer = createDrawerNavigator();
@@ -55,12 +53,19 @@ export default function sideNav() {
   return (
     <Drawer.Navigator
       useLegacyImplementation
-      initialRouteName="Home"
+      initialRouteName="planTrip"
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
-      <Drawer.Screen name="Home" component={HomeScreen} />
-      <Drawer.Screen name="Notifications" component={NotificationsScreen} />
-      <Drawer.Screen name="planTrip" component={PlanTripScreen} />
+      <Drawer.Screen
+        name="planTrip"
+        component={PlanTrip}
+        options={{
+          headerStyle: { backgroundColor: color_header_backGround },
+          headerShown: true,
+          headerTitleAlign: "center",
+          title: "Plan Trip",
+        }}
+      />
     </Drawer.Navigator>
   );
 }

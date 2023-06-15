@@ -20,7 +20,6 @@ import {
   colour_constainer_bg,
   colour_input_text,
   colour_label_text,
-  show_border,
 } from "../../components/css/colors";
 import { color } from "native-base/lib/typescript/theme/styled-system";
 import { Select_date } from "../../components/register/select_date";
