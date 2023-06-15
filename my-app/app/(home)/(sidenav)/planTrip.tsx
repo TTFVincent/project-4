@@ -502,7 +502,7 @@ function CreateInputTab() {
   );
 }
 
-export default function TabOneScreen() {
+export default function PlanTripScreen() {
   return (
     <NativeBaseProvider>
       <CreateInputTab />

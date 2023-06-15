@@ -15,7 +15,7 @@ import {
   Flex,
   HStack,
 } from "native-base";
-import { StyleSheet } from "react-native";
+import { Keyboard, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import {
   colour_constainer_bg,
   colour_input_text,
@@ -43,7 +43,6 @@ type RegisterForm = {
   Confirm_password: string;
 };
 
-
 const Register = () => {
   const [state, setState] = useState<boolean>(true);
   const [date, setdate] = useState<SetDate>({
@@ -70,13 +69,11 @@ const Register = () => {
             Password
           </FormControl.Label>
           <Input
-          
             onChangeText={(value: any) => {
               formInfo.current.password = value;
             }}
             color={colour_input_text}
             type="password"
-            
           />
         </FormControl>
         <FormControl>
@@ -99,7 +96,7 @@ const Register = () => {
             Password
           </FormControl.Label>
           <Input
-          isRequired={true}
+            isRequired={true}
             onChangeText={(value: any) => {
               formInfo.current.password = value;
             }}
@@ -112,7 +109,7 @@ const Register = () => {
             <Text color={colour_label_text}>Confirm Password</Text>
           </FormControl.Label>
           <Input
-          isRequired={true}
+            isRequired={true}
             onChangeText={(value: any) => {
               formInfo.current.Confirm_password = value;
             }}
@@ -126,7 +123,6 @@ const Register = () => {
   }
 
   const onSubmit = async () => {
-    
     console.log(formInfo.current);
     let currentState: boolean;
     formInfo.current.password != formInfo.current.Confirm_password
@@ -155,71 +151,73 @@ const Register = () => {
   };
 
   return (
-    <Center w="100%">
-      <Box safeArea p="2" w="90%" maxW="290" py="8">
-        <Heading
-          size="lg"
-          color="coolGray.800"
-          _dark={{
-            color: "warmGray.50",
-          }}
-          fontWeight="semibold"
-        >
-          Welcome
-        </Heading>
-        <Heading
-          mt="1"
-          color="coolGray.600"
-          _dark={{
-            color: "warmGray.200",
-          }}
-          fontWeight="medium"
-          size="xs"
-        >
-          Sign up to continue!
-        </Heading>
-        <VStack space={3} mt="5">
-          <FormControl>
-            <FormControl.Label>
-              <Text color={colour_label_text}>User Name</Text>
-            </FormControl.Label>
-            <Input
-            isRequired={true}
-              onChangeText={(value: any) => {
-                formInfo.current.user_name = value;
-              }}
-              color={colour_input_text}
-            />
-          </FormControl>
-          <Select_date setdate={setdate} />
-          <FormControl>
-            <FormControl.Label>
-              <Text color={colour_label_text}>Email</Text>
-            </FormControl.Label>
-            <Input
-            isRequired={true}
-              onChangeText={(value: any) => {
-                formInfo.current.email = value;
-              }}
-              color={colour_input_text}
-            />
-          </FormControl>
-
-          <ShowPasswordCheck />
-
-          <Button
-            mt="2"
-            colorScheme="indigo"
-            onPress={() => {
-              onSubmit();
-              console.log();
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <Center w="100%">
+        <Box safeArea p="2" w="90%" maxW="290" py="8">
+          <Heading
+            size="lg"
+            color="coolGray.800"
+            _dark={{
+              color: "warmGray.50",
             }}
+            fontWeight="semibold"
           >
-            Sign up
-          </Button>
-        </VStack>
-      </Box>
-    </Center>
+            Welcome
+          </Heading>
+          <Heading
+            mt="1"
+            color="coolGray.600"
+            _dark={{
+              color: "warmGray.200",
+            }}
+            fontWeight="medium"
+            size="xs"
+          >
+            Sign up to continue!
+          </Heading>
+          <VStack space={3} mt="5">
+            <FormControl>
+              <FormControl.Label>
+                <Text color={colour_label_text}>User Name</Text>
+              </FormControl.Label>
+              <Input
+                isRequired={true}
+                onChangeText={(value: any) => {
+                  formInfo.current.user_name = value;
+                }}
+                color={colour_input_text}
+              />
+            </FormControl>
+            <Select_date setdate={setdate} />
+            <FormControl>
+              <FormControl.Label>
+                <Text color={colour_label_text}>Email</Text>
+              </FormControl.Label>
+              <Input
+                isRequired={true}
+                onChangeText={(value: any) => {
+                  formInfo.current.email = value;
+                }}
+                color={colour_input_text}
+              />
+            </FormControl>
+
+            <ShowPasswordCheck />
+
+            <Button
+              mt="2"
+              colorScheme="indigo"
+              onPress={() => {
+                onSubmit();
+                console.log();
+              }}
+            >
+              Sign up
+            </Button>
+          </VStack>
+        </Box>
+      </Center>
+    </TouchableWithoutFeedback>
   );
 };
 

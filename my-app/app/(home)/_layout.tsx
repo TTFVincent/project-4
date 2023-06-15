@@ -51,13 +51,13 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="planTrip"
+        name="(sidenav)"
         options={{
           // href: isLoginToken ? "/planTrip" : "/",
-          // headerShown: false,
+          headerShown: false,
           headerTitleAlign: "center",
-          title: "PlanTrip",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "User Profile",
+          tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
         }}
       />
 
@@ -68,7 +68,7 @@ export default function TabLayout() {
           // href: isLoginToken ? "/googleMap" : "/",
 
           headerShown: true,
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="map" color={color} />,
         }}
       />
     </Tabs>
