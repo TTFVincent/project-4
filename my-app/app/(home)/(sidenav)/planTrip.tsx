@@ -85,101 +85,6 @@ type Dropdown2State<T> = {
   }[];
 };
 
-function useDropdown2<T>(options: {
-  options: {
-    text: string;
-    value: T;
-  }[];
-  defaultValue: T;
-}) {
-  const isOpen = useValue(false);
-  const x = useValue(0);
-  const y = useValue(0);
-  const selected = useValue(options.defaultValue);
-  function renderOptions() {
-    return (
-      <>
-        {isOpen.value ? (
-          <ScrollView
-            style={{
-              maxHeight: 200,
-              position: "absolute",
-              top: y.value,
-              left: x.value,
-              backgroundColor: "white",
-              width: 150,
-              padding: 16,
-              paddingTop: 8,
-              paddingBottom: 8,
-              borderRadius: 16,
-            }}
-          >
-            {options.options.map((option) => (
-              <TouchableOpacity
-                key={option.text}
-                onPress={() => {
-                  isOpen.value = false;
-                  selected.value = option.value;
-                }}
-              >
-                <Text> {option.text}</Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        ) : null}
-      </>
-    );
-  }
-  return { isOpen, x, y, renderOptions, ...options, selected };
-}
-
-function Dropdown2<T>(props: { state: Dropdown2State<T> }) {
-  const { state } = props;
-  const { isOpen, x, y, options, selected } = state;
-  const selectedOption = options.find(
-    (option) => option.value === selected.value
-  );
-  return (
-    <>
-      <TouchableWithoutFeedback
-        onPress={(e) => {
-          isOpen.value = !isOpen.value;
-          //   x.value = e.nativeEvent.pageX - e.nativeEvent.locationX;
-          //   y.value = e.nativeEvent.pageY - e.nativeEvent.locationY;
-          console.log({
-            page: [e.nativeEvent.pageX, e.nativeEvent.pageY],
-            location: [e.nativeEvent.locationX, e.nativeEvent.locationY],
-            source: e.nativeEvent.target,
-          });
-        }}
-      >
-        <NativeView
-          ref={(e) => {
-            e?.measure((x, y, w, h, pageX, pageY) => {
-              if (pageX) {
-                state.x.value = pageX;
-              }
-              if (pageY) {
-                state.y.value = pageY + h;
-              }
-            });
-          }}
-          style={{
-            backgroundColor: "white",
-            width: 150,
-            padding: 16,
-            paddingTop: 8,
-            paddingBottom: 8,
-            borderRadius: 16,
-          }}
-        >
-          <Text>{selectedOption ? selectedOption.text : "Select One"}</Text>
-        </NativeView>
-      </TouchableWithoutFeedback>
-    </>
-  );
-}
-
 function CreateInputTab() {
   const inputValue = useRef<Input[]>([]);
   const [changed, updateChanged] = useState<boolean>(false);
@@ -242,16 +147,6 @@ function CreateInputTab() {
     });
   }
 
-  const data = [
-    { key: "1", value: "Mobiles", disabled: true },
-    { key: "2", value: "Appliances" },
-    { key: "3", value: "Cameras" },
-    { key: "4", value: "Computers", disabled: true },
-    { key: "5", value: "Vegetables" },
-    { key: "6", value: "Diary Products" },
-    { key: "7", value: "Drinks" },
-  ];
-
   const budget = [
     { label: "100 ~ 500", value: "500" },
     { label: "500 ~ 1000", value: "1000" },
@@ -281,17 +176,6 @@ function CreateInputTab() {
     <TouchableWithoutFeedback onPress={() => touchScreen()}>
       <SafeAreaView style={styles.SafeAreaView}>
         <View style={styles.view_bg}>
-          <Box style={styles.header}>
-            <TouchableOpacity
-              onPress={() => {
-                router.push("/profile");
-              }}
-            >
-              <Box style={styles.profileIcon}>
-                <FontAwesomeIcon icon={faUser} size={30} />
-              </Box>
-            </TouchableOpacity>
-          </Box>
           <Box height={"40%"} borderBottomColor={"#000"} borderWidth={2}>
             <Box
               px={"5%"}
@@ -307,6 +191,7 @@ function CreateInputTab() {
                       ? "Budget: " + topOptionValues.budget
                       : "Select Budget"
                   }
+                  placeholderStyle={styles.dropdown_placeHolder}
                   data={budget}
                   onChange={(item) => {
                     setTopOption(item.value, "budget");
@@ -324,6 +209,7 @@ function CreateInputTab() {
                       ? "Budget: " + topOptionValues.budget
                       : "Select Budget"
                   }
+                  placeholderStyle={styles.dropdown_placeHolder}
                   data={budget}
                   onChange={(item) => {
                     setTopOption(item.value, "budget");
@@ -345,6 +231,7 @@ function CreateInputTab() {
             >
               <Box width={"47.5%"}>
                 <Dropdown
+                  placeholderStyle={styles.dropdown_placeHolder}
                   placeholder={
                     topOptionValues.groupSize
                       ? topOptionValues.groupSize
@@ -362,6 +249,7 @@ function CreateInputTab() {
               </Box>
               <Box width={"47.5%"}>
                 <Dropdown
+                  placeholderStyle={styles.dropdown_placeHolder}
                   placeholder={
                     topOptionValues.groupSize
                       ? topOptionValues.groupSize
@@ -379,97 +267,81 @@ function CreateInputTab() {
               </Box>
             </Box>
           </Box>
-
           <Stack
             pt="5"
             space={3}
             alignItems="center"
             style={styles.mainContainer}
           >
-            {inputValue.current.map((input: Input) => (
-              <Box
-                key={String(input.id)}
-                width={"90%"}
-                padding={"2%"}
-                bg={color_box_BG}
-              >
-                <Box>
-                  <Button
-                    style={styles.deleteButton}
-                    roundedRight="md"
-                    onPress={() => deleteInput(input.id)}
-                  >
-                    <FontAwesomeIcon icon={faTrashCan} size={20} />
-                  </Button>
-                </Box>
+            <ScrollView>
+              {inputValue.current.map((input: Input) => (
+                <Box
+                  key={String(input.id)}
+                  width={"90%"}
+                  padding={"2%"}
+                  bg={color_box_BG}
+                >
+                  <Box>
+                    <Button
+                      style={styles.deleteButton}
+                      roundedRight="md"
+                      onPress={() => deleteInput(input.id)}
+                    >
+                      <FontAwesomeIcon icon={faTrashCan} size={20} />
+                    </Button>
+                  </Box>
 
-                <HStack width="80%" pl="5%" space={1} alignItems="center">
-                  <Box width={"50%"}>
+                  <HStack width="80%" pl="5%" space={1} alignItems="center">
+                    <Box width={"50%"}>
+                      <FormControl>
+                        <Input
+                          width="50%"
+                          type="text"
+                          placeholder="destination"
+                          isFullWidth={true}
+                          onChangeText={(event) => {
+                            inputText(event, input.id);
+                          }}
+                        />
+                      </FormControl>
+                    </Box>
+                  </HStack>
+
+                  <HStack width="80%" pl="5%" space={1} alignItems="center">
                     <FormControl>
-                      <Input
-                        width="50%"
-                        type="text"
-                        placeholder="destination"
-                        isFullWidth={true}
-                        onChangeText={(event) => {
-                          inputText(event, input.id);
+                      <Select
+                        width={"60%"}
+                        onValueChange={(itemValue) => {}}
+                        _selectedItem={{
+                          bg: "teal.600",
+                          endIcon: <CheckIcon size="2" />,
                         }}
+                        placeholder="travelStyle"
+                      >
+                        <Select.Item
+                          label="Road Tripping"
+                          value="Road Tripping"
+                        />
+                        <Select.Item label="Eco-Tourism" value="Eco-Tourism" />
+                        <Select.Item label="Cultural" value="Cultural" />
+                        <Select.Item label="Luxury" value="Luxury" />
+                        <Select.Item label="Adventure" value="Adventure" />
+                      </Select>
+                    </FormControl>
+
+                    <FormControl>
+                      <SelectList
+                        setSelected={(val: any) => setSelected(val)}
+                        data={budget}
+                        save="value"
+                        search={false}
+                        placeholder="Budget"
                       />
                     </FormControl>
-                  </Box>
-
-                  <Box width={"60%"}>
-                    <MultipleSelectList
-                      setSelected={(val: any) => setSelected(val)}
-                      data={data}
-                      save="value"
-                      onSelect={() => alert(selected)}
-                      label="Categories"
-                    />
-                  </Box>
-                </HStack>
-
-                <HStack width="80%" pl="5%" space={1} alignItems="center">
-                  <FormControl>
-                    <Select
-                      width={"60%"}
-                      onValueChange={(itemValue) => {}}
-                      _selectedItem={{
-                        bg: "teal.600",
-                        endIcon: <CheckIcon size="2" />,
-                      }}
-                      placeholder="travelStyle"
-                    >
-                      <Select.Item
-                        label="Road Tripping"
-                        value="Road Tripping"
-                      />
-                      <Select.Item label="Eco-Tourism" value="Eco-Tourism" />
-                      <Select.Item label="Cultural" value="Cultural" />
-                      <Select.Item label="Luxury" value="Luxury" />
-                      <Select.Item label="Adventure" value="Adventure" />
-                    </Select>
-                  </FormControl>
-
-                  <FormControl>
-                    <SelectList
-                      setSelected={(val: any) => setSelected(val)}
-                      data={budget}
-                      save="value"
-                      search={false}
-                      placeholder="Budget"
-                    />
-                  </FormControl>
-                </HStack>
-
-                <SelectList
-                  setSelected={(val: any) => setSelected(val)}
-                  data={data}
-                  save="value"
-                  search={false}
-                />
-              </Box>
-            ))}
+                  </HStack>
+                </Box>
+              ))}
+            </ScrollView>
           </Stack>
 
           <HStack
@@ -502,7 +374,7 @@ function CreateInputTab() {
   );
 }
 
-export default function TabOneScreen() {
+export default function PlanTrip() {
   return (
     <NativeBaseProvider>
       <CreateInputTab />
@@ -512,24 +384,6 @@ export default function TabOneScreen() {
 
 const styles = StyleSheet.create({
   SafeAreaView: { backgroundColor: color_header_backGround },
-  profileIcon: {
-    borderColor: "#000",
-    borderWidth: 2,
-    width: 40,
-    height: 40,
-    borderRadius: 100,
-    margin: 15,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  header: {
-    width: "100%",
-    height: 50,
-    backgroundColor: color_header_backGround,
-    justifyContent: "center",
-    display: "flex",
-    alignItems: "flex-end",
-  },
   view_bg: {
     backgroundColor: colour_constainer_bg,
   },
@@ -568,5 +422,8 @@ const styles = StyleSheet.create({
     shadowRadius: 1.41,
 
     elevation: 2,
+  },
+  dropdown_placeHolder: {
+    textAlign: "center",
   },
 });

@@ -20,7 +20,6 @@ import {
   colour_constainer_bg,
   colour_input_text,
   colour_label_text,
-  show_border,
 } from "../../components/css/colors";
 import { color } from "native-base/lib/typescript/theme/styled-system";
 import { Select_date } from "../../components/register/select_date";
@@ -42,7 +41,6 @@ type RegisterForm = {
   password: string;
   Confirm_password: string;
 };
-
 
 const Register = () => {
   const [state, setState] = useState<boolean>(true);
@@ -70,13 +68,11 @@ const Register = () => {
             Password
           </FormControl.Label>
           <Input
-          
             onChangeText={(value: any) => {
               formInfo.current.password = value;
             }}
             color={colour_input_text}
             type="password"
-            
           />
         </FormControl>
         <FormControl>
@@ -99,7 +95,7 @@ const Register = () => {
             Password
           </FormControl.Label>
           <Input
-          isRequired={true}
+            isRequired={true}
             onChangeText={(value: any) => {
               formInfo.current.password = value;
             }}
@@ -112,7 +108,7 @@ const Register = () => {
             <Text color={colour_label_text}>Confirm Password</Text>
           </FormControl.Label>
           <Input
-          isRequired={true}
+            isRequired={true}
             onChangeText={(value: any) => {
               formInfo.current.Confirm_password = value;
             }}
@@ -126,7 +122,6 @@ const Register = () => {
   }
 
   const onSubmit = async () => {
-    
     console.log(formInfo.current);
     let currentState: boolean;
     formInfo.current.password != formInfo.current.Confirm_password
@@ -184,7 +179,7 @@ const Register = () => {
               <Text color={colour_label_text}>User Name</Text>
             </FormControl.Label>
             <Input
-            isRequired={true}
+              isRequired={true}
               onChangeText={(value: any) => {
                 formInfo.current.user_name = value;
               }}
@@ -197,7 +192,7 @@ const Register = () => {
               <Text color={colour_label_text}>Email</Text>
             </FormControl.Label>
             <Input
-            isRequired={true}
+              isRequired={true}
               onChangeText={(value: any) => {
                 formInfo.current.email = value;
               }}
