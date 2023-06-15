@@ -1,5 +1,4 @@
-import React, { useRef, useState } from "react";
-import { StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import {
   Box,
@@ -15,41 +14,55 @@ import {
   Link,
 } from "native-base";
 import * as bcrypt from "bcryptjs";
-import { useForm, } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { hashPassword } from "../../components/authentication/hash";
 import { SERVER_ADDRESS } from "@env";
 import { useTokenStore } from "../../zustand/useTokenStore";
-import axios from "axios"
-
+import axios from "axios";
+import {
+  colour_constainer_bg,
+  colour_input_text,
+  colour_label_text,
+} from "../../components/css/colors";
 
 type Value = {
   email: string;
   password: string;
 };
-const SubmitLogin = () => {
+
+const Login = () => {
   const router = useRouter();
-  const [value, setValue] = useState<Value>({email:"", password: ""});
+  const saveToken = useTokenStore((state: any) => state.saveToken);
+  const access_token = useTokenStore((state: any) => state.access_token);
+  const [value, setValue] = useState<Value>({ email: "", password: "" });
   const { handleSubmit } = useForm<Value>();
-  const saveToken = useTokenStore((state:any)=>state.saveToken)
 
-  
+  useEffect(() => {
+    const redirectPath = access_token ? "/planTrip" : "/";
+    setTimeout( () => !!router && router.push(redirectPath), 250)
+  }, [access_token]);
+
   const onSubmit = async () => {
-    
-    console.log('login password: ',value.password)
-    
-    const result = await axios.post(`${SERVER_ADDRESS}/auth/sign-in`, value)
+    console.log("login password: ", value.password);
 
-    saveToken({access_token: result.data.access_token, user_id: result.data.user_id})
-    axios.defaults.headers.common['Authorization'] = `Bearer ${result.data.access_token}`
+    const result = await axios.post(`${SERVER_ADDRESS}/auth/sign-in`, value);
+
+    saveToken({
+      access_token: result.data.access_token,
+      user_id: result.data.user_id,
+    });
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${result.data.access_token}`;
     console.log(result.data.access_token);
   };
 
-  const updateFormValue = (event:any, param:string) => {
-    let originalInput = value
-    let newInput: string =  event.target.value
-    originalInput[param as keyof Value] = newInput
-    setValue(originalInput)
-  }
+  const updateFormValue = (event: any, param: string) => {
+    let originalInput = value;
+    let newInput: string = event;
+    originalInput[param as keyof Value] = newInput;
+    setValue(originalInput);
+  };
 
   return (
     <Center w="100%">
@@ -80,13 +93,15 @@ const SubmitLogin = () => {
           <FormControl>
             <FormControl.Label>Email ID</FormControl.Label>
             <Input
-              onChange={(event)=>updateFormValue(event, "email")}
+              color={colour_input_text}
+              onChangeText={(event) => updateFormValue(event, "email")}
             />
           </FormControl>
           <FormControl>
             <FormControl.Label>Password</FormControl.Label>
             <Input
-              onChange={(event)=>updateFormValue(event, "password")}
+              color={colour_input_text}
+              onChangeText={(event) => updateFormValue(event, "password")}
               type="password"
             />
             <Link
@@ -115,12 +130,13 @@ const SubmitLogin = () => {
               Do not have an account.{" "}
             </Text>
             <Text
-        onPress={() => {
-          router.push("/register");
-        }}
-      >
-        Settings
-      </Text>
+              onPress={() => {
+                router.push("/register");
+              }}
+              color={colour_label_text}
+            >
+              Sign Up
+            </Text>
           </HStack>
         </VStack>
       </Box>
@@ -128,21 +144,12 @@ const SubmitLogin = () => {
   );
 };
 
-const styles = StyleSheet.create({
-
-_text:{
-  color: "indigo.500",
-  fontWeight: "normal",
-  fontSize: 6,
-}
-})
 export default () => {
   return (
     <NativeBaseProvider>
-      <Center flex={1} px="3">
-        <SubmitLogin />
+      <Center bg={colour_constainer_bg} flex={1} px="3">
+        <Login />
       </Center>
     </NativeBaseProvider>
   );
 };
-

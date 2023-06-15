@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 interface UseTokenStore {
-    access_token: string
+    access_token: string|null
     user_id: number|null
     logged_in: boolean
     saveToken: (value: any) => void

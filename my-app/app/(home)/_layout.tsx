@@ -1,8 +1,15 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs } from "expo-router";
 import { Pressable, useColorScheme } from "react-native";
-
+// import { createStackNavigator } from '@react-navigation/stack';
 import Colors from "../../constants/Colors";
+import { useTokenStore } from "../../zustand/useTokenStore";
+// import Index from "./index"
+// import { Keyboard } from "react-native";
+// import { KeyboardAvoidingView } from "react-native";
+// import { NativeBaseProvider, View } from "native-base";
+// import { TouchableWithoutFeedback } from "react-native";
+// import { SafeAreaView } from "react-native-safe-area-context";
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -16,6 +23,7 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const isLoginToken = useTokenStore((state: any) => state.access_token);
 
   return (
     <Tabs
@@ -24,31 +32,19 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-  name="index"
-  options={{
-   headerShown: false,
-    // tabBarStyle: {display: "none"},
-    href: null,
-    tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-    headerRight: () => (
-      <Link href="/modal" asChild>
-        <Pressable>
-          {({ pressed }) => (
-            <FontAwesome
-              name="info-circle"
-              size={25}
-              color={Colors[colorScheme ?? "light"].text}
-              style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-            />
-          )}
-        </Pressable>
-      </Link>
-    ),
-  }}
-/>
+        name="index"
+        options={{
+          headerShown: false,
+          // tabBarStyle: {display: "none"},
+          // href: isLoginToken ? "/planTrip" : "/",
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        }}
+      />
       <Tabs.Screen
         name="register"
         options={{
+          tabBarStyle: { display: "none" },
+
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
@@ -57,7 +53,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="planTrip"
         options={{
-          headerShown: false,
+          // href: isLoginToken ? "/planTrip" : "/",
+          // headerShown: false,
           headerTitleAlign: "center",
           title: "PlanTrip",
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
@@ -65,10 +62,12 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="two"
+        name="googleMap"
         options={{
-          title: "Tab Two",
-          headerShown: false,
+          title: "google map",
+          // href: isLoginToken ? "/googleMap" : "/",
+
+          headerShown: true,
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />

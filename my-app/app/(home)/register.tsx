@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Heading,
@@ -29,7 +29,7 @@ import { useRef } from "react";
 import { IInputComponentType } from "native-base/lib/typescript/components/primitives/Input/types";
 import { SERVER_ADDRESS } from "@env";
 import { hashPassword } from "../../components/authentication/hash";
-let status: boolean;
+import { useRouter } from "expo-router";
 export type SetDate = {
   day: string;
   month: string;
@@ -44,18 +44,17 @@ type RegisterForm = {
 };
 
 
-
-
 const Register = () => {
-  const [date, setdate] = React.useState<SetDate>({
+  const [state, setState] = useState<boolean>(true);
+  const [date, setdate] = useState<SetDate>({
     day: "",
     month: "",
     year: "",
   });
-  
+
   const saveDate = useRegisterStore((state: any) => state.saveDate);
   saveDate(date);
-  
+
   const formInfo = useRef<RegisterForm>({
     user_name: "",
     email: "",
@@ -63,48 +62,46 @@ const Register = () => {
     Confirm_password: "",
   });
 
-  function PasswordCheck() {
-    if (formInfo.current.password != formInfo.current.Confirm_password) {
-      status = false;
-      return (
-        <>
-          <FormControl>
-            <FormControl.Label _text={{ color: colour_label_text }}>
-              Password
-            </FormControl.Label>
-            <Input
-              onChange={(event: any) => {
-                formInfo.current.password = event.target.value;
-              }}
-              color={colour_input_text}
-              type="password"
-            />
-          </FormControl>
-          <FormControl>
-            <FormControl.Label>
-              <Text color={colour_label_text}>Confirm Password</Text>
-            </FormControl.Label>
-            <Input
-              onChange={(event: any) => {
-                formInfo.current.Confirm_password = event.target.value;
-              }}
-              color={colour_input_text}
-              type="password"
-            />
-            <Text>password is not match</Text>
-          </FormControl>
-        </>
-      );
-    }
-    return (
+  function ShowPasswordCheck() {
+    return state ? (
       <>
         <FormControl>
           <FormControl.Label _text={{ color: colour_label_text }}>
             Password
           </FormControl.Label>
           <Input
-            onChange={(event: any) => {
-              formInfo.current.password = event.target.value;
+          
+            onChangeText={(value: any) => {
+              formInfo.current.password = value;
+            }}
+            color={colour_input_text}
+            type="password"
+            
+          />
+        </FormControl>
+        <FormControl>
+          <FormControl.Label>
+            <Text color={colour_label_text}>Confirm Password</Text>
+          </FormControl.Label>
+          <Input
+            onChangeText={(value: any) => {
+              formInfo.current.Confirm_password = value;
+            }}
+            color={colour_input_text}
+            type="password"
+          />
+        </FormControl>
+      </>
+    ) : (
+      <>
+        <FormControl>
+          <FormControl.Label _text={{ color: colour_label_text }}>
+            Password
+          </FormControl.Label>
+          <Input
+          isRequired={true}
+            onChangeText={(value: any) => {
+              formInfo.current.password = value;
             }}
             color={colour_input_text}
             type="password"
@@ -115,22 +112,29 @@ const Register = () => {
             <Text color={colour_label_text}>Confirm Password</Text>
           </FormControl.Label>
           <Input
-            onChange={(event: any) => {
-              formInfo.current.Confirm_password = event.target.value;
+          isRequired={true}
+            onChangeText={(value: any) => {
+              formInfo.current.Confirm_password = value;
             }}
             color={colour_input_text}
             type="password"
           />
+          <Text>password is not match</Text>
         </FormControl>
       </>
     );
   }
 
   const onSubmit = async () => {
-
-
-    if ((status = true)) {
+    
+    console.log(formInfo.current);
+    let currentState: boolean;
+    formInfo.current.password != formInfo.current.Confirm_password
+      ? (setState(false), (currentState = false))
+      : (setState(true), (currentState = true));
+    if (currentState == true) {
       let testUser = {
+        birthDay: date,
         username: formInfo.current.user_name,
         email: formInfo.current.email,
         password: formInfo.current.password,
@@ -147,7 +151,6 @@ const Register = () => {
       const result = await response.json();
 
       console.log(result);
-
     }
   };
 
@@ -181,10 +184,11 @@ const Register = () => {
               <Text color={colour_label_text}>User Name</Text>
             </FormControl.Label>
             <Input
-              onChange={(event: any) => {
-                formInfo.current.user_name = event.target.value;
+            isRequired={true}
+              onChangeText={(value: any) => {
+                formInfo.current.user_name = value;
               }}
-              color={colour_label_text}
+              color={colour_input_text}
             />
           </FormControl>
           <Select_date setdate={setdate} />
@@ -193,14 +197,15 @@ const Register = () => {
               <Text color={colour_label_text}>Email</Text>
             </FormControl.Label>
             <Input
-              onChange={(event: any) => {
-                formInfo.current.email = event.target.value;
+            isRequired={true}
+              onChangeText={(value: any) => {
+                formInfo.current.email = value;
               }}
-              color={colour_label_text}
+              color={colour_input_text}
             />
           </FormControl>
 
-          <PasswordCheck />
+          <ShowPasswordCheck />
 
           <Button
             mt="2"
