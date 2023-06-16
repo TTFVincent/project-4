@@ -10,6 +10,7 @@ import MapViewDirections from "react-native-maps-directions";
 //@ts-ignore
 import { GOOGLE_MAP_KEY } from "@env";
 import { useState } from "react";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 const image = require("../../assets/images/favicon.png");
 
 type Coordinates = {
@@ -22,62 +23,73 @@ export default function TabTwoScreen() {
   const showDate = useRegisterStore((state: any) => state.showDate);
   const token = useTokenStore((state: any) => state.access_token);
 
-  const [coordinateState, setCoordinateState] = useState<Coordinates | null>([
-    {
-      latitude: 22.326299626506476,
-      longitude: 114.16930105529963,
-    },
-    {
-      latitude: 22.326259626506476,
-      longitude: 114.16530105529963,
-    },
-    {
-      latitude: 22.326253626506476,
-      longitude: 114.16340105529963,
-    },
-  ]);
-
   return (
     <View style={styles.container}>
-      <MapView
-        style={styles.mapContainer}
-        provider={PROVIDER_GOOGLE}
-        initialRegion={{
-          latitude: 22.343813260980898,
-          longitude: 114.1887436490869,
-          latitudeDelta: 0.15,
-          longitudeDelta: 0.15,
-        }}
-      >
-        {coordinateState?.map((value, i) => {
-          return (
-            <Marker
-              onPress={() => {
-                console.log("press");
-              }}
-              key={i}
-              image={image}
-              coordinate={value}
-            />
-          );
-        })}
-        {coordinateState?.map((value, i) => {
-          return (
-            <MapViewDirections
-              origin={coordinateState[Number(i)]}
-              destination={coordinateState[Number(i) + 1]}
-              apikey={GOOGLE_MAP_KEY}
-              strokeWidth={5}
-              strokeColor="#1967d2"
-            />
-          );
-        })}
-      </MapView>
-
+      <Map />
       <Text style={styles.text}>{prompt}</Text>
       <Text style={styles.text}>{GOOGLE_MAP_KEY}</Text>
       <Text style={styles.text}>token: {token}</Text>
     </View>
+  );
+}
+
+function Map() {
+  const [coordinateState, setCoordinateState] = useState<Coordinates | null>([
+    {
+      latitude: 22.2758,
+      longitude: 114.1455,
+    },
+    {
+      latitude: 22.291,
+      longitude: 114.1686,
+    },
+    {
+      latitude: 22.3067,
+      longitude: 114.1725,
+    },
+    {
+      latitude: 22.2809,
+      longitude: 114.1561,
+    },
+  ]);
+
+  return (
+    <MapView
+      style={styles.mapContainer}
+      provider={PROVIDER_GOOGLE}
+      initialRegion={{
+        latitude: 22.343813260980898,
+        longitude: 114.1887436490869,
+        latitudeDelta: 0.15,
+        longitudeDelta: 0.15,
+      }}
+    >
+      {coordinateState?.map((value, i) => {
+        return (
+          <Marker
+            key={i}
+            onPress={() => {
+              console.log("press");
+            }}
+            image={image}
+            coordinate={value}
+          />
+        );
+      })}
+      {coordinateState?.map((value, i) => {
+        return (
+          <MapViewDirections
+            key={i}
+            origin={coordinateState[Number(i)]}
+            mode={"DRIVING"}
+            destination={coordinateState[Number(i) + 1]}
+            apikey={GOOGLE_MAP_KEY}
+            strokeWidth={5}
+            strokeColor={i % 2 == 0 ? "#1967d2" : "#a0e630"}
+          />
+        );
+      })}
+    </MapView>
   );
 }
 
