@@ -6,6 +6,12 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post()
+  create(@Body() data: any){
+    console.log(data)
+      console.log("fail")
+    
+    return {message: 'Data received!'};
+  }
 
   @Get()
   getHello(): string {

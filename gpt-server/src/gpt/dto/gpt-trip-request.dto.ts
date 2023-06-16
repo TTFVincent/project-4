@@ -1,11 +1,11 @@
 export class GPTTripRequestDto {
-  groupSize: string;
+  group_size: string;
   destination: string;
   budget: string;
-  travelStyle: string;
-  interestsNew: string;
+  travel_style: string;
   activityType: string;
   cuisineType: string;
-  from_time: string;
-  to_time: string;
+  StartTime: string;
+  EndTime: string;
+  interestsNew: string;
 }

@@ -18,22 +18,11 @@ export class LoginController {
   constructor(private readonly loginService: LoginService) {}
 
   @Post()
-  create(@Body() data: any){
+  async create(@Body() data: any){
     console.log(data)
-    for(let user of users){
-      
-      if(user.password==data.password && user.email==data.email){
-        console.log("success")
-        const payload = {id: user.id}
-        const token = jwtEncode(payload,process.env.JWT_SECRET)
-        console.log(token)
+  };
+    
 
-        return {token: token}
-      }
-      console.log("fail")
-    }
-    return {message: 'Data received!'};
-  }
 
   @Get()
   findAll() {
