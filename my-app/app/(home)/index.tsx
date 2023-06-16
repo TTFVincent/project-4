@@ -24,6 +24,7 @@ import {
   colour_input_text,
   colour_label_text,
 } from "../../components/css/colors";
+import { Keyboard, TouchableWithoutFeedback } from "react-native";
 
 type Value = {
   email: string;
@@ -39,7 +40,7 @@ const Login = () => {
 
   useEffect(() => {
     const redirectPath = access_token ? "/planTrip" : "/";
-    setTimeout( () => !!router && router.push(redirectPath), 250)
+    setTimeout(() => !!router && router.push(redirectPath), 250);
   }, [access_token]);
 
   const onSubmit = async () => {
@@ -65,82 +66,88 @@ const Login = () => {
   };
 
   return (
-    <Center w="100%">
-      <Box safeArea p="2" py="8" w="90%" maxW="290">
-        <Heading
-          size="lg"
-          fontWeight="600"
-          color="coolGray.800"
-          _dark={{
-            color: "warmGray.50",
-          }}
-        >
-          Welcome
-        </Heading>
-        <Heading
-          mt="1"
-          _dark={{
-            color: "warmGray.200",
-          }}
-          color="coolGray.600"
-          fontWeight="medium"
-          size="xs"
-        >
-          Sign in to continue!
-        </Heading>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <Center w="100%">
+        <Box safeArea p="2" py="8" w="90%" maxW="290">
+          <Heading
+            size="lg"
+            fontWeight="600"
+            color="coolGray.800"
+            _dark={{
+              color: "warmGray.50",
+            }}
+          >
+            Welcome
+          </Heading>
+          <Heading
+            mt="1"
+            _dark={{
+              color: "warmGray.200",
+            }}
+            color="coolGray.600"
+            fontWeight="medium"
+            size="xs"
+          >
+            Sign in to continue!
+          </Heading>
 
-        <VStack space={3} mt="5">
-          <FormControl>
-            <FormControl.Label>Email ID</FormControl.Label>
-            <Input
-              color={colour_input_text}
-              onChangeText={(event) => updateFormValue(event, "email")}
-            />
-          </FormControl>
-          <FormControl>
-            <FormControl.Label>Password</FormControl.Label>
-            <Input
-              color={colour_input_text}
-              onChangeText={(event) => updateFormValue(event, "password")}
-              type="password"
-            />
-            <Link
-              _text={{
-                fontSize: "xs",
-                fontWeight: "500",
-                color: "indigo.500",
-              }}
-              alignSelf="flex-end"
-              mt="1"
+          <VStack space={3} mt="5">
+            <FormControl>
+              <FormControl.Label>Email ID</FormControl.Label>
+              <Input
+                color={colour_input_text}
+                onChangeText={(event) => updateFormValue(event, "email")}
+              />
+            </FormControl>
+            <FormControl>
+              <FormControl.Label>Password</FormControl.Label>
+              <Input
+                color={colour_input_text}
+                onChangeText={(event) => updateFormValue(event, "password")}
+                type="password"
+              />
+              <Link
+                _text={{
+                  fontSize: "xs",
+                  fontWeight: "500",
+                  color: "indigo.500",
+                }}
+                alignSelf="flex-end"
+                mt="1"
+              >
+                Forget Password?
+              </Link>
+            </FormControl>
+            <Button
+              onPress={handleSubmit(onSubmit)}
+              mt="2"
+              colorScheme="indigo"
             >
-              Forget Password?
-            </Link>
-          </FormControl>
-          <Button onPress={handleSubmit(onSubmit)} mt="2" colorScheme="indigo">
-            Sign in
-          </Button>
-          <HStack mt="6" justifyContent="center">
-            <Text
-              fontSize="sm"
-              color="coolGray.600"
-              _dark={{
-                color: "warmGray.200",
-              }}
-            >
-              Do not have an account.{" "}
-            </Text>
-            <Text
-              onPress={() => {
-                router.push("/register");
-              }}
-              color={colour_label_text}
-            >
-              Sign Up
-            </Text>
-          </HStack>
-        </VStack>
-      </Box>
-    </Center>
+              Sign in
+            </Button>
+            <HStack mt="6" justifyContent="center">
+              <Text
+                fontSize="sm"
+                color="coolGray.600"
+                _dark={{
+                  color: "warmGray.200",
+                }}
+              >
+                Do not have an account.{" "}
+              </Text>
+              <Text
+                onPress={() => {
+                  router.push("/register");
+                }}
+                color={colour_label_text}
+              >
+                Sign Up
+              </Text>
+            </HStack>
+          </VStack>
+        </Box>
+      </Center>
+    </TouchableWithoutFeedback>
   );
 };
 
