@@ -40,7 +40,7 @@ export class GPTService {
         messages: [
           {
             role: 'user',
-            content: `Generate a personalized travel itinerary for a trip to ${gptTripRequestDto.destination} with a budget of ${gptTripRequestDto.budget}. The traveler is interested in a ${gptTripRequestDto.travelStyle} vacation and enjoys ${gptTripRequestDto.interestsNew}. The itinerary should include ${gptTripRequestDto.activityType} activities and ${gptTripRequestDto.cuisineType} dining options. Please provide a detailed itinerary with daily recommendations from ${gptTripRequestDto.from_time} to ${gptTripRequestDto.to_time}, including suggested destinations, activities, and dining options. The itinerary should be in this JSON format: [{\"location\":,\"from_time\":,\"to_time\":,\"budget\":},]. The JSON object:`,
+            content: `Generate a personalized travel itinerary for a trip to ${gptTripRequestDto.destination} with a budget of ${gptTripRequestDto.budget}. The traveler is interested in a ${gptTripRequestDto.travelStyle} vacation and enjoys ${gptTripRequestDto.interestsNew}. The itinerary should include ${gptTripRequestDto.activityType} activities and ${gptTripRequestDto.cuisineType} dining options. Please provide a detailed itinerary with daily recommendations from ${gptTripRequestDto.from_time} to ${gptTripRequestDto.to_time}, including suggested destinations, activities, and dining options. The itinerary should be in this JSON format: [{\"location\":,\"latitude\":,\"longitude\":,\"from_time\":,\"to_time\":,\"budget\":},]. The JSON object:`,
           },
         ],
         temperature: 0.5,
