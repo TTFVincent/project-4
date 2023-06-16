@@ -50,12 +50,18 @@ function CreateInputTab() {
     StartTime: null,
     EndTime: null,
   });
-
   console.log("snd values: ", topOptionValues);
   const onSubmit = async () => {
-    console.log("snd values: ", GPT_server);
-    const response = fetch(`https://www.yahoo.com`);
-    // const response = await axios.get(`http://localhost:3000/123`);
+    console.log(GPT_server);
+    const response = await fetch(`http://13.54.234.151/gpt`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    // const response = await axios.get(`http://13.54.234.151/gpt`, {
+    //   params: { input: "who are you" },
+    // });
     console.log(response);
     prompt(response);
   };

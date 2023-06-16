@@ -71,7 +71,6 @@ export default function TabLayout() {
 
           headerShown: true,
           tabBarIcon: ({ color }) => <TabBarIcon name="map" color={color} />,
-          tabBarIcon: ({ color }) => <TabBarIcon name="map" color={color} />,
         }}
       />
     </Tabs>
