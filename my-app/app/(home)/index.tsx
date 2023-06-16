@@ -16,7 +16,8 @@ import {
 import * as bcrypt from "bcryptjs";
 import { useForm } from "react-hook-form";
 import { hashPassword } from "../../components/authentication/hash";
-import { SERVER_ADDRESS } from "@env";
+//@ts-ignore
+import { back_end_server } from "@env";
 import { useTokenStore } from "../../zustand/useTokenStore";
 import axios from "axios";
 import {
@@ -39,13 +40,11 @@ const Login = () => {
 
   useEffect(() => {
     const redirectPath = access_token ? "/planTrip" : "/";
-    setTimeout( () => !!router && router.push(redirectPath), 250)
+    setTimeout(() => !!router && router.push(redirectPath), 250);
   }, [access_token]);
 
   const onSubmit = async () => {
-    console.log("login password: ", value.password);
-
-    const result = await axios.post(`${SERVER_ADDRESS}/auth/sign-in`, value);
+    const result = await axios.post(`${back_end_server}/auth/sign-in`, value);
 
     saveToken({
       access_token: result.data.access_token,

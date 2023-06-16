@@ -26,7 +26,7 @@ import { Select_date } from "../../components/register/select_date";
 import { useRegisterStore } from "../../zustand/useRegisterStore";
 import { useRef } from "react";
 import { IInputComponentType } from "native-base/lib/typescript/components/primitives/Input/types";
-import { SERVER_ADDRESS } from "@env";
+import { back_end_server } from "@env";
 import { hashPassword } from "../../components/authentication/hash";
 import { useRouter } from "expo-router";
 export type SetDate = {
@@ -136,7 +136,7 @@ const Register = () => {
       };
 
       console.log(testUser);
-      const response = await fetch(`${SERVER_ADDRESS}/auth/sign-up`, {
+      const response = await fetch(`${back_end_server}/auth/sign-up`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

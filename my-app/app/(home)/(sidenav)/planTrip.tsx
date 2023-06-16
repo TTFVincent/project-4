@@ -1,113 +1,63 @@
 import {
   Keyboard,
-  KeyboardAvoidingView,
-  Pressable,
-  ScrollViewBase,
   StyleSheet,
-  Touchable,
-  TouchableOpacity,
-  View as NativeView,
   TouchableWithoutFeedback,
+  View,
+  Text,
 } from "react-native";
 import {
   Box,
   Center,
-  CheckIcon,
-  Flex,
   FormControl,
-  Icon,
   ScrollView,
-  Select,
-  VStack,
-} from "native-base";
-import { Text, View } from "../../../components/Themed";
-import {
   Button,
   HStack,
-  Heading,
   Input,
   NativeBaseProvider,
   Stack,
 } from "native-base";
-import React, { useRef, useState, useEffect, ReactNode } from "react";
+import React, { useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faTrashCan, faCirclePlus } from "@fortawesome/free-solid-svg-icons";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { usePromptStore } from "../../../zustand/usePromptStore";
 import {
   color_box_BG,
+  color_button_BG,
   color_header_backGround,
   colour_constainer_bg,
 } from "../../../components/css/colors";
-import { SERVER_ADDRESS } from "@env";
-import {
-  MultipleSelectList,
-  SelectList,
-} from "react-native-dropdown-select-list";
-import { useForm } from "react-hook-form";
+//@ts-ignore
+import { GPT_server } from "@env";
 import { Dropdown } from "react-native-element-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Route } from "expo-router/build/Route";
 import { useRouter } from "expo-router";
+import axios from "axios";
 
-type Input = {
+type LocationTabs = {
   id: number;
   text: string;
 };
 
-function useValue<T>(initialValue: T) {
-  const [value, setValue] = useState(initialValue);
-  return {
-    get value() {
-      return value;
-    },
-    set value(value: T) {
-      setValue(value);
-    },
-    toString() {
-      return String(value);
-    },
-  };
-}
-
-type Value<T> = {
-  value: T;
-};
-
-type Dropdown2State<T> = {
-  isOpen: Value<boolean>;
-  x: Value<number>;
-  y: Value<number>;
-  selected: Value<T>;
-  options: {
-    text: string;
-    value: T;
-  }[];
-};
-
 function CreateInputTab() {
-  const inputValue = useRef<Input[]>([]);
+  const inputValue = useRef<LocationTabs[]>([]);
   const [changed, updateChanged] = useState<boolean>(false);
   const prompt = usePromptStore((state: any) => state.savePrompt);
   const [selected, setSelected] = useState("");
   const [topOptionValues, setTopOptionValues] = useState({
-    budget: "",
-    groupSize: "",
+    budget: null,
+    travel_style: null,
+    group_size: null,
+    StartTime: null,
+    EndTime: null,
   });
 
-  console.log(topOptionValues);
-
-  const onSubmit = async (inputValue: Input[]) => {
-    const response = await fetch(`${SERVER_ADDRESS}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ inputValue }),
-    });
-    const result = await response.json();
-    console.log(result.message);
-    prompt(result.message);
+  console.log("snd values: ", topOptionValues);
+  const onSubmit = async () => {
+    console.log("snd values: ", GPT_server);
+    const response = fetch(`https://www.yahoo.com`);
+    // const response = await axios.get(`http://localhost:3000/123`);
+    console.log(response);
+    prompt(response);
   };
 
   const addInput = () => {
@@ -165,6 +115,34 @@ function CreateInputTab() {
     { label: "6", value: "6" },
   ];
 
+  const travelStyle = [
+    { label: "Road trip", value: "Road trip" },
+    { label: "Cultural", value: "Cultural travel" },
+    { label: "Food trip", value: "Food travel" },
+    { label: "Luxury", value: "Luxury travel" },
+    { label: "Budget", value: "Budget travel" },
+  ];
+  const cuisineType = [
+    { label: "Italian cuisine", value: "Italian cuisine" },
+    { label: "Chinese cuisine", value: "Chinese cuisine" },
+    { label: "Mexican cuisine", value: "Mexican cuisine" },
+    { label: "French cuisine", value: "French cuisine" },
+    { label: "Indian cuisine", value: "5Indian cuisine" },
+    { label: "Japanese cuisine", value: "Japanese cuisine" },
+    { label: "Korean cuisine", value: "Korean cuisine" },
+  ];
+
+  const StartTime = [];
+  const EndTime = [];
+  for (let h = 1; h <= 12; h++) {
+    StartTime.push({ label: `${h}am`, value: `${h}am` });
+    EndTime.push({ label: `${h}am`, value: `${h}am` });
+  }
+  for (let h = 1; h <= 12; h++) {
+    StartTime.push({ label: `${h}pm`, value: `${h}pm` });
+    EndTime.push({ label: `${h}pm`, value: `${h}pm` });
+  }
+
   function touchScreen() {
     Keyboard.dismiss();
     console.log("here");
@@ -176,13 +154,14 @@ function CreateInputTab() {
     <TouchableWithoutFeedback onPress={() => touchScreen()}>
       <SafeAreaView style={styles.SafeAreaView}>
         <View style={styles.view_bg}>
-          <Box height={"40%"} borderBottomColor={"#000"} borderWidth={2}>
+          <Box style={styles.topContainer}>
             <Box
               px={"5%"}
               width={"100%"}
               display="flex"
               flexDirection="row"
               justifyContent="space-between"
+              marginY="20px"
             >
               <Box width={"47.5%"}>
                 <Dropdown
@@ -205,14 +184,58 @@ function CreateInputTab() {
               <Box width={"47.5%"}>
                 <Dropdown
                   placeholder={
-                    topOptionValues.budget
-                      ? "Budget: " + topOptionValues.budget
-                      : "Select Budget"
+                    topOptionValues.travel_style
+                      ? topOptionValues.travel_style
+                      : "Select Travel Style"
                   }
                   placeholderStyle={styles.dropdown_placeHolder}
-                  data={budget}
+                  data={travelStyle}
                   onChange={(item) => {
-                    setTopOption(item.value, "budget");
+                    setTopOption(item.value, "travel_style");
+                  }}
+                  labelField="label"
+                  valueField="value"
+                  style={styles.dropdown}
+                />
+              </Box>
+            </Box>
+
+            <Box
+              px={"5%"}
+              width={"100%"}
+              display="flex"
+              flexDirection="row"
+              justifyContent="space-between"
+            >
+              <Box width={"47.5%"}>
+                <Dropdown
+                  placeholderStyle={styles.dropdown_placeHolder}
+                  placeholder={
+                    topOptionValues.StartTime
+                      ? "Start Time " + topOptionValues.StartTime
+                      : "Select Start Time"
+                  }
+                  data={StartTime}
+                  onChange={(item) => {
+                    setTopOption(item.value, "StartTime");
+                  }}
+                  labelField="label"
+                  valueField="value"
+                  style={styles.dropdown}
+                  maxHeight={200}
+                />
+              </Box>
+              <Box width={"47.5%"}>
+                <Dropdown
+                  placeholderStyle={styles.dropdown_placeHolder}
+                  placeholder={
+                    topOptionValues.group_size
+                      ? "Group Size: " + topOptionValues.group_size
+                      : "Select Group Size"
+                  }
+                  data={groupSize}
+                  onChange={(item) => {
+                    setTopOption(item.value, "group_size");
                   }}
                   labelField="label"
                   valueField="value"
@@ -233,13 +256,13 @@ function CreateInputTab() {
                 <Dropdown
                   placeholderStyle={styles.dropdown_placeHolder}
                   placeholder={
-                    topOptionValues.groupSize
-                      ? topOptionValues.groupSize
-                      : "Select Group Size"
+                    topOptionValues.EndTime
+                      ? "End Time " + topOptionValues.EndTime
+                      : "Select End Time"
                   }
-                  data={groupSize}
+                  data={EndTime}
                   onChange={(item) => {
-                    setTopOption(item.value, "groupSize");
+                    setTopOption(item.value, "EndTime");
                   }}
                   labelField="label"
                   valueField="value"
@@ -247,36 +270,35 @@ function CreateInputTab() {
                   maxHeight={200}
                 />
               </Box>
-              <Box width={"47.5%"}>
-                <Dropdown
-                  placeholderStyle={styles.dropdown_placeHolder}
-                  placeholder={
-                    topOptionValues.groupSize
-                      ? topOptionValues.groupSize
-                      : "Select Group Size"
-                  }
-                  data={groupSize}
-                  onChange={(item) => {
-                    setTopOption(item.value, "groupSize");
-                  }}
-                  labelField="label"
-                  valueField="value"
-                  style={styles.dropdown}
-                  maxHeight={200}
-                />
-              </Box>
+              <Box width={"47.5%"}></Box>
             </Box>
+
+            <Center>
+              <Text>Add number of locations</Text>
+              <Button
+                style={styles.addInputButton}
+                onPress={addInput}
+                textAlign={"center"}
+              >
+                <FontAwesomeIcon
+                  icon={faCirclePlus}
+                  size={40}
+                  style={{ color: "#FFF" }}
+                />
+              </Button>
+            </Center>
           </Box>
-          <Stack
-            pt="5"
-            space={3}
-            alignItems="center"
-            style={styles.mainContainer}
-          >
-            <ScrollView>
-              {inputValue.current.map((input: Input) => (
+
+          <ScrollView h="80">
+            <Stack
+              pt="5"
+              space={3}
+              alignItems="center"
+              // style={styles.secondContainer}
+            >
+              {inputValue.current.map((locationTabs: LocationTabs, i) => (
                 <Box
-                  key={String(input.id)}
+                  key={String(locationTabs.id)}
                   width={"90%"}
                   padding={"2%"}
                   bg={color_box_BG}
@@ -285,12 +307,12 @@ function CreateInputTab() {
                     <Button
                       style={styles.deleteButton}
                       roundedRight="md"
-                      onPress={() => deleteInput(input.id)}
+                      onPress={() => deleteInput(locationTabs.id)}
                     >
                       <FontAwesomeIcon icon={faTrashCan} size={20} />
                     </Button>
                   </Box>
-
+                  <Text>Destination {i + 1}</Text>
                   <HStack width="80%" pl="5%" space={1} alignItems="center">
                     <Box width={"50%"}>
                       <FormControl>
@@ -300,7 +322,7 @@ function CreateInputTab() {
                           placeholder="destination"
                           isFullWidth={true}
                           onChangeText={(event) => {
-                            inputText(event, input.id);
+                            inputText(event, locationTabs.id);
                           }}
                         />
                       </FormControl>
@@ -308,63 +330,39 @@ function CreateInputTab() {
                   </HStack>
 
                   <HStack width="80%" pl="5%" space={1} alignItems="center">
-                    <FormControl>
-                      <Select
-                        width={"60%"}
-                        onValueChange={(itemValue) => {}}
-                        _selectedItem={{
-                          bg: "teal.600",
-                          endIcon: <CheckIcon size="2" />,
+                    <Box width={"47.5%"}>
+                      <Dropdown
+                        placeholderStyle={styles.dropdown_placeHolder}
+                        placeholder={
+                          topOptionValues.EndTime
+                            ? "End Time " + topOptionValues.EndTime
+                            : "Select End Time"
+                        }
+                        data={cuisineType}
+                        onChange={(item) => {
+                          setTopOption(item.value, "EndTime");
                         }}
-                        placeholder="travelStyle"
-                      >
-                        <Select.Item
-                          label="Road Tripping"
-                          value="Road Tripping"
-                        />
-                        <Select.Item label="Eco-Tourism" value="Eco-Tourism" />
-                        <Select.Item label="Cultural" value="Cultural" />
-                        <Select.Item label="Luxury" value="Luxury" />
-                        <Select.Item label="Adventure" value="Adventure" />
-                      </Select>
-                    </FormControl>
-
-                    <FormControl>
-                      <SelectList
-                        setSelected={(val: any) => setSelected(val)}
-                        data={budget}
-                        save="value"
-                        search={false}
-                        placeholder="Budget"
+                        labelField="label"
+                        valueField="value"
+                        style={styles.dropdown}
+                        maxHeight={200}
                       />
-                    </FormControl>
+                    </Box>
                   </HStack>
                 </Box>
               ))}
-            </ScrollView>
-          </Stack>
+            </Stack>
+          </ScrollView>
 
           <HStack
             space="2"
             alignItems="center"
             justifyContent={"center"}
-            style={styles.mainContainer2}
+            style={styles.thirdContainer}
           >
-            <Center bg="primary.400:alpha.30" rounded="md">
-              <Button
-                size="16"
-                onPress={async () => onSubmit(inputValue.current)}
-              >
+            <Center>
+              <Button size="16" onPress={async () => onSubmit()}>
                 Plan Trip
-              </Button>
-            </Center>
-            <Center size="16" bg="white" rounded="md" alignItems={"center"}>
-              <Button
-                style={styles.addInputButton}
-                onPress={addInput}
-                textAlign={"center"}
-              >
-                <FontAwesomeIcon icon={faCirclePlus} size={40} />
               </Button>
             </Center>
           </HStack>
@@ -387,28 +385,14 @@ const styles = StyleSheet.create({
   view_bg: {
     backgroundColor: colour_constainer_bg,
   },
-  mainContainer2: {
-    height: "25%",
-    backgroundColor: colour_constainer_bg,
-  },
-  mainContainer: {
-    height: "35%",
-    overflowY: "scroll",
-    backgroundColor: colour_constainer_bg,
-  },
   addInputButton: {
-    position: "absolute",
-    backgroundColor: "#fff",
+    backgroundColor: color_button_BG,
+    color: color_button_BG,
     bottom: 5,
   },
   deleteButton: {
     backgroundColor: "#fff",
     color: "#",
-  },
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
   dropdown: {
     backgroundColor: "white",
@@ -425,5 +409,19 @@ const styles = StyleSheet.create({
   },
   dropdown_placeHolder: {
     textAlign: "center",
+  },
+  topContainer: {
+    height: "32%",
+    borderBottomColor: "#000",
+    borderWidth: 2,
+  },
+  secondContainer: {
+    height: 40,
+    overflowY: "scroll",
+    backgroundColor: colour_constainer_bg,
+  },
+  thirdContainer: {
+    height: "15%",
+    backgroundColor: colour_constainer_bg,
   },
 });
