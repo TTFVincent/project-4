@@ -11,6 +11,9 @@ import MapViewDirections from "react-native-maps-directions";
 import { GOOGLE_MAP_KEY } from "@env";
 import { useState } from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import BasicSwipeList from "../../components/SwipeList";
+import { TripLocation, sampleTrip } from "../../constants/TripLocation";
+
 const image = require("../../assets/images/favicon.png");
 
 type Coordinates = {
@@ -22,6 +25,7 @@ export default function TabTwoScreen() {
   const prompt = usePromptStore((state: any) => state.promptList);
   const showDate = useRegisterStore((state: any) => state.showDate);
   const token = useTokenStore((state: any) => state.access_token);
+  const [tripData, setTripData] = useState<TripLocation[]>(sampleTrip);
 
   return (
     <View style={styles.container}>
@@ -29,6 +33,7 @@ export default function TabTwoScreen() {
       <Text style={styles.text}>{prompt}</Text>
       <Text style={styles.text}>{GOOGLE_MAP_KEY}</Text>
       <Text style={styles.text}>token: {token}</Text>
+      <BasicSwipeList data={tripData} setData={setTripData} />
     </View>
   );
 }
