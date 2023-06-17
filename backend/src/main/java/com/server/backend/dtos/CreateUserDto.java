@@ -15,7 +15,7 @@ public class CreateUserDto implements Serializable {
     @NotBlank(message = "Missing name")
     private final String name;
     @Email(message = "Invalid email")
-    @NotBlank(message = "MIssing Email")
+    @NotBlank(message = "Missing Email")
     private final String email;
     @Size(message = "Password length 8-20", min = 8, max = 20)
     @NotBlank(message = "Missing Password")

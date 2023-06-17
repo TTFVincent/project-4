@@ -16,17 +16,32 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyAl6AErrvZsiAnJjIi22SGimwBJDehvd9s"
+      },
+      "bundleIdentifier": "com.manhon95.myapp"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAl6AErrvZsiAnJjIi22SGimwBJDehvd9s"
+        }
+      },
+      "package": "com.manhon95.myapp"
     },
     "web": {
       "bundler": "metro",
       "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "742a0c33-b653-43b3-bb1f-53e7a431a21b"
+      }
     }
   }
 }

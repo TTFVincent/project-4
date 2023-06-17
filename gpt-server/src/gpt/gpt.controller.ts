@@ -1,4 +1,4 @@
-import { Body, Controller, Get } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { GPTService } from './gpt.service';
 import { GPTRequestDto } from './dto/gpt-request.dto';
 import { GPTTripRequestDto } from './dto/gpt-trip-request.dto';
@@ -7,12 +7,12 @@ import { GPTTripRequestDto } from './dto/gpt-trip-request.dto';
 export class GPTController {
   constructor(private readonly gptService: GPTService) {}
 
-  @Get()
+  @Post()
   async getGPTResponse(@Body() gptRequestDto: GPTRequestDto): Promise<string> {
     return await this.gptService.getGPTResponse(gptRequestDto);
   }
 
-  @Get('trip')
+  @Post('trip')
   async getGPTTripResponse(
     @Body() gptTripRequestDto: GPTTripRequestDto,
   ): Promise<string> {

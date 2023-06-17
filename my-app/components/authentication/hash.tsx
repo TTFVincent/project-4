@@ -9,7 +9,6 @@ export async function hashPassword(plainPassword: string) {
 
 }
 
-
 export async function checkPassword(
     plainPassword: string,
     hashedPassword: string
