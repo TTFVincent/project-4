@@ -1,17 +1,14 @@
-import { StyleSheet, Platform } from "react-native";
-import MapView, { LatLng, Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import EditScreenInfo from "../../components/EditScreenInfo";
+import { StyleSheet } from "react-native";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { Text, View } from "../../components/Themed";
 import { usePromptStore } from "../../zustand/usePromptStore";
-import { colour_constainer_bg } from "../../components/css/colors";
+import { colour_container_bg } from "../../components/css/colors";
 import { useRegisterStore } from "../../zustand/useRegisterStore";
 import { useTokenStore } from "../../zustand/useTokenStore";
 import MapViewDirections from "react-native-maps-directions";
 //@ts-ignore
 import { GOOGLE_MAP_KEY } from "@env";
 import { useState } from "react";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-const image = require("../../assets/images/favicon.png");
 
 type Coordinates = {
   latitude: number;
@@ -65,16 +62,7 @@ function Map() {
       }}
     >
       {coordinateState?.map((value, i) => {
-        return (
-          <Marker
-            key={i}
-            onPress={() => {
-              console.log("press");
-            }}
-            image={image}
-            coordinate={value}
-          />
-        );
+        return <Marker key={i} onPress={() => {}} coordinate={value} />;
       })}
       {coordinateState?.map((value, i) => {
         return (
@@ -95,7 +83,7 @@ function Map() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colour_constainer_bg,
+    backgroundColor: colour_container_bg,
 
     flex: 1,
     alignItems: "center",
