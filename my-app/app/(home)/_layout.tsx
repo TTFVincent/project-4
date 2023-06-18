@@ -1,3 +1,4 @@
+import React from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs } from "expo-router";
 import { Pressable, useColorScheme } from "react-native";
@@ -68,7 +69,15 @@ export default function TabLayout() {
         options={{
           title: "google map",
           // href: isLoginToken ? "/googleMap" : "/",
-
+          headerShown: true,
+          tabBarIcon: ({ color }) => <TabBarIcon name="map" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="calendar"
+        options={{
+          title: "calendar",
+          // href: isLoginToken ? "/googleMap" : "/",
           headerShown: true,
           tabBarIcon: ({ color }) => <TabBarIcon name="map" color={color} />,
         }}

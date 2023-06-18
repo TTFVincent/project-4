@@ -51,31 +51,29 @@ export default function BasicSwipeList(props: {
   };
 
   const renderItem = (data: ListRenderItemInfo<TripLocation>) => (
-    <Box>
-      <Box pl="6" pr="5" py="2">
-        <HStack alignItems="center" space={3}>
-          <VStack>
-            <Text
-              color="coolGray.800"
-              _dark={{
-                color: "warmGray.50",
-              }}
-              bold
-            >
-              {data.item.location}
-            </Text>
-            <Text
-              color="coolGray.600"
-              _dark={{
-                color: "warmGray.200",
-              }}
-            >
-              {data.item.location_address}
-            </Text>
-          </VStack>
-          <Spacer />
-        </HStack>
-      </Box>
+    <Box pl="6" pr="5" py="2" bgColor="white">
+      <HStack alignItems="center" space={3}>
+        <VStack>
+          <Text
+            color="coolGray.800"
+            _dark={{
+              color: "warmGray.50",
+            }}
+            bold
+          >
+            {data.item.location}
+          </Text>
+          <Text
+            color="coolGray.600"
+            _dark={{
+              color: "warmGray.200",
+            }}
+          >
+            {data.item.location_address}
+          </Text>
+        </VStack>
+        <Spacer />
+      </HStack>
     </Box>
   );
 
@@ -105,18 +103,20 @@ export default function BasicSwipeList(props: {
   );
 
   return (
-    <Box bg="white" safeArea flex="1">
-      <SwipeListView
-        data={props.data}
-        renderItem={renderItem}
-        renderHiddenItem={renderHiddenItem}
-        disableRightSwipe={true}
-        rightOpenValue={-130}
-        previewRowKey={"0"}
-        previewOpenValue={-40}
-        previewOpenDelay={3000}
-        onRowDidOpen={onRowDidOpen}
-      />
-    </Box>
+    <NativeBaseProvider>
+      <Box bg="white" safeArea flex="1">
+        <SwipeListView
+          data={props.data}
+          renderItem={renderItem}
+          renderHiddenItem={renderHiddenItem}
+          disableRightSwipe={true}
+          rightOpenValue={-130}
+          previewRowKey={"0"}
+          previewOpenValue={-40}
+          previewOpenDelay={3000}
+          onRowDidOpen={onRowDidOpen}
+        />
+      </Box>
+    </NativeBaseProvider>
   );
 }
