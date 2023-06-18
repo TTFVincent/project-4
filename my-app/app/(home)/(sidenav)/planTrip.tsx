@@ -24,7 +24,7 @@ import {
   color_box_BG,
   color_button_BG,
   color_header_backGround,
-  colour_constainer_bg,
+  colour_container_bg,
 } from "../../../components/css/colors";
 //@ts-ignore
 import { GPT_server } from "@env";
@@ -389,7 +389,7 @@ export default function PlanTrip() {
 const styles = StyleSheet.create({
   SafeAreaView: { backgroundColor: color_header_backGround },
   view_bg: {
-    backgroundColor: colour_constainer_bg,
+    backgroundColor: colour_container_bg,
   },
   addInputButton: {
     backgroundColor: color_button_BG,
@@ -424,10 +424,10 @@ const styles = StyleSheet.create({
   secondContainer: {
     height: 40,
     overflowY: "scroll",
-    backgroundColor: colour_constainer_bg,
+    backgroundColor: colour_container_bg,
   },
   thirdContainer: {
     height: "15%",
-    backgroundColor: colour_constainer_bg,
+    backgroundColor: colour_container_bg,
   },
 });

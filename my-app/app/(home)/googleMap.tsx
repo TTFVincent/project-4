@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, Platform } from "react-native";
 import { Text, View } from "../../components/Themed";
 import { usePromptStore } from "../../zustand/usePromptStore";
-import { colour_constainer_bg } from "../../components/css/colors";
+import { colour_container_bg } from "../../components/css/colors";
 import { useRegisterStore } from "../../zustand/useRegisterStore";
 import { useTokenStore } from "../../zustand/useTokenStore";
 import BasicSwipeList from "../../components/SwipeList";
@@ -35,7 +35,7 @@ export default function TabTwoScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colour_constainer_bg,
+    backgroundColor: colour_container_bg,
 
     flex: 1,
     alignItems: "center",

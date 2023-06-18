@@ -21,7 +21,7 @@ import { back_end_server } from "@env";
 import { useTokenStore } from "../../zustand/useTokenStore";
 import axios from "axios";
 import {
-  colour_constainer_bg,
+  colour_container_bg,
   colour_input_text,
   colour_label_text,
 } from "../../components/css/colors";
@@ -153,7 +153,7 @@ const Login = () => {
 export default () => {
   return (
     <NativeBaseProvider>
-      <Center bg={colour_constainer_bg} flex={1} px="3">
+      <Center bg={colour_container_bg} flex={1} px="3">
         <Login />
       </Center>
     </NativeBaseProvider>

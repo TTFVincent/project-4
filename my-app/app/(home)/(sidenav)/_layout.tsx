@@ -10,6 +10,7 @@ import PlanTrip from "./planTrip";
 import { useTokenStore } from "../../../zustand/useTokenStore";
 import { useRouter } from "expo-router";
 import { color_header_backGround } from "../../../components/css/colors";
+import Profile from "./profile";
 
 function HomeScreen({ navigation }: any) {
   return (
@@ -64,6 +65,16 @@ export default function sideNav() {
           headerShown: true,
           headerTitleAlign: "center",
           title: "Plan Trip",
+        }}
+      />
+      <Drawer.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          headerStyle: { backgroundColor: color_header_backGround },
+          headerShown: true,
+          headerTitleAlign: "center",
+          title: "Profile",
         }}
       />
     </Drawer.Navigator>

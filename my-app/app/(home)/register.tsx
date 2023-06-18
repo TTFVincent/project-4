@@ -17,7 +17,7 @@ import {
 } from "native-base";
 import { Keyboard, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import {
-  colour_constainer_bg,
+  colour_container_bg,
   colour_input_text,
   colour_label_text,
 } from "../../components/css/colors";
@@ -26,6 +26,7 @@ import { Select_date } from "../../components/register/select_date";
 import { useRegisterStore } from "../../zustand/useRegisterStore";
 import { useRef } from "react";
 import { IInputComponentType } from "native-base/lib/typescript/components/primitives/Input/types";
+//@ts-ignore
 import { back_end_server } from "@env";
 import { hashPassword } from "../../components/authentication/hash";
 import { useRouter } from "expo-router";
@@ -234,7 +235,7 @@ export default () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colour_constainer_bg,
+    backgroundColor: colour_container_bg,
   },
   inputText: {},
 });
