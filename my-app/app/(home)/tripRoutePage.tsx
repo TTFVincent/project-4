@@ -8,29 +8,24 @@ import { useTokenStore } from "../../zustand/useTokenStore";
 import BasicSwipeList from "../../components/SwipeList";
 import { TripLocation, sampleTrip } from "../../constants/TripLocation";
 import Map from "../../components/Map";
+import { useLocalSearchParams } from "expo-router";
 
-export default function TabTwoScreen() {
+export default function MapPage() {
+  const { locationId, extra } = useLocalSearchParams();
   const prompt = usePromptStore((state: any) => state.promptList);
   const showDate = useRegisterStore((state: any) => state.showDate);
   const token = useTokenStore((state: any) => state.access_token);
   const [tripData, setTripData] = useState<TripLocation[]>(sampleTrip);
-  if (Platform.OS === "web") {
-    return (
-      <View style={styles.container}>
-        <BasicSwipeList data={tripData} setData={setTripData} />
-      </View>
-    );
-  } else {
-    return (
-      <View style={styles.container}>
-        <Map data={tripData} />
-        {/* <Text style={styles.text}>{prompt}</Text>
+
+  return (
+    <View style={styles.container}>
+      <Map data={tripData} defaultLocationId={locationId as string} />
+      {/* <Text style={styles.text}>{prompt}</Text>
       <Text style={styles.text}>{GOOGLE_MAP_KEY}</Text>
-      <Text style={styles.text}>token: {token}</Text> */}
-        <BasicSwipeList data={tripData} setData={setTripData} />
-      </View>
-    );
-  }
+      <Text style={styles.text}>token: {token}</Text> 
+    <BasicSwipeList data={tripData} setData={setTripData} />*/}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -42,7 +37,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   mapContainer: {
-    height: "50%",
+    height: "100%",
     width: "100%",
   },
   title: {
