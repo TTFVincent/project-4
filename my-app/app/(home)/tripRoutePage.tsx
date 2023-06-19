@@ -10,7 +10,7 @@ import { TripLocation, sampleTrip } from "../../constants/TripLocation";
 import Map from "../../components/Map";
 import { useLocalSearchParams } from "expo-router";
 
-export default function MapPage() {
+export default function tripRoutePage() {
   const { locationId, extra } = useLocalSearchParams();
   const prompt = usePromptStore((state: any) => state.promptList);
   const showDate = useRegisterStore((state: any) => state.showDate);
