@@ -28,6 +28,8 @@ import NativeUploady, {
 } from "@rpldy/native-uploady";
 import axios from "axios";
 import * as FileSystem from "expo-file-system";
+import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 const Upload = async () => {
   let file = await DocumentPicker.getDocumentAsync({
@@ -45,7 +47,7 @@ export default function Profile() {
   return (
     <NativeBaseProvider>
       <View style={styles.mainContainer}>
-        <Center flex={1}>
+        <Center>
           <Box style={styles.profile_pic_container}>
             <Image
               alt="Profile Picture"
@@ -53,8 +55,25 @@ export default function Profile() {
               source={require("../../../assets/images/exit.bmp")}
             />
           </Box>
-          <Button onPress={Upload}>Change Picture</Button>
-          <Text style={styles.text_size}>NAME: {}</Text>
+          {/* <Button onPress={Upload}>Change Picture</Button> */}
+          <Text style={styles.NameText}>NAME: {}</Text>
+
+          <Box style={styles.buttons}>
+            <Text style={styles.buttonText}>My itinerary</Text>
+            <FontAwesomeIcon size={30} icon={faAngleRight} />
+          </Box>
+          <Box style={styles.buttons}>
+            <Text style={styles.buttonText}>Transport</Text>
+            <FontAwesomeIcon size={30} icon={faAngleRight} />
+          </Box>
+          <Box style={styles.buttons}>
+            <Text style={styles.buttonText}>Edit </Text>
+            <FontAwesomeIcon size={30} icon={faAngleRight} />
+          </Box>
+          <Box style={styles.buttons}>
+            <Text style={styles.buttonText}>Setting</Text>
+            <FontAwesomeIcon size={30} icon={faAngleRight} />
+          </Box>
         </Center>
       </View>
     </NativeBaseProvider>
@@ -62,13 +81,30 @@ export default function Profile() {
 }
 
 const styles = StyleSheet.create({
+  buttonText: {
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+  buttons: {
+    width: "80%",
+    height: 60,
+    borderWidth: 1,
+    borderColor: "#fff",
+    alignItems: "center",
+    paddingHorizontal: 30,
+    borderRadius: 10,
+    marginVertical: 10,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   uploadedImage: {
     width: 20,
     height: 20,
   },
-  text_size: {
+  NameText: {
     fontSize: 20,
-    margin: 20,
+    margin: 10,
   },
   mainContainer: {
     backgroundColor: colour_container_bg,
@@ -76,11 +112,12 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   profile_pic_container: {
-    height: 200,
-    width: 200,
+    height: 100,
+    width: 100,
+    marginTop: 40,
     borderColor: "#fff",
-    borderWidth: 5,
-    borderRadius: 200,
+    borderWidth: 2,
+    borderRadius: 150,
     overflow: "hidden",
   },
 });
