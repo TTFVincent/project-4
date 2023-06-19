@@ -58,6 +58,11 @@ export default function Map(props: {
                 },
                 200
               );
+              setRegion({
+                ...e.nativeEvent.coordinate,
+                latitudeDelta: 0.005,
+                longitudeDelta: 0.005,
+              });
             }}
           >
             <Callout>

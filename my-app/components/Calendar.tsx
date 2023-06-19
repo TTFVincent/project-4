@@ -34,14 +34,14 @@ export default function Calendar(props: { data: TripLocation[] }) {
         1,
         22,
         +value.from_time.slice(0, 2),
-        +value.from_time.slice(2, 4)
+        +value.from_time.slice(3, 5)
       ),
       endDate: new Date(
         2023,
         1,
         22,
         +value.to_time.slice(0, 2),
-        +value.to_time.slice(2, 4)
+        +value.to_time.slice(3, 5)
       ),
       color: "#E5F9D3",
       title: value.location,
