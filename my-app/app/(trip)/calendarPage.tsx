@@ -60,7 +60,7 @@ export default function CalendarPage() {
 
 function DatePickButton(props: { scale: string }) {
   return (
-    <Button p={0} w="30%" rounded="full" shadow={5} bg="white">
+    <Button p={0} w="30%" shadow={5} bg="#EBEDF1">
       <Text fontSize="14" color="#333333">
         {props.scale}
       </Text>
@@ -74,9 +74,8 @@ function WeekDayButton(props: { weekDay: string; date: string }) {
       p={0}
       w="12%"
       h="100%"
-      rounded="full"
       shadow={5}
-      bg="white"
+      bg="#EBEDF1"
       flexDirection={"column"}
       alignItems={"center"}
     >

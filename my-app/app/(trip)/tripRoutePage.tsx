@@ -31,7 +31,6 @@ export default function tripRoutePage() {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colour_container_bg,
-
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",

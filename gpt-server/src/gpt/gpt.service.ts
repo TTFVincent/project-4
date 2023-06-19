@@ -35,23 +35,12 @@ export class GPTService {
     gptTripRequestDto: GPTTripRequestDto,
   ): Promise<string> {
     try {
-      console.log('here');
-      if (1) {
-        console.log(gptTripRequestDto);
-        return '';
-      }
       const response = await this.openai.createChatCompletion({
         model: 'gpt-3.5-turbo',
         messages: [
           {
             role: 'user',
-            content: `Generate a personalized travel itinerary for a trip to ${gptTripRequestDto.destination} with a budget of 
-            ${gptTripRequestDto.budget}. The traveler is interested in a ${gptTripRequestDto.travel_style} vacation and enjoys 
-            ${gptTripRequestDto.interestsNew}. The itinerary should include ${gptTripRequestDto.activityType} activities and 
-            ${gptTripRequestDto.cuisineType} dining options. Please provide a detailed itinerary with daily recommendations from 
-            ${gptTripRequestDto.StartTime} to ${gptTripRequestDto.EndTime}, including suggested destinations, activities, and dining options.
-             The itinerary should be in this JSON format: [{\"location\":,\"latitude\":,\"longitude\":,\"from_time\":,\"to_time\":,\"budget\":},].
-              The JSON object:`,
+            content: `Generate a personalized travel itinerary for a trip to ${gptTripRequestDto.destination} with a budget of HKD ${gptTripRequestDto.budget}. The traveler is interested in a ${gptTripRequestDto.travel_style} vacation and enjoys ${gptTripRequestDto.interestsNew}. The itinerary should include ${gptTripRequestDto.activityType} activities and ${gptTripRequestDto.cuisineType} dining options. Please provide a detailed itinerary with daily recommendations from ${gptTripRequestDto.StartTime} to ${gptTripRequestDto.EndTime}, including suggested destinations, activities, and dining options. The resulting JSON object should be in this format without other text: [{\"location\":,\"latitude\":,\"longitude\":,\"from_time\":,\"to_time\":,\"budget\":},]. The JSON object:`,
           },
         ],
         temperature: 0.5,

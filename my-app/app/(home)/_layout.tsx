@@ -73,24 +73,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="tripRoutePage"
-        options={{
-          title: "Google map",
-          // href: isLoginToken ? "/googleMap" : "/",
-          headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="map" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="calendarPage"
-        options={{
-          title: "Calendar",
-          // href: isLoginToken ? "/googleMap" : "/",
-          headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="map" color={color} />,
-        }}
-      />
-      <Tabs.Screen
         name="welcomePage"
         options={{
           title: "welcomePage",

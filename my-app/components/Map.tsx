@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { StyleSheet, Platform } from "react-native";
-import MapView, { LatLng, Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, {
+  Callout,
+  LatLng,
+  Marker,
+  PROVIDER_GOOGLE,
+  Region,
+} from "react-native-maps";
+import { Text, Box, NativeBaseProvider } from "native-base";
 import { colour_constainer_bg } from "../components/css/colors";
 import MapViewDirections from "react-native-maps-directions";
 //@ts-ignore
@@ -13,34 +20,48 @@ export default function Map(props: {
   data: TripLocation[];
   defaultLocationId?: string;
 }) {
+  const [region, setRegion] = useState<Region>({
+    latitude: props.defaultLocationId
+      ? +props.data[+props.defaultLocationId].latitude
+      : +props.data[2].latitude,
+    longitude: props.defaultLocationId
+      ? +props.data[+props.defaultLocationId].longitude
+      : +props.data[2].longitude,
+    latitudeDelta: 0.005,
+    longitudeDelta: 0.005,
+  });
+
   return (
     <MapView
       style={styles.mapContainer}
       provider={PROVIDER_GOOGLE}
-      region={{
-        latitude: props.defaultLocationId
-          ? +props.data[+props.defaultLocationId].latitude
-          : +props.data[2].latitude,
-        longitude: props.defaultLocationId
-          ? +props.data[+props.defaultLocationId].longitude
-          : +props.data[2].longitude,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
-      }}
+      region={region}
     >
       {props.data.map((value, i) => {
         return (
           <Marker
             key={i}
-            onPress={() => {
-              console.log("press");
-            }}
             image={image}
             coordinate={{
               latitude: +value.latitude,
               longitude: +value.longitude,
             }}
-          />
+            onPress={(e) => {
+              setRegion({
+                ...coordinate,
+                latitudeDelta: 0.005,
+                longitudeDelta: 0.005,
+              });
+            }}
+          >
+            <Callout>
+              <NativeBaseProvider>
+                <Box>
+                  <Text>{value.location}</Text>
+                </Box>
+              </NativeBaseProvider>
+            </Callout>
+          </Marker>
         );
       })}
       {props.data.map((value, i) => {
