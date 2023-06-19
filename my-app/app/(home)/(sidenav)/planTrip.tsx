@@ -25,6 +25,7 @@ import {
   color_button_BG,
   color_header_backGround,
   colour_container_bg,
+  colour_input_text,
 } from "../../../components/css/colors";
 //@ts-ignore
 import { GPT_server } from "@env";
@@ -32,6 +33,10 @@ import { Dropdown } from "react-native-element-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import axios from "axios";
+import {
+  PanGestureHandler,
+  TapGestureHandler,
+} from "react-native-gesture-handler";
 
 type LocationTabs = {
   id: number;
@@ -42,28 +47,44 @@ function CreateInputTab() {
   const inputValue = useRef<LocationTabs[]>([]);
   const [changed, updateChanged] = useState<boolean>(false);
   const prompt = usePromptStore((state: any) => state.savePrompt);
-  const [selected, setSelected] = useState("");
+  const [loadingScreen, setLoadingScreen] = useState();
   const [topOptionValues, setTopOptionValues] = useState({
     budget: null,
     travel_style: null,
     group_size: null,
     StartTime: null,
     EndTime: null,
+    interestsNew: null,
+    destination: null,
+    cuisineType: null,
+    activityType: null,
   });
   console.log("snd values: ", topOptionValues);
+
   const onSubmit = async () => {
     console.log(GPT_server);
-    const response = await fetch(`http://13.54.234.151/gpt`, {
-      method: "GET",
+    const response = await fetch(`http://13.54.234.151/gpt/trip`, {
+      method: "POST",
+      body: JSON.stringify(topOptionValues),
+      // body: JSON.stringify(topOptionValues),
       headers: {
         "Content-Type": "application/json",
       },
     });
-    // const response = await axios.get(`http://13.54.234.151/gpt`, {
-    //   params: { input: "who are you" },
+    const resText = await response.text();
+
+    try {
+      const res = JSON.parse(resText);
+      console.log("chatGPT respond: ", res);
+    } catch {
+      console.log("chatGPT respond text: ", resText);
+    }
+
+    // const response = await axios.post(`http://13.54.234.151/gpt/trip`, {
+    //   params: { input: JSON.stringify(topOptionValues) },
     // });
-    console.log(response);
-    prompt(response);
+    // console.log(response.data);
+    // prompt(response);
   };
 
   const addInput = () => {
@@ -111,14 +132,36 @@ function CreateInputTab() {
     { label: "5000 ~ 10000", value: "10000" },
     { label: "10000+", value: "10000 plus" },
   ];
+  const interestsNew = [
+    { label: "Art", value: "Art" },
+    { label: "Music", value: "Music" },
+    { label: "Sport", value: "Sport" },
+    { label: "Food", value: "Food" },
+    { label: "Nature", value: "Nature" },
+    { label: "History", value: "History" },
+  ];
 
-  const groupSize = [
+  const group_size = [
     { label: "1", value: "1" },
     { label: "2", value: "2" },
     { label: "3", value: "3" },
     { label: "4", value: "4" },
     { label: "5", value: "5" },
     { label: "6", value: "6" },
+  ];
+
+  const destination = [
+    { label: "HK", value: "Hong Kong" },
+    { label: "New York", value: "New York" },
+    { label: "Tokyo", value: "Tokyo" },
+  ];
+
+  const activityType = [
+    { label: "Out door", value: "Out door" },
+    { label: "Shopping", value: "Shopping" },
+    { label: "NightLife", value: "NightLife" },
+    { label: "Museums", value: "Museums" },
+    { label: "Beach", value: "Beach" },
   ];
 
   const travelStyle = [
@@ -151,11 +194,11 @@ function CreateInputTab() {
 
   function touchScreen() {
     Keyboard.dismiss();
-    console.log("here");
   }
 
   return (
-    <TouchableWithoutFeedback onPress={() => touchScreen()}>
+    <TapGestureHandler onHandlerStateChange={touchScreen} numberOfTaps={1}>
+      {/* <TouchableWithoutFeedback onPress={() => touchScreen()}> */}
       <SafeAreaView style={styles.SafeAreaView}>
         <View style={styles.view_bg}>
           <Box style={styles.topContainer}>
@@ -233,11 +276,83 @@ function CreateInputTab() {
                 <Dropdown
                   placeholderStyle={styles.dropdown_placeHolder}
                   placeholder={
+                    topOptionValues.interestsNew
+                      ? topOptionValues.interestsNew
+                      : "Select Interests New"
+                  }
+                  data={interestsNew}
+                  onChange={(item) => {
+                    setTopOption(item.value, "interestsNew");
+                  }}
+                  labelField="label"
+                  valueField="value"
+                  style={styles.dropdown}
+                  maxHeight={500}
+                />
+              </Box>
+            </Box>
+
+            <Box
+              px={"5%"}
+              width={"100%"}
+              display="flex"
+              flexDirection="row"
+              justifyContent="space-between"
+            >
+              <Box width={"47.5%"}>
+                <Dropdown
+                  placeholderStyle={styles.dropdown_placeHolder}
+                  placeholder={
+                    topOptionValues.cuisineType
+                      ? topOptionValues.cuisineType
+                      : "Select Cuisine Type"
+                  }
+                  data={cuisineType}
+                  onChange={(item) => {
+                    setTopOption(item.value, "cuisineType");
+                  }}
+                  labelField="label"
+                  valueField="value"
+                  style={styles.dropdown}
+                  maxHeight={200}
+                />
+              </Box>
+              <Box width={"47.5%"}>
+                <Dropdown
+                  placeholderStyle={styles.dropdown_placeHolder}
+                  placeholder={
+                    topOptionValues.activityType
+                      ? topOptionValues.activityType
+                      : "Select Activity Type"
+                  }
+                  data={activityType}
+                  onChange={(item) => {
+                    setTopOption(item.value, "activityType");
+                  }}
+                  labelField="label"
+                  valueField="value"
+                  style={styles.dropdown}
+                  maxHeight={500}
+                />
+              </Box>
+            </Box>
+
+            <Box
+              px={"5%"}
+              width={"100%"}
+              display="flex"
+              flexDirection="row"
+              justifyContent="space-between"
+            >
+              <Box width={"47.5%"}>
+                <Dropdown
+                  placeholderStyle={styles.dropdown_placeHolder}
+                  placeholder={
                     topOptionValues.group_size
-                      ? "Group Size: " + topOptionValues.group_size
+                      ? topOptionValues.group_size
                       : "Select Group Size"
                   }
-                  data={groupSize}
+                  data={group_size}
                   onChange={(item) => {
                     setTopOption(item.value, "group_size");
                   }}
@@ -245,6 +360,24 @@ function CreateInputTab() {
                   valueField="value"
                   style={styles.dropdown}
                   maxHeight={200}
+                />
+              </Box>
+              <Box width={"47.5%"}>
+                <Dropdown
+                  placeholderStyle={styles.dropdown_placeHolder}
+                  placeholder={
+                    topOptionValues.destination
+                      ? topOptionValues.destination
+                      : "Select Destination"
+                  }
+                  data={destination}
+                  onChange={(item) => {
+                    setTopOption(item.value, "destination");
+                  }}
+                  labelField="label"
+                  valueField="value"
+                  style={styles.dropdown}
+                  maxHeight={500}
                 />
               </Box>
             </Box>
@@ -293,13 +426,8 @@ function CreateInputTab() {
             </Center>
           </Box>
 
-          <ScrollView h="80">
-            <Stack
-              pt="5"
-              space={3}
-              alignItems="center"
-              // style={styles.secondContainer}
-            >
+          <Box style={styles.secondContainer}>
+            {/* <ScrollView>
               {inputValue.current.map((locationTabs: LocationTabs, i) => (
                 <Box
                   key={String(locationTabs.id)}
@@ -317,46 +445,40 @@ function CreateInputTab() {
                     </Button>
                   </Box>
                   <Text>Destination {i + 1}</Text>
-                  <HStack width="80%" pl="5%" space={1} alignItems="center">
-                    <Box width={"50%"}>
-                      <FormControl>
-                        <Input
-                          width="50%"
-                          type="text"
-                          placeholder="destination"
-                          isFullWidth={true}
-                          onChangeText={(event) => {
-                            inputText(event, locationTabs.id);
-                          }}
-                        />
-                      </FormControl>
-                    </Box>
-                  </HStack>
+                  <Box width={"50%"}>
+                    <Input
+                      width="50%"
+                      type="text"
+                      placeholder="destination"
+                      isFullWidth={true}
+                      onChangeText={(event) => {
+                        inputText(event, locationTabs.id);
+                      }}
+                    />
+                  </Box>
 
-                  <HStack width="80%" pl="5%" space={1} alignItems="center">
-                    <Box width={"47.5%"}>
-                      <Dropdown
-                        placeholderStyle={styles.dropdown_placeHolder}
-                        placeholder={
-                          topOptionValues.EndTime
-                            ? "End Time " + topOptionValues.EndTime
-                            : "Select End Time"
-                        }
-                        data={cuisineType}
-                        onChange={(item) => {
-                          setTopOption(item.value, "EndTime");
-                        }}
-                        labelField="label"
-                        valueField="value"
-                        style={styles.dropdown}
-                        maxHeight={200}
-                      />
-                    </Box>
-                  </HStack>
+                  <Box width={"47.5%"}>
+                    <Dropdown
+                      placeholderStyle={styles.dropdown_placeHolder}
+                      placeholder={
+                        topOptionValues.EndTime
+                          ? "End Time " + topOptionValues.EndTime
+                          : "Select End Time"
+                      }
+                      data={cuisineType}
+                      onChange={(item) => {
+                        setTopOption(item.value, "EndTime");
+                      }}
+                      labelField="label"
+                      valueField="value"
+                      style={styles.dropdown}
+                      maxHeight={200}
+                    />
+                  </Box>
                 </Box>
               ))}
-            </Stack>
-          </ScrollView>
+            </ScrollView> */}
+          </Box>
 
           <HStack
             space="2"
@@ -372,7 +494,7 @@ function CreateInputTab() {
           </HStack>
         </View>
       </SafeAreaView>
-    </TouchableWithoutFeedback>
+    </TapGestureHandler>
   );
 }
 
@@ -388,6 +510,7 @@ const styles = StyleSheet.create({
   SafeAreaView: { backgroundColor: color_header_backGround },
   view_bg: {
     backgroundColor: colour_container_bg,
+    height: "100%",
   },
   addInputButton: {
     backgroundColor: color_button_BG,
@@ -415,17 +538,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   topContainer: {
-    height: "32%",
+    height: "55%",
     borderBottomColor: "#000",
     borderWidth: 2,
   },
   secondContainer: {
-    height: 40,
-    overflowY: "scroll",
-    backgroundColor: colour_container_bg,
+    height: "30%",
+    backgroundColor: colour_input_text,
   },
   thirdContainer: {
     height: "15%",
-    backgroundColor: colour_container_bg,
+    backgroundColor: "#0f0",
   },
 });
