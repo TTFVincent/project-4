@@ -23,10 +23,10 @@ export default function Map(props: {
   const [region, setRegion] = useState<Region>({
     latitude: props.defaultLocationId
       ? +props.data[+props.defaultLocationId].latitude
-      : +props.data[2].latitude,
+      : +props.data[0].latitude,
     longitude: props.defaultLocationId
       ? +props.data[+props.defaultLocationId].longitude
-      : +props.data[2].longitude,
+      : +props.data[0].longitude,
     latitudeDelta: 0.005,
     longitudeDelta: 0.005,
   });
@@ -47,8 +47,9 @@ export default function Map(props: {
               longitude: +value.longitude,
             }}
             onPress={(e) => {
+              console.log(e.nativeEvent.coordinate);
               setRegion({
-                ...coordinate,
+                ...e.nativeEvent.coordinate,
                 latitudeDelta: 0.005,
                 longitudeDelta: 0.005,
               });
