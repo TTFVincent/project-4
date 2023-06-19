@@ -45,7 +45,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="register"
         options={{
-          tabBarStyle: { display: "none" },
+          // tabBarStyle: { display: "none" },
 
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
@@ -77,6 +77,15 @@ export default function TabLayout() {
         name="calendarPage"
         options={{
           title: "Calendar",
+          // href: isLoginToken ? "/googleMap" : "/",
+          headerShown: false,
+          tabBarIcon: ({ color }) => <TabBarIcon name="map" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="welcomePage"
+        options={{
+          title: "welcomePage",
           // href: isLoginToken ? "/googleMap" : "/",
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="map" color={color} />,

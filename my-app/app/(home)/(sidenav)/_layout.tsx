@@ -11,7 +11,7 @@ import { useTokenStore } from "../../../zustand/useTokenStore";
 import { useRouter } from "expo-router";
 import { color_header_backGround } from "../../../components/css/colors";
 import Profile from "./profile";
-
+import React from "react";
 function HomeScreen({ navigation }: any) {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -21,10 +21,6 @@ function HomeScreen({ navigation }: any) {
       />
     </View>
   );
-}
-
-function Logout() {
-  return <View></View>;
 }
 
 const Drawer = createDrawerNavigator();
