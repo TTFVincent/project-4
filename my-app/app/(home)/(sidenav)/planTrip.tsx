@@ -154,8 +154,6 @@ function CreateInputTab() {
     console.log("here");
   }
 
-  const router = useRouter();
-
   return (
     <TouchableWithoutFeedback onPress={() => touchScreen()}>
       <SafeAreaView style={styles.SafeAreaView}>
