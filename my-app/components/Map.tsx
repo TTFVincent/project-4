@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { StyleSheet, Platform } from "react-native";
 import MapView, {
   Callout,
@@ -30,12 +30,15 @@ export default function Map(props: {
     latitudeDelta: 0.005,
     longitudeDelta: 0.005,
   });
+  const mapViewRef = useRef<MapView>(null);
 
   return (
     <MapView
+      ref={mapViewRef}
       style={styles.mapContainer}
       provider={PROVIDER_GOOGLE}
       region={region}
+      onRegionChangeComplete={(reg, e) => {}}
     >
       {props.data.map((value, i) => {
         return (
@@ -47,12 +50,14 @@ export default function Map(props: {
               longitude: +value.longitude,
             }}
             onPress={(e) => {
-              console.log(e.nativeEvent.coordinate);
-              setRegion({
-                ...e.nativeEvent.coordinate,
-                latitudeDelta: 0.005,
-                longitudeDelta: 0.005,
-              });
+              mapViewRef.current?.animateToRegion(
+                {
+                  ...e.nativeEvent.coordinate,
+                  latitudeDelta: 0.005,
+                  longitudeDelta: 0.005,
+                },
+                200
+              );
             }}
           >
             <Callout>
