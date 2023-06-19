@@ -5,31 +5,6 @@ import WeekView, { WeekViewEvent } from "react-native-week-view";
 import { TripLocation } from "../constants/TripLocation";
 import { useRouter } from "expo-router";
 
-const myEvents: WeekViewEvent[] = [
-  {
-    id: 1,
-    startDate: new Date(2023, 1, 20, 9),
-    endDate: new Date(2023, 1, 20, 11),
-    color: "blue",
-    title: "Meeting",
-    description: "E1",
-    resolveOverlap: "lane",
-    stackKey: "",
-    eventKind: "standard",
-  },
-  {
-    id: 2,
-    startDate: new Date(2023, 1, 22, 10),
-    endDate: new Date(2023, 1, 22, 11, 30),
-    color: "red",
-    title: "Meeting",
-    description: "E2",
-    resolveOverlap: "lane",
-    stackKey: "",
-    eventKind: "standard",
-  },
-];
-
 function MyEventComponent({ event }: { event: WeekViewEvent }) {
   const router = useRouter();
   return (
@@ -49,8 +24,6 @@ function MyEventComponent({ event }: { event: WeekViewEvent }) {
     </Pressable>
   );
 }
-
-const MyTodayComponent = () => <Box></Box>;
 
 export default function Calendar(props: { data: TripLocation[] }) {
   const events: WeekViewEvent[] = props.data.map((value, i) => {
@@ -72,7 +45,7 @@ export default function Calendar(props: { data: TripLocation[] }) {
       ),
       color: "#E5F9D3",
       title: value.location,
-      description: "null",
+      description: null,
       resolveOverlap: "lane",
       stackKey: "",
       eventKind: "standard",
@@ -95,6 +68,7 @@ export default function Calendar(props: { data: TripLocation[] }) {
         showTitle={false}
         timesColumnWidth={0.25}
         hoursInDisplay={8}
+        fixedHorizontally={true}
       />
     </NativeBaseProvider>
   );
