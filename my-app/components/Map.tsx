@@ -9,16 +9,23 @@ import { TripLocation } from "../constants/TripLocation";
 
 const image = require("../assets/images/favicon.png");
 
-export default function Map(props: { data: TripLocation[] }) {
+export default function Map(props: {
+  data: TripLocation[];
+  defaultLocationId?: string;
+}) {
   return (
     <MapView
       style={styles.mapContainer}
       provider={PROVIDER_GOOGLE}
-      initialRegion={{
-        latitude: 22.343813260980898,
-        longitude: 114.1887436490869,
-        latitudeDelta: 0.15,
-        longitudeDelta: 0.15,
+      region={{
+        latitude: props.defaultLocationId
+          ? +props.data[+props.defaultLocationId].latitude
+          : +props.data[2].latitude,
+        longitude: props.defaultLocationId
+          ? +props.data[+props.defaultLocationId].longitude
+          : +props.data[2].longitude,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
       }}
     >
       {props.data.map((value, i) => {
@@ -67,7 +74,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   mapContainer: {
-    height: "50%",
+    height: "100%",
     width: "100%",
   },
   title: {
