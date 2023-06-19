@@ -8,5 +8,5 @@ interface UseChatGPTRespond {
 
 export const useChatGPTRespond = create<UseChatGPTRespond>((set) => ({
   respond: {},
-  saveRespond: (prompt: any) => set(() => ({ respond: prompt })),
+  saveRespond: (state: any) => set(() => ({ respond: state })),
 }));

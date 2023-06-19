@@ -44,7 +44,7 @@ export default function Map(props: {
         return (
           <Marker
             key={i}
-            image={image}
+            // image={image}
             coordinate={{
               latitude: +value.latitude,
               longitude: +value.longitude,

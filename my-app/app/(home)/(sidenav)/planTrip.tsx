@@ -37,10 +37,23 @@ import {
   PanGestureHandler,
   TapGestureHandler,
 } from "react-native-gesture-handler";
+import { useChatGPTRespond } from "../../../zustand/useChatGPTRespondStore";
 
 type LocationTabs = {
   id: number;
   text: string;
+};
+
+type Input = {
+  budget: null | string;
+  travel_style: null | string;
+  group_size: null | string;
+  StartTime: null | string;
+  EndTime: null | string;
+  interestsNew: null | string;
+  destination: null | string;
+  cuisineType: null | string;
+  activityType: null | string;
 };
 
 function CreateInputTab() {
@@ -48,7 +61,7 @@ function CreateInputTab() {
   const [changed, updateChanged] = useState<boolean>(false);
   const prompt = usePromptStore((state: any) => state.savePrompt);
   const [loadingScreen, setLoadingScreen] = useState();
-  const [topOptionValues, setTopOptionValues] = useState({
+  const [topOptionValues, setTopOptionValues] = useState<Input>({
     budget: null,
     travel_style: null,
     group_size: null,
@@ -59,6 +72,8 @@ function CreateInputTab() {
     cuisineType: null,
     activityType: null,
   });
+  const saveRespond = useChatGPTRespond((state: any) => state.saveRespond);
+  const router = useRouter();
   console.log("snd values: ", topOptionValues);
 
   const onSubmit = async () => {
@@ -76,6 +91,8 @@ function CreateInputTab() {
     try {
       const res = JSON.parse(resText);
       console.log("chatGPT respond: ", res);
+      saveRespond(res);
+      router.push("/calendarPage");
     } catch {
       console.log("chatGPT respond text: ", resText);
     }
@@ -184,18 +201,26 @@ function CreateInputTab() {
   const StartTime = [];
   const EndTime = [];
   for (let h = 1; h <= 12; h++) {
-    StartTime.push({ label: `${h}am`, value: `${h}am` });
-    EndTime.push({ label: `${h}am`, value: `${h}am` });
+    StartTime.push({ label: `${h}am`, value: `${h}:00` });
+    EndTime.push({ label: `${h}am`, value: `${h + 12}:00` });
   }
   for (let h = 1; h <= 12; h++) {
-    StartTime.push({ label: `${h}pm`, value: `${h}pm` });
-    EndTime.push({ label: `${h}pm`, value: `${h}pm` });
+    StartTime.push({ label: `${h}pm`, value: `${h}:00` });
+    EndTime.push({ label: `${h}pm`, value: `${h + 12}:00` });
   }
 
   function touchScreen() {
     Keyboard.dismiss();
   }
 
+  function toTime() {
+    let time = topOptionValues.StartTime;
+    if (time) {
+      let newTime = time.toString().slice(0, -2);
+
+      return newTime;
+    }
+  }
   return (
     <TapGestureHandler onHandlerStateChange={touchScreen} numberOfTaps={1}>
       {/* <TouchableWithoutFeedback onPress={() => touchScreen()}> */}
@@ -259,7 +284,7 @@ function CreateInputTab() {
                   placeholderStyle={styles.dropdown_placeHolder}
                   placeholder={
                     topOptionValues.StartTime
-                      ? "Start Time " + topOptionValues.StartTime
+                      ? "Start Time " + toTime()
                       : "Select Start Time"
                   }
                   data={StartTime}

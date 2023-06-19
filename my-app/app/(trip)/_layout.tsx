@@ -27,15 +27,6 @@ export default function TabLayout() {
         headerTitleStyle: {
           fontWeight: "bold",
         },
-        headerLeft: () => (
-          <Pressable onPress={router.back}>
-            <FontAwesome
-              size={28}
-              style={{ marginBottom: 0 }}
-              name="arrow-left"
-            />
-          </Pressable>
-        ),
       }}
     >
       <Stack.Screen
@@ -63,6 +54,15 @@ export default function TabLayout() {
                 size={28}
                 style={{ marginBottom: 0, marginEnd: 5 }}
                 name="map"
+              />
+            </Pressable>
+          ),
+          headerLeft: () => (
+            <Pressable onPress={router.back}>
+              <FontAwesome
+                size={28}
+                style={{ marginBottom: 0 }}
+                name="arrow-left"
               />
             </Pressable>
           ),

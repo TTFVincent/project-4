@@ -9,13 +9,12 @@ import BasicSwipeList from "../../components/SwipeList";
 import { TripLocation, sampleTrip } from "../../constants/TripLocation";
 import Map from "../../components/Map";
 import { useLocalSearchParams } from "expo-router";
+import { useChatGPTRespond } from "../../zustand/useChatGPTRespondStore";
 
 export default function tripRoutePage() {
+  const respond = useChatGPTRespond((state: any) => state.respond);
   const { locationId, extra } = useLocalSearchParams();
-  const prompt = usePromptStore((state: any) => state.promptList);
-  const showDate = useRegisterStore((state: any) => state.showDate);
-  const token = useTokenStore((state: any) => state.access_token);
-  const [tripData, setTripData] = useState<TripLocation[]>(sampleTrip);
+  const [tripData, setTripData] = useState<TripLocation[]>(respond);
 
   return (
     <View style={styles.container}>
