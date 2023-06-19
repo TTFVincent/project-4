@@ -12,6 +12,7 @@ import {
   Center,
   NativeBaseProvider,
   Link,
+  Image,
 } from "native-base";
 import * as bcrypt from "bcryptjs";
 import { useForm } from "react-hook-form";
@@ -25,7 +26,7 @@ import {
   colour_input_text,
   colour_label_text,
 } from "../../components/css/colors";
-import { Keyboard, TouchableWithoutFeedback } from "react-native";
+import { Keyboard, TouchableWithoutFeedback, StyleSheet } from "react-native";
 
 type Value = {
   email: string;
@@ -68,27 +69,24 @@ const Login = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Center w="100%">
         <Box safeArea p="2" py="8" w="90%" maxW="290">
-          <Heading
-            size="lg"
-            fontWeight="600"
-            color="coolGray.800"
-            _dark={{
-              color: "warmGray.50",
-            }}
-          >
-            Welcome
-          </Heading>
-          <Heading
-            mt="1"
-            _dark={{
-              color: "warmGray.200",
-            }}
-            color="coolGray.600"
-            fontWeight="medium"
-            size="xs"
-          >
-            Sign in to continue!
-          </Heading>
+          <Image
+            source={require("../../assets/images/icon.png")}
+            height={"40%"}
+            mb={3}
+          />
+
+          <Center>
+            <Heading
+              size="lg"
+              fontWeight="600"
+              color="coolGray.800"
+              _dark={{
+                color: "warmGray.50",
+              }}
+            >
+              Welcome
+            </Heading>
+          </Center>
 
           <VStack space={3} mt="5">
             <FormControl>
@@ -124,7 +122,7 @@ const Login = () => {
             >
               Sign in
             </Button>
-            <HStack mt="6" justifyContent="center">
+            <HStack mt="2" justifyContent="center">
               <Text
                 fontSize="sm"
                 color="coolGray.600"
@@ -159,3 +157,5 @@ export default () => {
     </NativeBaseProvider>
   );
 };
+
+const style = StyleSheet.create({});

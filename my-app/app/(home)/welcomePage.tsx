@@ -44,6 +44,7 @@ export default function welcomePage() {
 
           <View style={style.slideViewContainer}>
             <SliderBox
+              style={style.images}
               images={images}
               sliderBoxHeight={400}
               dotColor="#FFEE58"
@@ -55,7 +56,7 @@ export default function welcomePage() {
               autoplay
               autoplayInterval={8000}
               circleLoop
-            />
+            ></SliderBox>
             <StatusBar />
           </View>
 
@@ -87,10 +88,14 @@ export default function welcomePage() {
 }
 
 const style = StyleSheet.create({
+  images: {
+    marginLeft: "10%",
+    height: "100%",
+    width: "80%",
+  },
   slideViewContainer: {
-    height: "50%",
-    width: "100%",
-    marginVertical: 20,
+    height: "40%",
+    marginVertical: 50,
   },
   headerContainer: {
     justifyContent: "center",
