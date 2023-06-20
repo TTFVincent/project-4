@@ -13,10 +13,12 @@ import {
   Button,
 } from "native-base";
 import { TripLocation, sampleTrip } from "../../constants/TripLocation";
+import { useChatGPTRespond } from "../../zustand/useChatGPTRespondStore";
 
 export default function CalendarPage() {
-  const [tripData, setTripData] = useState<TripLocation[]>(sampleTrip);
+  const respond = useChatGPTRespond((state: any) => state.respond);
 
+  const [tripData, setTripData] = useState<TripLocation[]>(respond);
   return (
     <NativeBaseProvider>
       <SafeAreaView style={styles.container}>
