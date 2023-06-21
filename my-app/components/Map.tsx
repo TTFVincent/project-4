@@ -8,6 +8,7 @@ import MapView, {
   Region,
 } from "react-native-maps";
 import { Text, Box, NativeBaseProvider } from "native-base";
+//@ts-ignore
 import { colour_constainer_bg } from "../components/css/colors";
 import MapViewDirections from "react-native-maps-directions";
 //@ts-ignore

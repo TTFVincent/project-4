@@ -3,7 +3,6 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   View,
-  Text,
 } from "react-native";
 import {
   Box,
@@ -15,15 +14,27 @@ import {
   Input,
   NativeBaseProvider,
   Stack,
+  Flex,
+  Text,
+  Slider,
+  Pressable,
 } from "native-base";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faTrashCan, faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPalette,
+  faMusic,
+  faBaseball,
+  faLandmark,
+  faTree,
+  faUtensils,
+} from "@fortawesome/free-solid-svg-icons";
 import { usePromptStore } from "../../../zustand/usePromptStore";
 import {
   color_box_BG,
   color_button_BG,
   color_header_backGround,
+  color_icon_border,
   colour_container_bg,
   colour_input_text,
 } from "../../../components/css/colors";
@@ -33,19 +44,21 @@ import { Dropdown } from "react-native-element-dropdown";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import axios from "axios";
-import {
-  PanGestureHandler,
-  TapGestureHandler,
-} from "react-native-gesture-handler";
+import { TapGestureHandler } from "react-native-gesture-handler";
 import { useChatGPTRespond } from "../../../zustand/useChatGPTRespondStore";
-
+import Spinner from "react-native-loading-spinner-overlay";
+import SegmentedControlTab from "react-native-segmented-control-tab";
+import DatePicker from "react-native-date-picker";
+import DateTimePicker, {
+  DateTimePickerAndroid,
+} from "@react-native-community/datetimepicker";
 type LocationTabs = {
   id: number;
   text: string;
 };
 
 type Input = {
-  budget: null | string;
+  budget: string | undefined;
   travel_style: null | string;
   group_size: null | string;
   StartTime: null | string;
@@ -56,13 +69,19 @@ type Input = {
   activityType: null | string;
 };
 
+const dateTimePickerProps = {
+  value: new Date(),
+  mode: "time",
+  // display: "inline",
+};
+
 function CreateInputTab() {
   const inputValue = useRef<LocationTabs[]>([]);
   const [changed, updateChanged] = useState<boolean>(false);
   const prompt = usePromptStore((state: any) => state.savePrompt);
-  const [loadingScreen, setLoadingScreen] = useState();
+  const [loadingScreen, setLoadingScreen] = useState(false);
   const [topOptionValues, setTopOptionValues] = useState<Input>({
-    budget: null,
+    budget: undefined,
     travel_style: null,
     group_size: null,
     StartTime: null,
@@ -77,7 +96,7 @@ function CreateInputTab() {
   console.log("snd values: ", topOptionValues);
 
   const onSubmit = async () => {
-    console.log(GPT_server);
+    setLoadingScreen(true);
     const response = await fetch(`http://13.54.234.151/gpt/trip`, {
       method: "POST",
       body: JSON.stringify(topOptionValues),
@@ -92,9 +111,11 @@ function CreateInputTab() {
       const res = JSON.parse(resText);
       console.log("chatGPT respond: ", res);
       saveRespond(res);
+      setLoadingScreen(false);
       router.push("/calendarPage");
     } catch {
       console.log("chatGPT respond text: ", resText);
+      setLoadingScreen(false);
     }
 
     // const response = await axios.post(`http://13.54.234.151/gpt/trip`, {
@@ -102,27 +123,6 @@ function CreateInputTab() {
     // });
     // console.log(response.data);
     // prompt(response);
-  };
-
-  const addInput = () => {
-    if (inputValue.current.length >= 3) {
-      return;
-    }
-    let id: number = inputValue.current[0]
-      ? inputValue.current[inputValue.current.length - 1].id + 1
-      : 0;
-
-    inputValue.current = [...inputValue.current, { id, text: "" }];
-    updateChanged(!changed);
-    console.log(inputValue.current);
-  };
-
-  const deleteInput = (id: number) => {
-    const updatedList = inputValue.current.filter((listItem) => {
-      return listItem.id !== id;
-    });
-    inputValue.current = updatedList;
-    updateChanged(!changed);
   };
 
   const inputText = (event: any, id: number) => {
@@ -183,8 +183,6 @@ function CreateInputTab() {
 
   const travelStyle = [
     { label: "Road trip", value: "Road trip" },
-    { label: "Cultural", value: "Cultural travel" },
-    { label: "Food trip", value: "Food travel" },
     { label: "Luxury", value: "Luxury travel" },
     { label: "Budget", value: "Budget travel" },
   ];
@@ -214,46 +212,187 @@ function CreateInputTab() {
   }
 
   function toTime() {
-    let time = topOptionValues.StartTime;
-    if (time) {
-      let newTime = time.toString().slice(0, -2);
+    let showTime = { startTime: "", endTime: "" };
+    let startTime = topOptionValues.StartTime;
+    let endTime = topOptionValues.EndTime;
+    if (startTime) {
+      showTime["startTime"] = startTime.toString().slice(0, -2);
+    }
+    if (endTime) {
+      showTime["endTime"] = endTime.toString().slice(0, -2);
+    }
+    return showTime;
+  }
 
-      return newTime;
+  function checkBudgetInput(input: any) {
+    console.log("leave focus: " + topOptionValues.budget);
+
+    if (/^\d+$/.test(input)) {
+      if (input >= 5000) {
+        setTopOption("5000", "budget");
+        setShowBudget("5000");
+      }
+      if (input <= 1000) {
+        setTopOption("1000", "budget");
+        setShowBudget("1000");
+      }
+
+      setTopOption(input, "budget");
     }
   }
+
+  const [showBudget, setShowBudget] = useState<string>("");
+  // useEffect(() => {
+  //   setShowBudget(checkBudgetInput(topOptionValues.budget));
+  // }, [topOptionValues.budget]);
+
+  const [selectTab, setSelectTab] = useState(0);
+
+  function handleIndexChange(value: number) {
+    setSelectTab(value);
+    setTopOption(String(value + 1), "group_size");
+  }
+
+  function handleInput(text: string) {
+    if (/^\d+$/.test(text)) setShowBudget(text);
+  }
+
+  const [date, setDate] = useState(new Date());
   return (
     <TapGestureHandler onHandlerStateChange={touchScreen} numberOfTaps={1}>
-      {/* <TouchableWithoutFeedback onPress={() => touchScreen()}> */}
       <SafeAreaView style={styles.SafeAreaView}>
         <View style={styles.view_bg}>
+          <Spinner
+            visible={loadingScreen}
+            textContent={"Loading..."}
+            textStyle={styles.spinnerTextStyle}
+          />
           <Box style={styles.topContainer}>
-            <Box
-              px={"5%"}
-              width={"100%"}
-              display="flex"
-              flexDirection="row"
-              justifyContent="space-between"
-              marginY="20px"
-            >
-              <Box width={"47.5%"}>
-                <Dropdown
-                  placeholder={
-                    topOptionValues.budget
-                      ? "Budget: " + topOptionValues.budget
-                      : "Select Budget"
-                  }
-                  placeholderStyle={styles.dropdown_placeHolder}
-                  data={budget}
-                  onChange={(item) => {
-                    setTopOption(item.value, "budget");
+            <ScrollView>
+              {/* ------------------------------ interestsNew tab ------------------------------  */}
+              <Box marginTop="20px">
+                <Flex flexDir={"row"} justifyContent={"space-around"}>
+                  <Box>
+                    <Button
+                      style={
+                        topOptionValues.interestsNew == "Art"
+                          ? styles.interestNewButonsSelected
+                          : styles.interestNewButons
+                      }
+                      onPress={() => setTopOption("Art", "interestsNew")}
+                    >
+                      <FontAwesomeIcon
+                        color="#195CB2"
+                        size={25}
+                        icon={faPalette}
+                      />
+                    </Button>
+                    <Text textAlign={"center"}>Art</Text>
+                  </Box>
+                  <Box>
+                    <Button
+                      style={
+                        topOptionValues.interestsNew == "Food"
+                          ? styles.interestNewButonsSelected
+                          : styles.interestNewButons
+                      }
+                      onPress={() => setTopOption("Food", "interestsNew")}
+                    >
+                      <FontAwesomeIcon
+                        color="#195CB2"
+                        size={25}
+                        icon={faUtensils}
+                      />
+                    </Button>
+                    <Text textAlign={"center"}>Food</Text>
+                  </Box>
+
+                  <Box>
+                    <Button
+                      style={
+                        topOptionValues.interestsNew == "Music"
+                          ? styles.interestNewButonsSelected
+                          : styles.interestNewButons
+                      }
+                      onPress={() => setTopOption("Music", "interestsNew")}
+                    >
+                      <FontAwesomeIcon
+                        color="#195CB2"
+                        size={25}
+                        icon={faMusic}
+                      />
+                    </Button>
+                    <Text textAlign={"center"}>Music</Text>
+                  </Box>
+                  <Box>
+                    <Button
+                      style={
+                        topOptionValues.interestsNew == "Sport"
+                          ? styles.interestNewButonsSelected
+                          : styles.interestNewButons
+                      }
+                      onPress={() => setTopOption("Sport", "interestsNew")}
+                    >
+                      <FontAwesomeIcon
+                        color="#195CB2"
+                        size={25}
+                        icon={faBaseball}
+                      />
+                    </Button>
+                    <Text textAlign={"center"}>Sport</Text>
+                  </Box>
+                  <Box>
+                    <Button
+                      style={
+                        topOptionValues.interestsNew == "History"
+                          ? styles.interestNewButonsSelected
+                          : styles.interestNewButons
+                      }
+                      onPress={() => setTopOption("History", "interestsNew")}
+                    >
+                      <FontAwesomeIcon
+                        color="#195CB2"
+                        size={25}
+                        icon={faLandmark}
+                      />
+                    </Button>
+                    <Text textAlign={"center"}>History</Text>
+                  </Box>
+                  <Box>
+                    <Button
+                      style={
+                        topOptionValues.interestsNew == "Nature"
+                          ? styles.interestNewButonsSelected
+                          : styles.interestNewButons
+                      }
+                      onPress={() => setTopOption("Nature", "interestsNew")}
+                    >
+                      <FontAwesomeIcon
+                        color="#195CB2"
+                        size={25}
+                        icon={faTree}
+                      />
+                    </Button>
+                    <Text textAlign={"center"}>Nature</Text>
+                  </Box>
+                </Flex>
+              </Box>
+
+              {/* ------------------------------ number of people tab ------------------------------  */}
+              <Box marginTop="20px" marginX="20px">
+                <Text style={styles.labelText}>Select number of people</Text>
+                <SegmentedControlTab
+                  values={["1", "2", "3", "4", "5"]}
+                  selectedIndex={selectTab}
+                  onTabPress={(e) => {
+                    handleIndexChange(e);
                   }}
-                  labelField="label"
-                  valueField="value"
-                  style={styles.dropdown}
-                  maxHeight={200}
                 />
               </Box>
-              <Box width={"47.5%"}>
+
+              {/* ------------------------------ travel Style tab------------------------------ */}
+              <Box px={"5%"} marginTop="20px" width={"100%"}>
+                <Text style={styles.labelText}>Select your travel style</Text>
                 <Dropdown
                   placeholder={
                     topOptionValues.travel_style
@@ -270,61 +409,10 @@ function CreateInputTab() {
                   style={styles.dropdown}
                 />
               </Box>
-            </Box>
 
-            <Box
-              px={"5%"}
-              width={"100%"}
-              display="flex"
-              flexDirection="row"
-              justifyContent="space-between"
-            >
-              <Box width={"47.5%"}>
-                <Dropdown
-                  placeholderStyle={styles.dropdown_placeHolder}
-                  placeholder={
-                    topOptionValues.StartTime
-                      ? "Start Time " + toTime()
-                      : "Select Start Time"
-                  }
-                  data={StartTime}
-                  onChange={(item) => {
-                    setTopOption(item.value, "StartTime");
-                  }}
-                  labelField="label"
-                  valueField="value"
-                  style={styles.dropdown}
-                  maxHeight={200}
-                />
-              </Box>
-              <Box width={"47.5%"}>
-                <Dropdown
-                  placeholderStyle={styles.dropdown_placeHolder}
-                  placeholder={
-                    topOptionValues.interestsNew
-                      ? topOptionValues.interestsNew
-                      : "Select Interests New"
-                  }
-                  data={interestsNew}
-                  onChange={(item) => {
-                    setTopOption(item.value, "interestsNew");
-                  }}
-                  labelField="label"
-                  valueField="value"
-                  style={styles.dropdown}
-                  maxHeight={500}
-                />
-              </Box>
-            </Box>
-
-            <Box
-              px={"5%"}
-              width={"100%"}
-              display="flex"
-              flexDirection="row"
-              justifyContent="space-between"
-            >
-              <Box width={"47.5%"}>
+              {/* ------------------------------ travel Cuisine tab------------------------------ */}
+              <Box px={"5%"} marginTop="20px" width={"100%"}>
+                <Text style={styles.labelText}>Select your cuisine type</Text>
                 <Dropdown
                   placeholderStyle={styles.dropdown_placeHolder}
                   placeholder={
@@ -342,7 +430,10 @@ function CreateInputTab() {
                   maxHeight={200}
                 />
               </Box>
-              <Box width={"47.5%"}>
+
+              {/* ------------------------------ travel Activity tab------------------------------ */}
+              <Box px={"5%"} marginTop="20px" width={"100%"}>
+                <Text style={styles.labelText}>Select your activity type</Text>
                 <Dropdown
                   placeholderStyle={styles.dropdown_placeHolder}
                   placeholder={
@@ -360,163 +451,131 @@ function CreateInputTab() {
                   maxHeight={500}
                 />
               </Box>
-            </Box>
 
-            <Box
-              px={"5%"}
-              width={"100%"}
-              display="flex"
-              flexDirection="row"
-              justifyContent="space-between"
-            >
-              <Box width={"47.5%"}>
-                <Dropdown
-                  placeholderStyle={styles.dropdown_placeHolder}
-                  placeholder={
-                    topOptionValues.group_size
-                      ? topOptionValues.group_size
-                      : "Select Group Size"
+              {/* ------------------------------ Time Picker tab------------------------------ */}
+
+              <Box px={"5%"} marginTop="20px" width={"100%"}>
+                <Pressable
+                  onPress={() =>
+                    DateTimePickerAndroid.open(dateTimePickerProps)
                   }
-                  data={group_size}
-                  onChange={(item) => {
-                    setTopOption(item.value, "group_size");
-                  }}
-                  labelField="label"
-                  valueField="value"
-                  style={styles.dropdown}
-                  maxHeight={200}
-                />
-              </Box>
-              <Box width={"47.5%"}>
-                <Dropdown
-                  placeholderStyle={styles.dropdown_placeHolder}
-                  placeholder={
-                    topOptionValues.destination
-                      ? topOptionValues.destination
-                      : "Select Destination"
-                  }
-                  data={destination}
-                  onChange={(item) => {
-                    setTopOption(item.value, "destination");
-                  }}
-                  labelField="label"
-                  valueField="value"
-                  style={styles.dropdown}
-                  maxHeight={500}
-                />
-              </Box>
-            </Box>
-
-            <Box
-              px={"5%"}
-              width={"100%"}
-              display="flex"
-              flexDirection="row"
-              justifyContent="space-between"
-            >
-              <Box width={"47.5%"}>
-                <Dropdown
-                  placeholderStyle={styles.dropdown_placeHolder}
-                  placeholder={
-                    topOptionValues.EndTime
-                      ? "End Time " + topOptionValues.EndTime
-                      : "Select End Time"
-                  }
-                  data={EndTime}
-                  onChange={(item) => {
-                    setTopOption(item.value, "EndTime");
-                  }}
-                  labelField="label"
-                  valueField="value"
-                  style={styles.dropdown}
-                  maxHeight={200}
-                />
-              </Box>
-              <Box width={"47.5%"}></Box>
-            </Box>
-
-            <Center>
-              <Text>Add number of locations</Text>
-              <Button
-                style={styles.addInputButton}
-                onPress={addInput}
-                textAlign={"center"}
-              >
-                <FontAwesomeIcon
-                  icon={faCirclePlus}
-                  size={40}
-                  style={{ color: "#FFF" }}
-                />
-              </Button>
-            </Center>
-          </Box>
-
-          <Box style={styles.secondContainer}>
-            {/* <ScrollView>
-              {inputValue.current.map((locationTabs: LocationTabs, i) => (
-                <Box
-                  key={String(locationTabs.id)}
-                  width={"90%"}
-                  padding={"2%"}
-                  bg={color_box_BG}
                 >
-                  <Box>
-                    <Button
-                      style={styles.deleteButton}
-                      roundedRight="md"
-                      onPress={() => deleteInput(locationTabs.id)}
-                    >
-                      <FontAwesomeIcon icon={faTrashCan} size={20} />
-                    </Button>
-                  </Box>
-                  <Text>Destination {i + 1}</Text>
-                  <Box width={"50%"}>
-                    <Input
-                      width="50%"
-                      type="text"
-                      placeholder="destination"
-                      isFullWidth={true}
-                      onChangeText={(event) => {
-                        inputText(event, locationTabs.id);
-                      }}
-                    />
-                  </Box>
+                  <Text style={styles.labelText}>
+                    Select Starting time type
+                  </Text>
+                </Pressable>
+                {/* <DateTimePicker
+                  value={new Date()}
+                  mode="time"
+                  display="inline"
+                /> */}
+                {/* <DatePicker
+                  mode="time"
+                  onDateChange={(e) => {
+                    setDate;
+                  }}
+                  date={date}
+                /> */}
+              </Box>
 
-                  <Box width={"47.5%"}>
-                    <Dropdown
-                      placeholderStyle={styles.dropdown_placeHolder}
-                      placeholder={
-                        topOptionValues.EndTime
-                          ? "End Time " + topOptionValues.EndTime
-                          : "Select End Time"
-                      }
-                      data={cuisineType}
-                      onChange={(item) => {
-                        setTopOption(item.value, "EndTime");
-                      }}
-                      labelField="label"
-                      valueField="value"
-                      style={styles.dropdown}
-                      maxHeight={200}
-                    />
-                  </Box>
+              <Box
+                px={"5%"}
+                width={"100%"}
+                display="flex"
+                flexDirection="row"
+                justifyContent="space-between"
+              >
+                <Box width={"47.5%"}>
+                  <Dropdown
+                    placeholderStyle={styles.dropdown_placeHolder}
+                    placeholder={
+                      topOptionValues.StartTime
+                        ? "Start Time " + toTime().startTime + "00"
+                        : "Select Start Time"
+                    }
+                    data={StartTime}
+                    onChange={(item) => {
+                      setTopOption(item.value, "StartTime");
+                    }}
+                    labelField="label"
+                    valueField="value"
+                    style={styles.dropdown}
+                    maxHeight={200}
+                  />
                 </Box>
-              ))}
-            </ScrollView> */}
-          </Box>
+              </Box>
 
-          <HStack
-            space="2"
-            alignItems="center"
-            justifyContent={"center"}
-            style={styles.thirdContainer}
-          >
-            <Center>
-              <Button size="16" onPress={async () => onSubmit()}>
-                Plan Trip
-              </Button>
-            </Center>
-          </HStack>
+              <Box
+                px={"5%"}
+                width={"100%"}
+                display="flex"
+                flexDirection="row"
+                justifyContent="space-between"
+              >
+                <Box width={"47.5%"}>
+                  <Dropdown
+                    placeholderStyle={styles.dropdown_placeHolder}
+                    placeholder={
+                      topOptionValues.EndTime
+                        ? "End Time " + toTime().endTime + "00"
+                        : "Select End Time"
+                    }
+                    data={EndTime}
+                    onChange={(item) => {
+                      setTopOption(item.value, "EndTime");
+                    }}
+                    labelField="label"
+                    valueField="value"
+                    style={styles.dropdown}
+                    maxHeight={200}
+                  />
+                </Box>
+              </Box>
+              {/* ------------------------------- budget tab ------------------------------- */}
+              <Box marginX="20px" marginTop="20px">
+                <Text style={styles.labelText}>Input your budget</Text>
+
+                <Input
+                  fontSize={15}
+                  value={showBudget}
+                  onEndEditing={(e) => {
+                    console.log(e.nativeEvent.text);
+                    checkBudgetInput(e.nativeEvent.text);
+                  }}
+                  onChangeText={(e) => {
+                    handleInput(e);
+                  }}
+                  placeholder={"Input your budget 1000 - 5000"}
+                />
+              </Box>
+
+              {/* ------------------------------- Destination tab ------------------------------- */}
+              <Box marginX="20px" marginTop="20px">
+                <Text style={styles.labelText}>
+                  Input the country and the city
+                </Text>
+                <Input
+                  fontSize={15}
+                  onEndEditing={(e) => {
+                    setTopOption(e.nativeEvent.text, "destination");
+                    console.log();
+                  }}
+                  placeholder={"Eg: Japan Tokyo"}
+                />
+              </Box>
+
+              <Center>
+                <Button
+                  marginTop={"20px"}
+                  style={styles.Button_planTrip}
+                  onPress={async () => onSubmit()}
+                  fontSize={"sm"}
+                >
+                  Plan Trip
+                </Button>
+              </Center>
+            </ScrollView>
+          </Box>
         </View>
       </SafeAreaView>
     </TapGestureHandler>
@@ -532,15 +591,23 @@ export default function PlanTrip() {
 }
 
 const styles = StyleSheet.create({
+  interestNewButons: {
+    borderRadius: 15,
+    backgroundColor: "#eee",
+    borderColor: color_icon_border,
+    borderWidth: 1,
+  },
+  interestNewButonsSelected: {
+    borderRadius: 15,
+    backgroundColor: "#aaa",
+    borderColor: color_icon_border,
+    borderWidth: 1,
+  },
+  spinnerTextStyle: { color: "#FFF" },
   SafeAreaView: { backgroundColor: color_header_backGround },
   view_bg: {
     backgroundColor: colour_container_bg,
     height: "100%",
-  },
-  addInputButton: {
-    backgroundColor: color_button_BG,
-    color: color_button_BG,
-    bottom: 5,
   },
   deleteButton: {
     backgroundColor: "#fff",
@@ -548,31 +615,30 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     backgroundColor: "white",
-    borderRadius: 12,
+    borderRadius: 15,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 2,
     },
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
-
-    elevation: 2,
+    elevation: 5,
+    height: 40,
   },
   dropdown_placeHolder: {
     textAlign: "center",
   },
   topContainer: {
-    height: "55%",
-    borderBottomColor: "#000",
-    borderWidth: 2,
+    height: "100%",
   },
-  secondContainer: {
-    height: "30%",
-    backgroundColor: colour_input_text,
+  labelText: {
+    marginBottom: 5,
+    fontWeight: "bold",
   },
-  thirdContainer: {
-    height: "15%",
-    backgroundColor: "#0f0",
+  Button_planTrip: {
+    height: 50,
+    width: 200,
+    borderRadius: 20,
   },
 });
