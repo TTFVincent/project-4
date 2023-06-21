@@ -1,46 +1,30 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { RowMap, SwipeListView } from "react-native-swipe-list-view";
-import {
-  Dimensions,
-  ListRenderItemInfo,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ListRenderItemInfo } from "react-native";
 import {
   NativeBaseProvider,
   Box,
   Text,
   Pressable,
-  Heading,
-  IconButton,
   Icon,
   HStack,
-  Avatar,
   VStack,
   Spacer,
-  Center,
-  ScrollView,
-  Modal,
-  FormControl,
-  Input,
-  Button,
-  TextArea,
-  Divider,
 } from "native-base";
-import { MaterialIcons, Entypo } from "@expo/vector-icons";
-import { TripLocation } from "../constants/TripLocation";
+import { MaterialIcons } from "@expo/vector-icons";
+import { Trip } from "../constants/TripLocation";
 
 export default function BasicSwipeList(props: {
-  data: TripLocation[];
-  setData: Dispatch<SetStateAction<TripLocation[]>>;
+  data: Trip[];
+  setData: Dispatch<SetStateAction<Trip[]>>;
 }) {
-  const closeRow = (rowMap: RowMap<TripLocation>, rowKey: string) => {
+  const closeRow = (rowMap: RowMap<Trip>, rowKey: string) => {
     if (rowMap[rowKey]) {
       rowMap[rowKey].closeRow();
     }
   };
 
-  const deleteRow = (rowMap: RowMap<TripLocation>, rowKey: string) => {
+  const deleteRow = (rowMap: RowMap<Trip>, rowKey: string) => {
     console.log("Delete this row", rowKey);
     closeRow(rowMap, rowKey);
     props.setData(props.data.filter((item) => item.id !== rowKey));
@@ -50,7 +34,7 @@ export default function BasicSwipeList(props: {
     console.log("This row opened", rowKey);
   };
 
-  const renderItem = (data: ListRenderItemInfo<TripLocation>) => (
+  const renderItem = (data: ListRenderItemInfo<Trip>) => (
     <Box pl="6" pr="5" py="2" bgColor="white">
       <HStack alignItems="center" space={3}>
         <VStack>
@@ -61,7 +45,7 @@ export default function BasicSwipeList(props: {
             }}
             bold
           >
-            {data.item.location}
+            Trip
           </Text>
           <Text
             color="coolGray.600"
@@ -69,7 +53,7 @@ export default function BasicSwipeList(props: {
               color: "warmGray.200",
             }}
           >
-            {data.item.location_address}
+            {data.item.id}
           </Text>
         </VStack>
         <Spacer />
@@ -78,8 +62,8 @@ export default function BasicSwipeList(props: {
   );
 
   const renderHiddenItem = (
-    data: ListRenderItemInfo<TripLocation>,
-    rowMap: RowMap<TripLocation>
+    data: ListRenderItemInfo<Trip>,
+    rowMap: RowMap<Trip>
   ) => (
     <HStack flex="1" pl="2">
       <Pressable

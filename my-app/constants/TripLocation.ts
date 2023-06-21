@@ -1,3 +1,5 @@
+export type Trip = { id: string; trip: TripLocation[] };
+
 export type TripLocation = {
   location: string;
   location_address: string;
@@ -8,42 +10,46 @@ export type TripLocation = {
   budget: string;
 };
 
-export const sampleTrip: TripLocation[] = [
-  {
-    location: "The Peak",
-    location_address: "Victoria Peak, Central and Western District, Hong Kong",
-    latitude: "22.2758",
-    longitude: "114.1455",
-    from_time: "1000",
-    to_time: "1200",
-    budget: "65",
-  },
-  {
-    location: "Hong Kong Museum of Art",
-    location_address: "10 Salisbury Rd, Tsim Sha Tsui, Hong Kong",
-    latitude: "22.2948",
-    longitude: "114.1713",
-    from_time: "1300",
-    to_time: "1500",
-    budget: "10",
-  },
-  {
-    location: "Giacomo Ristorante Italiano",
-    location_address:
-      "Shop 1, G/F Heung Hoi Mansion, 26 Soy Street, Mong Kok, Hong Kong",
-    latitude: "22.3176",
-    longitude: "114.1703",
-    from_time: "1800",
-    to_time: "2000",
-    budget: "250",
-  },
-  {
-    location: "Ladies' Market",
-    location_address: "Tung Choi St, Mong Kok, Hong Kong",
-    latitude: "22.3192",
-    longitude: "114.1698",
-    from_time: "2100",
-    to_time: "2300",
-    budget: "30",
-  },
-];
+export const sampleTrip: Trip = {
+  id: "0",
+  trip: [
+    {
+      location: "The Peak",
+      location_address:
+        "Victoria Peak, Central and Western District, Hong Kong",
+      latitude: "22.2758",
+      longitude: "114.1455",
+      from_time: "1000",
+      to_time: "1200",
+      budget: "65",
+    },
+    {
+      location: "Hong Kong Museum of Art",
+      location_address: "10 Salisbury Rd, Tsim Sha Tsui, Hong Kong",
+      latitude: "22.2948",
+      longitude: "114.1713",
+      from_time: "1300",
+      to_time: "1500",
+      budget: "10",
+    },
+    {
+      location: "Giacomo Ristorante Italiano",
+      location_address:
+        "Shop 1, G/F Heung Hoi Mansion, 26 Soy Street, Mong Kok, Hong Kong",
+      latitude: "22.3176",
+      longitude: "114.1703",
+      from_time: "1800",
+      to_time: "2000",
+      budget: "250",
+    },
+    {
+      location: "Ladies' Market",
+      location_address: "Tung Choi St, Mong Kok, Hong Kong",
+      latitude: "22.3192",
+      longitude: "114.1698",
+      from_time: "2100",
+      to_time: "2300",
+      budget: "30",
+    },
+  ],
+};
