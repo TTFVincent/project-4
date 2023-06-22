@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "echo",
+    "password": "echo",
+    "database": "tecky_project_4_gpt",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "echo",
+    "password": "echo",
+    "database": "tecky_project_4_gpt",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "echo",
+    "password": "echo",
+    "database": "tecky_project_4_gpt",
+    "host": "localhost",
+    "dialect": "postgres"
+  }
+}

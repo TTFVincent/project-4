@@ -11,7 +11,7 @@ import {
 import { TripLocation } from 'src/models/trip-locations/entities/trip-location.entity';
 import { Trip } from 'src/models/trips/entities/trip.entity';
 
-Table({ tableName: 'locations' });
+@Table({ tableName: 'locations' })
 export class Location extends Model {
   @Column({ primaryKey: true, autoIncrement: true })
   id: number;

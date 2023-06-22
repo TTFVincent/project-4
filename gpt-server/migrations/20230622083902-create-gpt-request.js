@@ -2,32 +2,45 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('users', {
+    await queryInterface.createTable('gpt_requests', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      name: {
-        allowNull: false,
+      group_size: {
         type: Sequelize.STRING,
       },
-      email: {
-        unique: true,
-        allowNull: false,
+      destination: {
         type: Sequelize.STRING,
       },
-      password: {
-        allowNull: false,
+      budget: {
         type: Sequelize.STRING,
       },
-      phone: {
+      travel_style: {
         type: Sequelize.STRING,
       },
-      role: {
-        allowNull: false,
+      activity_type: {
         type: Sequelize.STRING,
+      },
+      cuisine_type: {
+        type: Sequelize.STRING,
+      },
+      interests_new: {
+        type: Sequelize.STRING,
+      },
+      start_time: {
+        type: Sequelize.STRING,
+      },
+      end_time: {
+        type: Sequelize.STRING,
+      },
+      interests_new: {
+        type: Sequelize.STRING,
+      },
+      output: {
+        type: Sequelize.STRING(2047),
       },
       createdAt: {
         allowNull: false,
@@ -42,6 +55,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('users');
+    await queryInterface.dropTable('gpt_requests');
   },
 };
