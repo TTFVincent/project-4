@@ -1,5 +1,6 @@
 import {
   Keyboard,
+  Platform,
   StyleSheet,
   TouchableWithoutFeedback,
   View,
@@ -51,6 +52,7 @@ import SegmentedControlTab from "react-native-segmented-control-tab";
 import DatePicker from "react-native-date-picker";
 import DateTimePicker, {
   DateTimePickerAndroid,
+  DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { useTrip } from "../../../context/personalTripContext";
 type LocationTabs = {
@@ -68,12 +70,6 @@ type Input = {
   destination: null | string;
   cuisine_type: null | string;
   activity_type: null | string;
-};
-
-const dateTimePickerProps = {
-  value: new Date(),
-  mode: "time",
-  // display: "inline",
 };
 
 function CreateInputTab() {
@@ -100,6 +96,35 @@ function CreateInputTab() {
   });
   const saveRespond = useChatGPTRespond((state: any) => state.saveRespond);
   const router = useRouter();
+  const [formStartTime, setFormStartTime] = useState<Date>(new Date());
+  const [formEndTime, setFormEndTime] = useState<Date>(new Date());
+
+  function setStartTime(event: DateTimePickerEvent, date?: Date) {
+    if (date) {
+      setFormStartTime(date);
+      setTopOption(date.toTimeString().slice(0, 5), "start_time");
+    }
+  }
+
+  function setEndTime(event: DateTimePickerEvent, date?: Date) {
+    if (date) {
+      setFormEndTime(date);
+      setTopOption(date.toTimeString().slice(0, 5), "end_time");
+    }
+  }
+
+  const startDateTimePickerProps = {
+    value: formStartTime,
+    onChange: setStartTime,
+    // display: "inline",
+  };
+
+  const endDateTimePickerProps = {
+    value: formEndTime,
+    onChange: setEndTime,
+    // display: "inline",
+  };
+
   console.log("snd values: ", topOptionValues);
 
   const onSubmit = async () => {
@@ -439,39 +464,41 @@ function CreateInputTab() {
                 )} */}
                 <Center>
                   <Text style={styles.labelText}>Starting time type</Text>
-                  <Pressable
-                    onPress={() => {
-                      let time = String(
-                        //@ts-ignore
-                        DateTimePickerAndroid.open(dateTimePickerProps)
-                      );
-                      setTopOption(time, "start_time");
-                    }}
-                  >
-                    <Box style={styles.timeButtons}>
-                      <Text fontSize={"3xl"} style={styles.timeTextDisplay}>
-                        {topOptionValues.start_time}88:88
-                      </Text>
-                    </Box>
-                  </Pressable>
+                  {Platform.OS === "android" && (
+                    <Pressable
+                      onPress={() => {
+                        DateTimePickerAndroid.open(startDateTimePickerProps);
+                      }}
+                    >
+                      <Box style={styles.timeButtons}>
+                        <Text fontSize={"3xl"} style={styles.timeTextDisplay}>
+                          {topOptionValues.start_time}88:88
+                        </Text>
+                      </Box>
+                    </Pressable>
+                  )}
+                  {Platform.OS === "ios" && (
+                    <DateTimePicker {...startDateTimePickerProps} mode="time" />
+                  )}
                 </Center>
                 <Center>
                   <Text style={styles.labelText}> Ending time type</Text>
-                  <Pressable
-                    onPress={() => {
-                      let time = String(
-                        //@ts-ignore
-                        DateTimePickerAndroid.open(dateTimePickerProps)
-                      );
-                      setTopOption(time, "start_time");
-                    }}
-                  >
-                    <Box style={styles.timeButtons}>
-                      <Text fontSize={"3xl"} style={styles.timeTextDisplay}>
-                        {topOptionValues.start_time}88:88
-                      </Text>
-                    </Box>
-                  </Pressable>
+                  {Platform.OS === "android" && (
+                    <Pressable
+                      onPress={() => {
+                        DateTimePickerAndroid.open(endDateTimePickerProps);
+                      }}
+                    >
+                      <Box style={styles.timeButtons}>
+                        <Text fontSize={"3xl"} style={styles.timeTextDisplay}>
+                          {topOptionValues.end_time}88:88
+                        </Text>
+                      </Box>
+                    </Pressable>
+                  )}
+                  {Platform.OS === "ios" && (
+                    <DateTimePicker {...endDateTimePickerProps} mode="time" />
+                  )}
                 </Center>
                 {/* <DateTimePicker
                   value={new Date()}
