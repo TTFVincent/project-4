@@ -61,12 +61,12 @@ type Input = {
   budget: string | undefined;
   travel_style: null | string;
   group_size: null | string;
-  StartTime: null | string;
-  EndTime: null | string;
-  interestsNew: null | string;
+  start_time: null | string;
+  end_time: null | string;
+  interests_new: null | string;
   destination: null | string;
-  cuisineType: null | string;
-  activityType: null | string;
+  cuisine_type: null | string;
+  activity_type: null | string;
 };
 
 const dateTimePickerProps = {
@@ -76,18 +76,19 @@ const dateTimePickerProps = {
 };
 
 function CreateInputTab() {
-  const inputValue = useRef<LocationTabs[]>([]);
+  const [showBudget, setShowBudget] = useState<string>("");
+  const [selectTab, setSelectTab] = useState(0);
   const [loadingScreen, setLoadingScreen] = useState(false);
   const [topOptionValues, setTopOptionValues] = useState<Input>({
     budget: undefined,
     travel_style: null,
     group_size: null,
-    StartTime: null,
-    EndTime: null,
-    interestsNew: null,
+    start_time: null,
+    end_time: null,
+    interests_new: null,
     destination: null,
-    cuisineType: null,
-    activityType: null,
+    cuisine_type: null,
+    activity_type: null,
   });
   const saveRespond = useChatGPTRespond((state: any) => state.saveRespond);
   const router = useRouter();
@@ -123,53 +124,12 @@ function CreateInputTab() {
     // prompt(response);
   };
 
-  const inputText = (event: any, id: number) => {
-    const value = event;
-    const newInput = { id: id, text: value };
-    const updatedList = inputValue.current.map((listItem) => {
-      return listItem.id === id ? newInput : listItem;
-    });
-    inputValue.current = updatedList;
-  };
-
   function setTopOption(value: string, key: string) {
     setTopOptionValues({
       ...topOptionValues,
       [`${key}`]: value,
     });
   }
-
-  const budget = [
-    { label: "100 ~ 500", value: "500" },
-    { label: "500 ~ 1000", value: "1000" },
-    { label: "1000 ~ 2000", value: "2000" },
-    { label: "2000 ~ 5000", value: "5000" },
-    { label: "5000 ~ 10000", value: "10000" },
-    { label: "10000+", value: "10000 plus" },
-  ];
-  const interestsNew = [
-    { label: "Art", value: "Art" },
-    { label: "Music", value: "Music" },
-    { label: "Sport", value: "Sport" },
-    { label: "Food", value: "Food" },
-    { label: "Nature", value: "Nature" },
-    { label: "History", value: "History" },
-  ];
-
-  const group_size = [
-    { label: "1", value: "1" },
-    { label: "2", value: "2" },
-    { label: "3", value: "3" },
-    { label: "4", value: "4" },
-    { label: "5", value: "5" },
-    { label: "6", value: "6" },
-  ];
-
-  const destination = [
-    { label: "HK", value: "Hong Kong" },
-    { label: "New York", value: "New York" },
-    { label: "Tokyo", value: "Tokyo" },
-  ];
 
   const activityType = [
     { label: "Out door", value: "Out door" },
@@ -184,7 +144,7 @@ function CreateInputTab() {
     { label: "Luxury", value: "Luxury travel" },
     { label: "Budget", value: "Budget travel" },
   ];
-  const cuisineType = [
+  const cuisine_type = [
     { label: "Italian cuisine", value: "Italian cuisine" },
     { label: "Chinese cuisine", value: "Chinese cuisine" },
     { label: "Mexican cuisine", value: "Mexican cuisine" },
@@ -210,14 +170,14 @@ function CreateInputTab() {
   }
 
   function toTime() {
-    let showTime = { startTime: "", endTime: "" };
-    let startTime = topOptionValues.StartTime;
-    let endTime = topOptionValues.EndTime;
+    let showTime = { start_time: "", end_time: "" };
+    let startTime = topOptionValues.start_time;
+    let endTime = topOptionValues.end_time;
     if (startTime) {
-      showTime["startTime"] = startTime.toString().slice(0, -2);
+      showTime["start_time"] = startTime.toString().slice(0, -2);
     }
     if (endTime) {
-      showTime["endTime"] = endTime.toString().slice(0, -2);
+      showTime["end_time"] = endTime.toString().slice(0, -2);
     }
     return showTime;
   }
@@ -239,12 +199,13 @@ function CreateInputTab() {
     }
   }
 
-  const [showBudget, setShowBudget] = useState<string>("");
-  // useEffect(() => {
-  //   setShowBudget(checkBudgetInput(topOptionValues.budget));
-  // }, [topOptionValues.budget]);
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
 
-  const [selectTab, setSelectTab] = useState(0);
+  const onChange = (event: any, selectedDate: any) => {
+    const currentDate = selectedDate || date;
+    setDate(currentDate);
+  };
 
   function handleIndexChange(value: number) {
     setSelectTab(value);
@@ -255,7 +216,6 @@ function CreateInputTab() {
     if (/^\d+$/.test(text)) setShowBudget(text);
   }
 
-  const [date, setDate] = useState(new Date());
   return (
     <TapGestureHandler onHandlerStateChange={touchScreen} numberOfTaps={1}>
       <SafeAreaView style={styles.SafeAreaView}>
@@ -267,17 +227,17 @@ function CreateInputTab() {
           />
           <Box style={styles.topContainer}>
             <ScrollView>
-              {/* ------------------------------ interestsNew tab ------------------------------  */}
+              {/* ------------------------------ interests_new tab ------------------------------  */}
               <Box marginTop="20px">
                 <Flex flexDir={"row"} justifyContent={"space-around"}>
                   <Box>
                     <Button
                       style={
-                        topOptionValues.interestsNew == "Art"
+                        topOptionValues.interests_new == "Art"
                           ? styles.interestNewButonsSelected
                           : styles.interestNewButons
                       }
-                      onPress={() => setTopOption("Art", "interestsNew")}
+                      onPress={() => setTopOption("Art", "interests_new")}
                     >
                       <FontAwesomeIcon
                         color="#195CB2"
@@ -290,11 +250,11 @@ function CreateInputTab() {
                   <Box>
                     <Button
                       style={
-                        topOptionValues.interestsNew == "Food"
+                        topOptionValues.interests_new == "Food"
                           ? styles.interestNewButonsSelected
                           : styles.interestNewButons
                       }
-                      onPress={() => setTopOption("Food", "interestsNew")}
+                      onPress={() => setTopOption("Food", "interests_new")}
                     >
                       <FontAwesomeIcon
                         color="#195CB2"
@@ -308,11 +268,11 @@ function CreateInputTab() {
                   <Box>
                     <Button
                       style={
-                        topOptionValues.interestsNew == "Music"
+                        topOptionValues.interests_new == "Music"
                           ? styles.interestNewButonsSelected
                           : styles.interestNewButons
                       }
-                      onPress={() => setTopOption("Music", "interestsNew")}
+                      onPress={() => setTopOption("Music", "interests_new")}
                     >
                       <FontAwesomeIcon
                         color="#195CB2"
@@ -325,11 +285,11 @@ function CreateInputTab() {
                   <Box>
                     <Button
                       style={
-                        topOptionValues.interestsNew == "Sport"
+                        topOptionValues.interests_new == "Sport"
                           ? styles.interestNewButonsSelected
                           : styles.interestNewButons
                       }
-                      onPress={() => setTopOption("Sport", "interestsNew")}
+                      onPress={() => setTopOption("Sport", "interests_new")}
                     >
                       <FontAwesomeIcon
                         color="#195CB2"
@@ -342,11 +302,11 @@ function CreateInputTab() {
                   <Box>
                     <Button
                       style={
-                        topOptionValues.interestsNew == "History"
+                        topOptionValues.interests_new == "History"
                           ? styles.interestNewButonsSelected
                           : styles.interestNewButons
                       }
-                      onPress={() => setTopOption("History", "interestsNew")}
+                      onPress={() => setTopOption("History", "interests_new")}
                     >
                       <FontAwesomeIcon
                         color="#195CB2"
@@ -359,11 +319,11 @@ function CreateInputTab() {
                   <Box>
                     <Button
                       style={
-                        topOptionValues.interestsNew == "Nature"
+                        topOptionValues.interests_new == "Nature"
                           ? styles.interestNewButonsSelected
                           : styles.interestNewButons
                       }
-                      onPress={() => setTopOption("Nature", "interestsNew")}
+                      onPress={() => setTopOption("Nature", "interests_new")}
                     >
                       <FontAwesomeIcon
                         color="#195CB2"
@@ -414,13 +374,13 @@ function CreateInputTab() {
                 <Dropdown
                   placeholderStyle={styles.dropdown_placeHolder}
                   placeholder={
-                    topOptionValues.cuisineType
-                      ? topOptionValues.cuisineType
+                    topOptionValues.cuisine_type
+                      ? topOptionValues.cuisine_type
                       : "Select Cuisine Type"
                   }
-                  data={cuisineType}
+                  data={cuisine_type}
                   onChange={(item) => {
-                    setTopOption(item.value, "cuisineType");
+                    setTopOption(item.value, "cuisine_type");
                   }}
                   labelField="label"
                   valueField="value"
@@ -435,13 +395,13 @@ function CreateInputTab() {
                 <Dropdown
                   placeholderStyle={styles.dropdown_placeHolder}
                   placeholder={
-                    topOptionValues.activityType
-                      ? topOptionValues.activityType
+                    topOptionValues.activity_type
+                      ? topOptionValues.activity_type
                       : "Select Activity Type"
                   }
                   data={activityType}
                   onChange={(item) => {
-                    setTopOption(item.value, "activityType");
+                    setTopOption(item.value, "activity_type");
                   }}
                   labelField="label"
                   valueField="value"
@@ -452,20 +412,58 @@ function CreateInputTab() {
 
               {/* ------------------------------ Time Picker tab------------------------------ */}
 
-              <Box px={"5%"} marginTop="20px" width={"100%"}>
-                <Pressable
-                  onPress={() => {
-                    let time = String(
-                      DateTimePickerAndroid.open(dateTimePickerProps)
-                    );
-                    setTopOption(time, "Starttime");
-                  }}
-                >
-                  <Text style={styles.labelText}>
-                    Select Starting time type
-                  </Text>
-                  <Text>{topOptionValues.StartTime}</Text>
-                </Pressable>
+              <Box
+                px={"5%"}
+                marginTop="20px"
+                width={"100%"}
+                display={"flex"}
+                flexDir={"row"}
+                justifyContent={"space-around"}
+              >
+                {/* {show && (
+                  <DateTimePicker
+                    mode="time"
+                    is24Hour={true}
+                    value={date}
+                    onChange={onchange}
+                  />
+                )} */}
+                <Center>
+                  <Text style={styles.labelText}>Starting time type</Text>
+                  <Pressable
+                    onPress={() => {
+                      let time = String(
+                        //@ts-ignore
+                        DateTimePickerAndroid.open(dateTimePickerProps)
+                      );
+                      setTopOption(time, "start_time");
+                    }}
+                  >
+                    <Box style={styles.timeButtons}>
+                      <Text fontSize={"3xl"} style={styles.timeTextDisplay}>
+                        {topOptionValues.start_time}88:88
+                      </Text>
+                    </Box>
+                  </Pressable>
+                </Center>
+                <Center>
+                  <Text style={styles.labelText}> Ending time type</Text>
+                  <Pressable
+                    onPress={() => {
+                      let time = String(
+                        //@ts-ignore
+                        DateTimePickerAndroid.open(dateTimePickerProps)
+                      );
+                      setTopOption(time, "start_time");
+                    }}
+                  >
+                    <Box style={styles.timeButtons}>
+                      <Text fontSize={"3xl"} style={styles.timeTextDisplay}>
+                        {topOptionValues.start_time}88:88
+                      </Text>
+                    </Box>
+                  </Pressable>
+                </Center>
                 {/* <DateTimePicker
                   value={new Date()}
                   mode="time"
@@ -491,13 +489,13 @@ function CreateInputTab() {
                   <Dropdown
                     placeholderStyle={styles.dropdown_placeHolder}
                     placeholder={
-                      topOptionValues.StartTime
-                        ? "Start Time " + toTime().startTime + "00"
+                      topOptionValues.start_time
+                        ? "Start Time " + toTime().start_time + "00"
                         : "Select Start Time"
                     }
                     data={StartTime}
                     onChange={(item) => {
-                      setTopOption(item.value, "StartTime");
+                      setTopOption(item.value, "start_time");
                     }}
                     labelField="label"
                     valueField="value"
@@ -518,13 +516,13 @@ function CreateInputTab() {
                   <Dropdown
                     placeholderStyle={styles.dropdown_placeHolder}
                     placeholder={
-                      topOptionValues.EndTime
-                        ? "End Time " + toTime().endTime + "00"
+                      topOptionValues.end_time
+                        ? "End Time " + toTime().end_time + "00"
                         : "Select End Time"
                     }
                     data={EndTime}
                     onChange={(item) => {
-                      setTopOption(item.value, "EndTime");
+                      setTopOption(item.value, "end_time");
                     }}
                     labelField="label"
                     valueField="value"
@@ -593,6 +591,15 @@ export default function PlanTrip() {
 }
 
 const styles = StyleSheet.create({
+  timeTextDisplay: {},
+  timeButtons: {
+    width: 100,
+    height: 50,
+    borderWidth: 2,
+    borderColor: "#000",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   interestNewButons: {
     borderRadius: 15,
     backgroundColor: "#eee",

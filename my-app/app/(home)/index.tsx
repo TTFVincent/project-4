@@ -13,6 +13,8 @@ import {
   NativeBaseProvider,
   Link,
   Image,
+  Checkbox,
+  Spacer,
 } from "native-base";
 import * as bcrypt from "bcryptjs";
 import { useForm } from "react-hook-form";
@@ -27,6 +29,7 @@ import {
   colour_label_text,
 } from "../../components/css/colors";
 import { Keyboard, TouchableWithoutFeedback, StyleSheet } from "react-native";
+import { getValueFor, saveValue } from "../../constants/Storage";
 
 type Value = {
   email: string;
@@ -39,6 +42,9 @@ const Login = () => {
   const access_token = useTokenStore((state: any) => state.access_token);
   const [value, setValue] = useState<Value>({ email: "", password: "" });
   const { handleSubmit } = useForm<Value>();
+  const [rememberMe, setRememberMe] = useState<boolean>();
+
+  saveToken(getValueFor("token"));
 
   useEffect(() => {
     const redirectPath = access_token ? "/planTrip" : "/";
@@ -55,6 +61,11 @@ const Login = () => {
     axios.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${result.data.access_token}`;
+
+    if (rememberMe) {
+      console.log(" token saved");
+      saveValue("token", result.data.access_token);
+    }
     console.log(result.data.access_token);
   };
 
@@ -103,17 +114,32 @@ const Login = () => {
                 onChangeText={(event) => updateFormValue(event, "password")}
                 type="password"
               />
-              <Link
-                _text={{
-                  fontSize: "xs",
-                  fontWeight: "500",
-                  color: "indigo.500",
-                }}
-                alignSelf="flex-end"
-                mt="1"
+              <Box
+                display={"flex"}
+                justifyContent={"space-between"}
+                flexDir={"row"}
+                alignItems={"center"}
               >
-                Forget Password?
-              </Link>
+                <Checkbox
+                  value="true"
+                  onChange={(e) => {
+                    setRememberMe(e);
+                  }}
+                  style={style.checkbox}
+                >
+                  Remeber me
+                </Checkbox>
+                <Link
+                  _text={{
+                    fontSize: "xs",
+                    fontWeight: "500",
+                    color: "indigo.500",
+                  }}
+                  alignSelf="flex-end"
+                >
+                  Forget Password?
+                </Link>
+              </Box>
             </FormControl>
             <Button
               onPress={handleSubmit(onSubmit)}
@@ -130,7 +156,7 @@ const Login = () => {
                   color: "warmGray.200",
                 }}
               >
-                Do not have an account.{" "}
+                Do not have an account.
               </Text>
               <Text
                 onPress={() => {
@@ -158,4 +184,9 @@ export default () => {
   );
 };
 
-const style = StyleSheet.create({});
+const style = StyleSheet.create({
+  checkbox: {
+    width: 18,
+    height: 18,
+  },
+});
