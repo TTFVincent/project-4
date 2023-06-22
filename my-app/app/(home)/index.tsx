@@ -15,6 +15,7 @@ import {
   Image,
   Checkbox,
   Spacer,
+  ScrollView,
 } from "native-base";
 import * as bcrypt from "bcryptjs";
 import { useForm } from "react-hook-form";
@@ -40,20 +41,34 @@ const Login = () => {
   const router = useRouter();
   const saveToken = useTokenStore((state: any) => state.saveToken);
   const access_token = useTokenStore((state: any) => state.access_token);
+  const user_id = useTokenStore((state: any) => state.user_id);
   const [value, setValue] = useState<Value>({ email: "", password: "" });
   const { handleSubmit } = useForm<Value>();
   const [rememberMe, setRememberMe] = useState<boolean>();
+  const [localToken, setLocalToken] = useState<string>();
+  const [localId, setLocalId] = useState<string>();
 
-  saveToken(getValueFor("token"));
+  async function loadToken() {
+    const tokenFromLocal = await getValueFor("token");
+    const idFromLocal = await getValueFor("id");
 
-  useEffect(() => {
+    if (tokenFromLocal) setLocalToken(tokenFromLocal);
+    if (idFromLocal) setLocalId(idFromLocal);
+
+    saveToken({ access_token: tokenFromLocal, user_id: idFromLocal });
     const redirectPath = access_token ? "/planTrip" : "/";
+
     setTimeout(() => !!router && router.push(redirectPath), 250);
+  }
+  useEffect(() => {
+    loadToken();
   }, [access_token]);
 
   const onSubmit = async () => {
     const result = await axios.post(`${back_end_server}/auth/sign-in`, value);
 
+    console.log("fetch token: " + result.data.access_token);
+    console.log("fetch token: " + result.data.user_id);
     saveToken({
       access_token: result.data.access_token,
       user_id: result.data.user_id,
@@ -65,6 +80,7 @@ const Login = () => {
     if (rememberMe) {
       console.log(" token saved");
       saveValue("token", result.data.access_token);
+      saveValue("Id", result.data.user_id);
     }
     console.log(result.data.access_token);
   };
@@ -80,15 +96,15 @@ const Login = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Center w="100%">
         <Box safeArea p="2" py="8" w="90%" maxW="290">
-          <Image
+          {/* <Image
             source={require("../../assets/images/icon.png")}
             height={"40%"}
             mb={3}
           />
-
-          <Center>
+ */}
+          {/* <Center>
             <Heading
-              size="lg"
+              size="sm"
               fontWeight="600"
               color="coolGray.800"
               _dark={{
@@ -96,8 +112,13 @@ const Login = () => {
               }}
             >
               Welcome
+             
             </Heading>
-          </Center>
+          </Center> */}
+          <Text fontSize={5}>fetch Token: {access_token}</Text>
+          <Text fontSize={5}>fetch id: {user_id}</Text>
+          <Text fontSize={5}>local Token: {localToken}</Text>
+          <Text fontSize={5}>local id: {localId}</Text>
 
           <VStack space={3} mt="5">
             <FormControl>

@@ -13,6 +13,7 @@ import { color_header_backGround } from "../../../components/css/colors";
 import Profile from "./profile";
 import React from "react";
 import myTripPage from "./myTripPage";
+import { saveValue } from "../../../constants/Storage";
 function HomeScreen({ navigation }: any) {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -44,6 +45,7 @@ function signOut(navigation: any, saveToken: any) {
     access_token: null,
     user_id: null,
   });
+  saveValue("token", "");
   navigation.navigate("index");
 }
 
