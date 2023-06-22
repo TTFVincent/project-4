@@ -13,6 +13,7 @@ import { color_header_backGround } from "../../../components/css/colors";
 import Profile from "./profile";
 import React from "react";
 import MyTripPage from "./myTripPage";
+import { saveValue } from "../../../constants/Storage";
 import { TripsProvider } from "../../../context/personalTripContext";
 function HomeScreen({ navigation }: any) {
   return (
@@ -45,6 +46,7 @@ function signOut(navigation: any, saveToken: any) {
     access_token: null,
     user_id: null,
   });
+  saveValue("token", "");
   navigation.navigate("index");
 }
 
