@@ -28,7 +28,6 @@ export class GPTService {
       });
       const output = response.data.choices[0].message?.content;
       if (!output) return 'error';
-      this.gptRequestModel.create({ ...gptRequestDto, output });
       return output;
     } catch (error) {
       // Consider adjusting the error handling logic for your use case
@@ -55,7 +54,9 @@ export class GPTService {
         temperature: 0.5,
         max_tokens: 2047,
       });
+      const output = response.data.choices[0].message?.content;
       if (!response.data.choices[0].message?.content) return 'error';
+      this.gptRequestModel.create({ ...gptTripRequestDto, output });
       return response.data.choices[0].message.content;
     } catch (error) {
       // Consider adjusting the error handling logic for your use case
