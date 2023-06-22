@@ -18,21 +18,18 @@ import {
 // @ts-ignore
 import { SliderBox } from "react-native-image-slider-box";
 import { StatusBar } from "react-native";
+import { getLocationImage } from "../../components/locationImage";
 
 export default function welcomePage() {
   const router = useRouter();
-  const [images, setImages] = React.useState([
-    require("../../assets/images/exit.bmp"),
-    require("../../assets/images/icon.png"),
-    require("../../assets/images/splash.png"),
-  ]);
+  const [images, setImages] = React.useState<string[]>([]);
   return (
     <NativeBaseProvider>
       <View style={style.body}>
         <Center flex={1}>
           <Box style={style.headerContainer}>
             <Text fontWeight={"bold"} fontSize={"4xl"}>
-              Lazy Trip Plainer
+              Lazy Trip Planner
             </Text>
           </Box>
 
@@ -73,8 +70,9 @@ export default function welcomePage() {
             <Spacer />
             <Button
               style={style.buttons}
-              onPress={() => {
-                router.push("/register");
+              onPress={async () => {
+                setImages(await getLocationImage("tecky academy"));
+                // router.push("/register");
               }}
             >
               Register

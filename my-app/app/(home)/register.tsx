@@ -156,24 +156,13 @@ const Register = () => {
         <Box safeArea p="2" w="90%" maxW="290" py="8">
           <Heading
             size="lg"
-            color="coolGray.800"
+            color={colour_label_text}
             _dark={{
               color: "warmGray.50",
             }}
             fontWeight="semibold"
           >
-            Welcome
-          </Heading>
-          <Heading
-            mt="1"
-            color="coolGray.600"
-            _dark={{
-              color: "warmGray.200",
-            }}
-            fontWeight="medium"
-            size="xs"
-          >
-            Sign up to continue!
+            Sign up
           </Heading>
           <VStack space={3} mt="5">
             <FormControl>
