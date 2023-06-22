@@ -52,6 +52,7 @@ import DatePicker from "react-native-date-picker";
 import DateTimePicker, {
   DateTimePickerAndroid,
 } from "@react-native-community/datetimepicker";
+import { useTrip } from "../../../context/personalTripContext";
 type LocationTabs = {
   id: number;
   text: string;
@@ -76,6 +77,13 @@ const dateTimePickerProps = {
 };
 
 function CreateInputTab() {
+  /* ------------------------------ tripsContext ------------------------------ */
+  const tripsContext = useTrip();
+  if (!tripsContext) {
+    throw new Error("tripsContext not found");
+  }
+  /* ---------------------------- tripsContext end ---------------------------- */
+
   const [showBudget, setShowBudget] = useState<string>("");
   const [selectTab, setSelectTab] = useState(0);
   const [loadingScreen, setLoadingScreen] = useState(false);
@@ -111,6 +119,7 @@ function CreateInputTab() {
       console.log("chatGPT respond: ", res);
       saveRespond(res);
       setLoadingScreen(false);
+      tripsContext.saveLocalTrip(res);
       router.push("/calendarPage");
     } catch {
       console.log("chatGPT respond text: ", resText);
