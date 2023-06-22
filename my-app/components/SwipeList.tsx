@@ -13,11 +13,16 @@ import {
 } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Trip } from "../constants/TripLocation";
+import { useChatGPTRespond } from "../zustand/useChatGPTRespondStore";
+import { useRouter } from "expo-router";
 
 export default function BasicSwipeList(props: {
   data: Trip[];
   setData: Dispatch<SetStateAction<Trip[]>>;
 }) {
+  const saveRespond = useChatGPTRespond((state: any) => state.saveRespond);
+  const router = useRouter();
+
   const closeRow = (rowMap: RowMap<Trip>, rowKey: string) => {
     if (rowMap[rowKey]) {
       rowMap[rowKey].closeRow();
@@ -34,8 +39,19 @@ export default function BasicSwipeList(props: {
     console.log("This row opened", rowKey);
   };
 
+  function onPressRow(trip: Trip) {
+    saveRespond(trip.trip);
+    router.push("/calendarPage");
+  }
+
   const renderItem = (data: ListRenderItemInfo<Trip>) => (
-    <Box pl="6" pr="5" py="2" bgColor="white">
+    <Pressable
+      pl="6"
+      pr="5"
+      py="2"
+      bgColor="white"
+      onPress={() => onPressRow(data.item)}
+    >
       <HStack alignItems="center" space={3}>
         <VStack>
           <Text
@@ -58,7 +74,7 @@ export default function BasicSwipeList(props: {
         </VStack>
         <Spacer />
       </HStack>
-    </Box>
+    </Pressable>
   );
 
   const renderHiddenItem = (

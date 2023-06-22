@@ -64,15 +64,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="generatePage"
-        options={{
-          title: "Generate",
-          // href: isLoginToken ? "/googleMap" : "/",
-          headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="map" color={color} />,
-        }}
-      />
-      <Tabs.Screen
         name="welcomePage"
         options={{
           title: "welcomePage",

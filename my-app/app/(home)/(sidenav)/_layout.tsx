@@ -12,7 +12,8 @@ import { useRouter } from "expo-router";
 import { color_header_backGround } from "../../../components/css/colors";
 import Profile from "./profile";
 import React from "react";
-import myTripPage from "./myTripPage";
+import MyTripPage from "./myTripPage";
+import { TripsProvider } from "../../../context/personalTripContext";
 function HomeScreen({ navigation }: any) {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -49,41 +50,43 @@ function signOut(navigation: any, saveToken: any) {
 
 export default function sideNav() {
   return (
-    <Drawer.Navigator
-      useLegacyImplementation
-      initialRouteName="planTrip"
-      drawerContent={(props) => <CustomDrawerContent {...props} />}
-    >
-      <Drawer.Screen
-        name="planTrip"
-        component={PlanTrip}
-        options={{
-          headerStyle: { backgroundColor: color_header_backGround },
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "Plan Trip",
-        }}
-      />
-      <Drawer.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          headerStyle: { backgroundColor: color_header_backGround },
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "Profile",
-        }}
-      />
-      <Drawer.Screen
-        name="myTripPage"
-        component={myTripPage}
-        options={{
-          headerStyle: { backgroundColor: color_header_backGround },
-          headerShown: true,
-          headerTitleAlign: "center",
-          title: "MyTrip",
-        }}
-      />
-    </Drawer.Navigator>
+    <TripsProvider>
+      <Drawer.Navigator
+        useLegacyImplementation
+        initialRouteName="planTrip"
+        drawerContent={(props) => <CustomDrawerContent {...props} />}
+      >
+        <Drawer.Screen
+          name="planTrip"
+          component={PlanTrip}
+          options={{
+            headerStyle: { backgroundColor: color_header_backGround },
+            headerShown: true,
+            headerTitleAlign: "center",
+            title: "Plan Trip",
+          }}
+        />
+        <Drawer.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            headerStyle: { backgroundColor: color_header_backGround },
+            headerShown: true,
+            headerTitleAlign: "center",
+            title: "Profile",
+          }}
+        />
+        <Drawer.Screen
+          name="myTripPage"
+          component={MyTripPage}
+          options={{
+            headerStyle: { backgroundColor: color_header_backGround },
+            headerShown: true,
+            headerTitleAlign: "center",
+            title: "MyTrip",
+          }}
+        />
+      </Drawer.Navigator>
+    </TripsProvider>
   );
 }

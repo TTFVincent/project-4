@@ -13,8 +13,14 @@ import MapView, {
   PROVIDER_GOOGLE,
   Region,
 } from "react-native-maps";
-import { Text, Box, NativeBaseProvider, Image } from "native-base";
-import { colour_container_bg } from "./css/colors";
+import {
+  Text,
+  Box,
+  NativeBaseProvider,
+  Image,
+  HStack,
+  Center,
+} from "native-base";
 import MapViewDirections from "react-native-maps-directions";
 import { TripLocation } from "../constants/TripLocation";
 import { env } from "../config/env";
@@ -43,12 +49,17 @@ export default function Map(props: {
   async function loadTripLocationPhotos() {
     const res = await Promise.all(
       props.data.map((tripLocation) => getLocationImage(tripLocation.location))
-    );
+    ).then((data) => {
+      return data;
+    });
+    console.log("res", res);
     setLocationPhotos(res);
+    console.log(locationPhotos[0][0]);
   }
 
   useEffect(() => {
-    loadTripLocationPhotos;
+    console.log("adc");
+    loadTripLocationPhotos();
   }, []);
 
   return (
@@ -85,12 +96,23 @@ export default function Map(props: {
           >
             <Callout>
               <NativeBaseProvider>
-                <Box>
-                  {locationPhotos[i].map((locationPhotoURI) => {
-                    return <Image source={{ uri: locationPhotoURI }}></Image>;
-                  })}
+                <Center>
+                  {locationPhotos[i] && (
+                    <HStack space={1} justifyContent="space-evenly">
+                      {locationPhotos[i].map((locationPhotoURI, j) => {
+                        return (
+                          <Image
+                            key={j}
+                            source={{ uri: locationPhotoURI }}
+                            alt={`${value.location} ${j}`}
+                            style={{ width: 100, height: 100 }}
+                          ></Image>
+                        );
+                      })}
+                    </HStack>
+                  )}
                   <Text>{value.location}</Text>
-                </Box>
+                </Center>
               </NativeBaseProvider>
             </Callout>
           </Marker>
@@ -111,7 +133,7 @@ export default function Map(props: {
             }}
             apikey={env.GOOGLE_MAP_KEY}
             strokeWidth={5}
-            strokeColor={i % 2 == 0 ? "#1967d2" : "#a0e630"}
+            strokeColor={"#1967d2"}
           />
         );
       })}

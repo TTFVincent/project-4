@@ -7,11 +7,11 @@ import React, {
   Dispatch,
   SetStateAction,
 } from "react";
-import { Trip } from "../constants/TripLocation";
+import { Trip, TripLocation } from "../constants/TripLocation";
 import { deleteValue, getValueFor, saveValue } from "../constants/Storage";
 
 type TripState = {
-  saveLocalTrip: (trip: Trip) => Promise<void>;
+  saveLocalTrip: (trip: TripLocation[]) => Promise<void>;
   deleteLocalTrip: (tripIndex: string) => Promise<void>;
   trips: Trip[];
 };
@@ -36,13 +36,13 @@ async function loadLocalTrip(
   for (let i = 0; i < +maxTripIndex; i++) {
     const tripInStorage = await getValueFor(`${i}`);
     if (!tripInStorage) continue;
-    tripsInStorage.push(JSON.parse(tripInStorage));
+    tripsInStorage.push({ id: `${i}`, trip: JSON.parse(tripInStorage) });
   }
   setTrips(tripsInStorage);
 }
 
 async function saveLocalTrip(
-  trip: Trip,
+  trip: TripLocation[],
   maxTripIndex: string,
   setMaxTripIndex: Dispatch<SetStateAction<string>>
 ): Promise<void> {
@@ -51,14 +51,18 @@ async function saveLocalTrip(
     const newMaxTripIndex = `${+maxTripIndex + 1}`;
     await saveValue("maxTripIndex", newMaxTripIndex);
     setMaxTripIndex(newMaxTripIndex);
-  } catch (err) {}
+
+    console.log("save Trip");
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 async function deleteLocalTrip(tripIndex: string): Promise<void> {
   await deleteValue(tripIndex);
 }
 
-export function Provider(props: { children: ReactNode }) {
+export function TripsProvider(props: { children: ReactNode }) {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [maxTripIndex, setMaxTripIndex] = useState<string>("0");
 
@@ -68,7 +72,7 @@ export function Provider(props: { children: ReactNode }) {
   return (
     <TripContext.Provider
       value={{
-        saveLocalTrip: (trip: Trip) =>
+        saveLocalTrip: (trip: TripLocation[]) =>
           saveLocalTrip(trip, maxTripIndex, setMaxTripIndex),
         deleteLocalTrip,
         trips,
