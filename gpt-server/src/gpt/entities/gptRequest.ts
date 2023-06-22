@@ -1,6 +1,6 @@
 import { Column, Model, Table } from 'sequelize-typescript';
 
-@Table({ tableName: 'gptRequests' })
+@Table({ tableName: 'gpt_requests' })
 export class GPTRequest extends Model {
   @Column({ primaryKey: true, autoIncrement: true, allowNull: false })
   id: number;
