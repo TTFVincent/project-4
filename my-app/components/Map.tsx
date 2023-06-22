@@ -1,4 +1,10 @@
-import React, { Dispatch, SetStateAction, useRef, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { StyleSheet, Platform } from "react-native";
 import MapView, {
   Callout,
@@ -32,14 +38,18 @@ export default function Map(props: {
     longitudeDelta: 0.005,
   });
   const mapViewRef = useRef<MapView>(null);
+  const [locationPhotos, setLocationPhotos] = useState<string[][]>([]);
 
-  async function getPhoto(
-    location: string,
-    setShowPhoto: Dispatch<SetStateAction<String[]>>
-  ) {
-    const result = await getLocationImage(location);
-    setShowPhoto(result);
+  async function loadTripLocationPhotos() {
+    const res = await Promise.all(
+      props.data.map((tripLocation) => getLocationImage(tripLocation.location))
+    );
+    setLocationPhotos(res);
   }
+
+  useEffect(() => {
+    loadTripLocationPhotos;
+  }, []);
 
   return (
     <MapView
@@ -50,14 +60,9 @@ export default function Map(props: {
       onRegionChangeComplete={(reg, e) => {}}
     >
       {props.data.map((value, i) => {
-        const [showPhoto, setShowPhoto] = useState<string[]>([]);
-
-        // setShowPhoto(await getLocationImage(value.location));
-
         return (
           <Marker
             key={i}
-            // image={image}
             coordinate={{
               latitude: +value.latitude,
               longitude: +value.longitude,
@@ -81,7 +86,9 @@ export default function Map(props: {
             <Callout>
               <NativeBaseProvider>
                 <Box>
-                  {/* <Image source={{ uri: showPhoto }}></Image> */}
+                  {locationPhotos[i].map((locationPhotoURI) => {
+                    return <Image source={{ uri: locationPhotoURI }}></Image>;
+                  })}
                   <Text>{value.location}</Text>
                 </Box>
               </NativeBaseProvider>
