@@ -5,7 +5,7 @@ export class GPTTripRequestDto {
   travel_style: string;
   activityType: string;
   cuisineType: string;
-  StartTime: string;
-  EndTime: string;
+  startTime: string;
+  endTime: string;
   interestsNew: string;
 }
