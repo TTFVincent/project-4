@@ -22,6 +22,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
+      phone: {
+        type: Sequelize.STRING,
+      },
       role: {
         allowNull: false,
         type: Sequelize.STRING,
@@ -39,6 +42,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('users');
   },
 };

@@ -7,6 +7,7 @@ import { LocationsModule } from './models/locations/locations.module';
 import { TripLocationsModule } from './models/trip-locations/trip-locations.module';
 import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { AuthModule } from './auth/auth.module';
 import { User } from './models/users/entities/user.entity';
 import { Trip } from './models/trips/entities/trip.entity';
 import { Location } from './models/locations/entities/location.entity';
@@ -29,6 +30,7 @@ import { TripLocation } from './models/trip-locations/entities/trip-location.ent
     TripsModule,
     LocationsModule,
     TripLocationsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
