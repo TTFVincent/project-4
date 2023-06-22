@@ -4,7 +4,7 @@ import { GPTRequestDto } from './dto/gpt-request.dto';
 import { GPTTripRequestDto } from './dto/gpt-trip-request.dto';
 import { GPTRequest } from './entities/gptRequest';
 
-@Controller()
+@Controller('gpt')
 export class GPTController {
   constructor(private readonly gptService: GPTService) {}
 
