@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { Dispatch, SetStateAction, useRef, useState } from "react";
 import { StyleSheet, Platform } from "react-native";
 import MapView, {
   Callout,
@@ -7,13 +7,13 @@ import MapView, {
   PROVIDER_GOOGLE,
   Region,
 } from "react-native-maps";
-import { Text, Box, NativeBaseProvider } from "native-base";
-//@ts-ignore
-import { colour_constainer_bg } from "../components/css/colors";
+import { Text, Box, NativeBaseProvider, Image } from "native-base";
+import { colour_container_bg } from "./css/colors";
 import MapViewDirections from "react-native-maps-directions";
-//@ts-ignore
-import { GOOGLE_MAP_KEY } from "@env";
 import { TripLocation } from "../constants/TripLocation";
+import { env } from "../config/env";
+import { globalStyles } from "../config/style";
+import { getLocationImage } from "./locationImage";
 
 const image = require("../assets/images/favicon.png");
 
@@ -33,6 +33,14 @@ export default function Map(props: {
   });
   const mapViewRef = useRef<MapView>(null);
 
+  async function getPhoto(
+    location: string,
+    setShowPhoto: Dispatch<SetStateAction<String[]>>
+  ) {
+    const result = await getLocationImage(location);
+    setShowPhoto(result);
+  }
+
   return (
     <MapView
       ref={mapViewRef}
@@ -42,6 +50,10 @@ export default function Map(props: {
       onRegionChangeComplete={(reg, e) => {}}
     >
       {props.data.map((value, i) => {
+        const [showPhoto, setShowPhoto] = useState<string[]>([]);
+
+        // setShowPhoto(await getLocationImage(value.location));
+
         return (
           <Marker
             key={i}
@@ -69,6 +81,7 @@ export default function Map(props: {
             <Callout>
               <NativeBaseProvider>
                 <Box>
+                  {/* <Image source={{ uri: showPhoto }}></Image> */}
                   <Text>{value.location}</Text>
                 </Box>
               </NativeBaseProvider>
@@ -89,7 +102,7 @@ export default function Map(props: {
               latitude: +props.data[i + 1]?.latitude,
               longitude: +props.data[i + 1]?.longitude,
             }}
-            apikey={GOOGLE_MAP_KEY}
+            apikey={env.GOOGLE_MAP_KEY}
             strokeWidth={5}
             strokeColor={i % 2 == 0 ? "#1967d2" : "#a0e630"}
           />
@@ -100,8 +113,7 @@ export default function Map(props: {
 }
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colour_constainer_bg,
-
+    backgroundColor: globalStyles.containerBackgroundColor,
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",

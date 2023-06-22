@@ -77,8 +77,6 @@ const dateTimePickerProps = {
 
 function CreateInputTab() {
   const inputValue = useRef<LocationTabs[]>([]);
-  const [changed, updateChanged] = useState<boolean>(false);
-  const prompt = usePromptStore((state: any) => state.savePrompt);
   const [loadingScreen, setLoadingScreen] = useState(false);
   const [topOptionValues, setTopOptionValues] = useState<Input>({
     budget: undefined,
@@ -456,13 +454,17 @@ function CreateInputTab() {
 
               <Box px={"5%"} marginTop="20px" width={"100%"}>
                 <Pressable
-                  onPress={() =>
-                    DateTimePickerAndroid.open(dateTimePickerProps)
-                  }
+                  onPress={() => {
+                    let time = String(
+                      DateTimePickerAndroid.open(dateTimePickerProps)
+                    );
+                    setTopOption(time, "Starttime");
+                  }}
                 >
                   <Text style={styles.labelText}>
                     Select Starting time type
                   </Text>
+                  <Text>{topOptionValues.StartTime}</Text>
                 </Pressable>
                 {/* <DateTimePicker
                   value={new Date()}
