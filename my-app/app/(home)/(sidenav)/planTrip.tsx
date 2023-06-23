@@ -116,12 +116,14 @@ function CreateInputTab() {
   const startDateTimePickerProps = {
     value: formStartTime,
     onChange: setStartTime,
+    mode: "time",
     // display: "inline",
   };
 
   const endDateTimePickerProps = {
     value: formEndTime,
     onChange: setEndTime,
+    mode: "time",
     // display: "inline",
   };
 
@@ -454,31 +456,26 @@ function CreateInputTab() {
                 flexDir={"row"}
                 justifyContent={"space-around"}
               >
-                {/* {show && (
-                  <DateTimePicker
-                    mode="time"
-                    is24Hour={true}
-                    value={date}
-                    onChange={onchange}
-                  />
-                )} */}
                 <Center>
                   <Text style={styles.labelText}>Starting time type</Text>
                   {Platform.OS === "android" && (
                     <Pressable
                       onPress={() => {
+                        //@ts-ignore
                         DateTimePickerAndroid.open(startDateTimePickerProps);
                       }}
                     >
                       <Box style={styles.timeButtons}>
                         <Text fontSize={"3xl"} style={styles.timeTextDisplay}>
-                          {topOptionValues.start_time}88:88
+                          {topOptionValues.start_time
+                            ? topOptionValues.start_time
+                            : "00:00"}
                         </Text>
                       </Box>
                     </Pressable>
                   )}
                   {Platform.OS === "ios" && (
-                    <DateTimePicker {...startDateTimePickerProps} mode="time" />
+                    <DateTimePicker {...startDateTimePickerProps} />
                   )}
                 </Center>
                 <Center>
@@ -486,87 +483,25 @@ function CreateInputTab() {
                   {Platform.OS === "android" && (
                     <Pressable
                       onPress={() => {
+                        //@ts-ignore
                         DateTimePickerAndroid.open(endDateTimePickerProps);
                       }}
                     >
                       <Box style={styles.timeButtons}>
                         <Text fontSize={"3xl"} style={styles.timeTextDisplay}>
-                          {topOptionValues.end_time}88:88
+                          {topOptionValues.end_time
+                            ? topOptionValues.end_time
+                            : "00:00"}
                         </Text>
                       </Box>
                     </Pressable>
                   )}
                   {Platform.OS === "ios" && (
-                    <DateTimePicker {...endDateTimePickerProps} mode="time" />
+                    <DateTimePicker {...endDateTimePickerProps} />
                   )}
                 </Center>
-                {/* <DateTimePicker
-                  value={new Date()}
-                  mode="time"
-                  display="inline"
-                /> */}
-                {/* <DatePicker
-                  mode="time"
-                  onDateChange={(e) => {
-                    setDate;
-                  }}
-                  date={date}
-                /> */}
               </Box>
 
-              <Box
-                px={"5%"}
-                width={"100%"}
-                display="flex"
-                flexDirection="row"
-                justifyContent="space-between"
-              >
-                <Box width={"47.5%"}>
-                  <Dropdown
-                    placeholderStyle={styles.dropdown_placeHolder}
-                    placeholder={
-                      topOptionValues.start_time
-                        ? "Start Time " + toTime().start_time + "00"
-                        : "Select Start Time"
-                    }
-                    data={StartTime}
-                    onChange={(item) => {
-                      setTopOption(item.value, "start_time");
-                    }}
-                    labelField="label"
-                    valueField="value"
-                    style={styles.dropdown}
-                    maxHeight={200}
-                  />
-                </Box>
-              </Box>
-
-              <Box
-                px={"5%"}
-                width={"100%"}
-                display="flex"
-                flexDirection="row"
-                justifyContent="space-between"
-              >
-                <Box width={"47.5%"}>
-                  <Dropdown
-                    placeholderStyle={styles.dropdown_placeHolder}
-                    placeholder={
-                      topOptionValues.end_time
-                        ? "End Time " + toTime().end_time + "00"
-                        : "Select End Time"
-                    }
-                    data={EndTime}
-                    onChange={(item) => {
-                      setTopOption(item.value, "end_time");
-                    }}
-                    labelField="label"
-                    valueField="value"
-                    style={styles.dropdown}
-                    maxHeight={200}
-                  />
-                </Box>
-              </Box>
               {/* ------------------------------- budget tab ------------------------------- */}
               <Box marginX="20px" marginTop="20px">
                 <Text style={styles.labelText}>Input your budget</Text>

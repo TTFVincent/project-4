@@ -18,7 +18,6 @@ import {
 // @ts-ignore
 import { SliderBox } from "react-native-image-slider-box";
 import { StatusBar } from "react-native";
-import { getLocationImage } from "../../components/locationImage";
 
 export default function welcomePage() {
   const router = useRouter();
@@ -71,8 +70,7 @@ export default function welcomePage() {
             <Button
               style={style.buttons}
               onPress={async () => {
-                setImages(await getLocationImage("tecky academy"));
-                // router.push("/register");
+                router.push("/register");
               }}
             >
               Register
