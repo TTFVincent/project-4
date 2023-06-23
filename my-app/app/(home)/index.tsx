@@ -40,8 +40,8 @@ type Value = {
 const Login = () => {
   const router = useRouter();
   const saveToken = useTokenStore((state: any) => state.saveToken);
-  const access_token = useTokenStore((state: any) => state.access_token);
-  const user_id = useTokenStore((state: any) => state.user_id);
+  const useAccess_token = useTokenStore((state: any) => state.access_token);
+  const useUser_id = useTokenStore((state: any) => state.user_id);
   const [value, setValue] = useState<Value>({ email: "", password: "" });
   const { handleSubmit } = useForm<Value>();
   const [rememberMe, setRememberMe] = useState<boolean>();
@@ -56,23 +56,23 @@ const Login = () => {
     if (idFromLocal) setLocalId(idFromLocal);
 
     saveToken({ access_token: tokenFromLocal, user_id: idFromLocal });
-    const redirectPath = access_token ? "/planTrip" : "/";
+    const redirectPath = useAccess_token ? "/planTrip" : "/";
 
     setTimeout(() => !!router && router.push(redirectPath), 250);
   }
   useEffect(() => {
     loadToken();
-  }, [access_token]);
+  }, [useAccess_token]);
 
   const onSubmit = async () => {
     const result = await axios.post(`${back_end_server}/auth/sign-in`, value);
 
-    console.log("fetch token: " + result.data.access_token);
-    console.log("fetch token: " + result.data.user_id);
     saveToken({
       access_token: result.data.access_token,
       user_id: result.data.user_id,
     });
+    console.log("first: " + result.data.user_id);
+    console.log("second: " + useUser_id);
     axios.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${result.data.access_token}`;
@@ -115,8 +115,8 @@ const Login = () => {
              
             </Heading>
           </Center> */}
-          <Text fontSize={5}>fetch Token: {access_token}</Text>
-          <Text fontSize={5}>fetch id: {user_id}</Text>
+          <Text fontSize={5}>fetch Token: {useAccess_token}</Text>
+          <Text fontSize={5}>fetch id: {useUser_id}</Text>
           <Text fontSize={5}>local Token: {localToken}</Text>
           <Text fontSize={5}>local id: {localId}</Text>
 
