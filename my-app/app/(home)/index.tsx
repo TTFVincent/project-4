@@ -44,14 +44,11 @@ const Login = () => {
   const user_id = useTokenStore((state) => state.user_id);
   const [value, setValue] = useState<Value>({ email: "", password: "" });
   const { handleSubmit } = useForm<Value>();
-  const [rememberMe, setRememberMe] = useState<boolean>(true);
+  const [rememberMe, setRememberMe] = useState<boolean>(false);
 
   async function loadToken() {
     let user_id = await getValueFor("userId");
     let token = await getValueFor("token");
-
-    console.log("STORAGE ID", user_id);
-    console.log("STORAGE Token", token);
 
     if (token) {
       console.log("idFromLocal", user_id);
@@ -62,7 +59,6 @@ const Login = () => {
   }
 
   function redirectPath() {
-    // const redirectPath = useAccess_token ? "/planTrip" : "/";
     setTimeout(() => !!router && router.push("/planTrip"), 250);
   }
 
@@ -75,27 +71,20 @@ const Login = () => {
 
     // Login success
     if (result.data.access_token) {
-      console.log("result.data", result.data);
-
       saveToken({
         access_token: result.data.access_token,
         user_id: result.data.user_id,
       });
-
-      console.log("first: " + result.data.user_id);
-      console.log("second: " + result.data.user_id);
 
       axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${result.data.access_token}`;
 
       if (rememberMe) {
-        console.log(" token saved");
         await saveValue("userId", result.data.user_id + "");
         await saveValue("token", result.data.access_token);
       }
 
-      console.log(result.data.access_token);
       redirectPath();
     } else {
       // Login failed
@@ -113,13 +102,13 @@ const Login = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Center w="100%">
         <Box safeArea p="2" py="8" w="90%" maxW="290">
-          {/* <Image
+          <Image
             source={require("../../assets/images/icon.png")}
             height={"40%"}
             mb={3}
           />
- */}
-          {/* <Center>
+
+          <Center>
             <Heading
               size="sm"
               fontWeight="600"
@@ -129,13 +118,8 @@ const Login = () => {
               }}
             >
               Welcome
-             
             </Heading>
-          </Center> */}
-          <Text fontSize={5}>fetch Token: {useAccess_token}</Text>
-          <Text fontSize={5}>fetch id: {user_id}</Text>
-          {/* <Text fontSize={5}>local Token: {localToken}</Text>
-          <Text fontSize={5}>local id: {localId}</Text> */}
+          </Center>
 
           <VStack space={3} mt="5">
             <FormControl>
