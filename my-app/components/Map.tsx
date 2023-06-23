@@ -26,6 +26,7 @@ import { TripLocation } from "../constants/TripLocation";
 import { env } from "../config/env";
 import { globalStyles } from "../config/style";
 import { getLocationImage } from "./locationImage";
+import Geocoder from "react-native-geocoding";
 
 const image = require("../assets/images/favicon.png");
 
@@ -52,13 +53,10 @@ export default function Map(props: {
     ).then((data) => {
       return data;
     });
-    console.log("res", res);
     setLocationPhotos(res);
-    console.log(locationPhotos[0][0]);
   }
 
   useEffect(() => {
-    console.log("adc");
     loadTripLocationPhotos();
   }, []);
 

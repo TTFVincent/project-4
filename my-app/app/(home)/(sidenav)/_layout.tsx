@@ -15,6 +15,7 @@ import React from "react";
 import MyTripPage from "./myTripPage";
 import { saveValue } from "../../../constants/Storage";
 import { TripsProvider } from "../../../context/personalTripContext";
+import MapPickPage from "../(modal)/mapPickPage";
 function HomeScreen({ navigation }: any) {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>

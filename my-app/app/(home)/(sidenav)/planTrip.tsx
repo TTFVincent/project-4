@@ -19,6 +19,7 @@ import {
   Text,
   Slider,
   Pressable,
+  Modal,
 } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -55,6 +56,7 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { useTrip } from "../../../context/personalTripContext";
+import MapPicker from "../../../components/MapPicker";
 type LocationTabs = {
   id: number;
   text: string;
@@ -79,6 +81,14 @@ function CreateInputTab() {
     throw new Error("tripsContext not found");
   }
   /* ---------------------------- tripsContext end ---------------------------- */
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const initialRef = useRef(null);
+  const finalRef = useRef(null);
+
+  const [regionString, setRegionString] = useState<string>("");
+
+  const [destinationBuffer, setDestinationBuffer] = useState<string>("");
 
   const [showBudget, setShowBudget] = useState<string>("");
   const [selectTab, setSelectTab] = useState(0);
@@ -529,11 +539,24 @@ function CreateInputTab() {
                   fontSize={15}
                   onEndEditing={(e) => {
                     setTopOption(e.nativeEvent.text, "destination");
-                    console.log();
+                  }}
+                  onChangeText={(e) => {
+                    setDestinationBuffer(e);
                   }}
                   placeholder={"Eg: Japan Tokyo"}
+                  value={destinationBuffer}
                 />
               </Box>
+              <Center>
+                <Button
+                  marginTop={"20px"}
+                  style={styles.Button_planTrip}
+                  onPress={() => setModalVisible(true)}
+                  fontSize={"sm"}
+                >
+                  Pick By Location
+                </Button>
+              </Center>
 
               <Center>
                 <Button
@@ -548,6 +571,37 @@ function CreateInputTab() {
             </ScrollView>
           </Box>
         </View>
+        <Modal
+          isOpen={modalVisible}
+          onClose={() => setModalVisible(false)}
+          initialFocusRef={initialRef}
+          finalFocusRef={finalRef}
+          size={"xl"}
+        >
+          <Modal.Content>
+            <Modal.CloseButton />
+            <Modal.Header>
+              <Box h={300} justifyContent="center" alignItems="center">
+                <MapPicker
+                  defaultLocation={{ latitude: 22.3, longitude: 114.17 }}
+                  setRegionString={setRegionString}
+                ></MapPicker>
+              </Box>
+            </Modal.Header>
+            <Modal.Body>{regionString}</Modal.Body>
+            <Modal.Footer justifyContent={"center"}>
+              <Button
+                onPress={() => {
+                  setTopOption(regionString, "destination");
+                  setDestinationBuffer(regionString);
+                  setModalVisible(false);
+                }}
+              >
+                Save
+              </Button>
+            </Modal.Footer>
+          </Modal.Content>
+        </Modal>
       </SafeAreaView>
     </TapGestureHandler>
   );
