@@ -31,38 +31,22 @@ export default function TabLayout() {
     >
       <Stack.Screen
         name="tripRoutePage"
-        options={{
-          // href: isLoginToken ? "/googleMap" : "/",
-          headerRight: () => (
-            <Pressable onPress={() => router.replace("/calendarPage")}>
-              <FontAwesome
-                size={28}
-                style={{ marginBottom: 0, marginEnd: 5 }}
-                name="calendar"
-              />
-            </Pressable>
-          ),
-        }}
+        options={
+          {
+            // href: isLoginToken ? "/googleMap" : "/",
+          }
+        }
       />
       <Stack.Screen
         name="calendarPage"
         options={{
           // href: isLoginToken ? "/googleMap" : "/",
           headerRight: () => (
-            <Pressable onPress={() => router.replace("/tripRoutePage")}>
+            <Pressable onPress={() => router.push("/tripRoutePage")}>
               <FontAwesome
                 size={28}
                 style={{ marginBottom: 0, marginEnd: 5 }}
                 name="map"
-              />
-            </Pressable>
-          ),
-          headerLeft: () => (
-            <Pressable onPress={router.back}>
-              <FontAwesome
-                size={28}
-                style={{ marginBottom: 0 }}
-                name="arrow-left"
               />
             </Pressable>
           ),
