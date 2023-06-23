@@ -9,18 +9,21 @@ function MyEventComponent({ event }: { event: WeekViewEvent }) {
   const router = useRouter();
   return (
     <Pressable
-      onPress={() => router.replace("/tripRoutePage?locationId=" + event.id)}
+      onPress={() => router.push("/tripRoutePage?locationId=" + event.id)}
       paddingLeft={5}
+      paddingRight={5}
       paddingTop={5}
       width={"100%"}
       flex={1}
     >
-      <Text style={{ fontSize: 12, fontWeight: "bold", color: "#333333" }}>
-        {event.title}
-      </Text>
-      <Text style={{ fontSize: 10, color: "#333333" }}>
-        {event.description}
-      </Text>
+      <Box>
+        <Text style={{ fontSize: 12, fontWeight: "bold", color: "#333333" }}>
+          {event.title}
+        </Text>
+        <Text style={{ fontSize: 10, color: "#333333" }}>
+          {event.description}
+        </Text>
+      </Box>
     </Pressable>
   );
 }
@@ -53,7 +56,7 @@ export default function Calendar(props: { data: TripLocation[] }) {
       ),
       color: "#E5F9D3",
       title: value.location,
-      description: `latitude: ${value.latitude}, longitude: ${value.longitude}`,
+      description: value.location_address,
       resolveOverlap: "lane",
       stackKey: "",
       eventKind: "standard",
@@ -104,6 +107,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   eventContainer: {
+    borderRadius: 10,
     backgroundColor: "#E5F9D3",
   },
   gridRow: {

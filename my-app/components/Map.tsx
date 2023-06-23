@@ -68,7 +68,6 @@ export default function Map(props: {
       style={styles.mapContainer}
       provider={PROVIDER_GOOGLE}
       region={region}
-      onRegionChangeComplete={(reg, e) => {}}
     >
       {props.data.map((value, i) => {
         return (
@@ -94,18 +93,31 @@ export default function Map(props: {
               });
             }}
           >
-            <Callout>
+            <Callout tooltip>
               <NativeBaseProvider>
-                <Center>
+                <Center
+                  bg="#F0F0F0"
+                  borderRadius={10}
+                  p={2}
+                  borderWidth={2}
+                  borderColor={"#EBEDF1"}
+                >
                   {locationPhotos[i] && (
-                    <HStack space={1} justifyContent="space-evenly">
+                    <HStack w={"100%"} space={1} justifyContent="space-evenly">
                       {locationPhotos[i].map((locationPhotoURI, j) => {
                         return (
                           <Image
+                            borderRadius={20}
                             key={j}
-                            source={{ uri: locationPhotoURI }}
+                            source={{
+                              uri: locationPhotoURI,
+                              headers: {
+                                Accept: "*/*",
+                              },
+                            }}
                             alt={`${value.location} ${j}`}
                             style={{ width: 100, height: 100 }}
+                            resizeMode={"cover"}
                           ></Image>
                         );
                       })}
