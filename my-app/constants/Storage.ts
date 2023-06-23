@@ -6,12 +6,16 @@ export async function saveValue(key: string, value: string): Promise<void> {
   Platform.OS === "web"
     ? await AsyncStorage.setItem(key, value)
     : await SecureStore.setItemAsync(key, value);
+
+  // await AsyncStorage.setItem(key, value);
 }
 
 export async function deleteValue(key: string): Promise<void> {
   Platform.OS === "web"
     ? await AsyncStorage.removeItem(key)
     : await SecureStore.deleteItemAsync(key);
+
+  // await AsyncStorage.removeItem(key);
 }
 
 export async function getValueFor(key: string): Promise<string | null> {
@@ -20,4 +24,6 @@ export async function getValueFor(key: string): Promise<string | null> {
       ? await AsyncStorage.getItem(key)
       : await SecureStore.getItemAsync(key);
   return result;
+
+  // return await AsyncStorage.getItem(key);
 }
