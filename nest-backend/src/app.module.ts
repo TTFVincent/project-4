@@ -12,6 +12,7 @@ import { User } from './models/users/entities/user.entity';
 import { Trip } from './models/trips/entities/trip.entity';
 import { Location } from './models/locations/entities/location.entity';
 import { TripLocation } from './models/trip-locations/entities/trip-location.entity';
+import { env } from './env';
 
 @Module({
   imports: [
@@ -20,9 +21,9 @@ import { TripLocation } from './models/trip-locations/entities/trip-location.ent
       dialect: 'postgres',
       host: 'localhost',
       port: 5432,
-      username: process.env.DATABASE_USER,
-      password: process.env.DATABASE_PASSWORD,
-      database: process.env.DATABASE_NAME,
+      username: env.DATABASE_USER,
+      password: env.DATABASE_PASSWORD,
+      database: env.DATABASE_NAME,
       models: [User, Trip, Location, TripLocation],
       synchronize: false,
     }),

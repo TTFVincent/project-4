@@ -11,22 +11,9 @@ import {
   Button,
 } from "native-base";
 import { StyleSheet } from "react-native";
-import { colour_container_bg } from "../../../components/css/colors";
-import React, { useContext, useState, useCallback } from "react";
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  ImageBackground,
-} from "react-native";
+import { colour_container_bg } from "../../components/css/colors";
+import React from "react";
 import * as DocumentPicker from "expo-document-picker";
-import NativeUploady, {
-  UploadyContext,
-  useItemFinishListener,
-  useItemStartListener,
-  useItemErrorListener,
-} from "@rpldy/native-uploady";
-import axios from "axios";
 import * as FileSystem from "expo-file-system";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -38,8 +25,8 @@ const Upload = async () => {
   });
   const pic = FileSystem.documentDirectory + "picture.png";
   FileSystem.copyAsync({
-    from: "../../../assets/images/exit.bmp",
-    to: "../../../assets/profilePic",
+    from: "../../assets/images/exit.bmp",
+    to: "../../assets/profilePic",
   });
 };
 
@@ -52,7 +39,7 @@ export default function Profile() {
             <Image
               alt="Profile Picture"
               size={"100%"}
-              source={require("../../../assets/images/exit.bmp")}
+              source={require("../../assets/images/exit.bmp")}
             />
           </Box>
           {/* <Button onPress={Upload}>Change Picture</Button> */}

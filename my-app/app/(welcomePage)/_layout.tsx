@@ -1,9 +1,14 @@
 import { Stack } from "expo-router";
-import { Center } from "native-base";
+import { NativeBaseProvider } from "native-base";
 import React from "react";
-export default function sideNav() {}
-<Stack>
-  <Center flex={1}>
-    <Stack.Screen name="welcomePage" />
-  </Center>
-</Stack>;
+export default function sideNav() {
+  return (
+    <NativeBaseProvider>
+      <Stack>
+        <Stack.Screen name="welcomePage" />
+        <Stack.Screen name="login" />
+        <Stack.Screen name="register" />
+      </Stack>
+    </NativeBaseProvider>
+  );
+}

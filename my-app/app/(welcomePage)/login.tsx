@@ -29,8 +29,14 @@ import {
   colour_input_text,
   colour_label_text,
 } from "../../components/css/colors";
-import { Keyboard, TouchableWithoutFeedback, StyleSheet } from "react-native";
-import { getValueFor, saveValue } from "../../constants/Storage";
+import {
+  Keyboard,
+  TouchableWithoutFeedback,
+  StyleSheet,
+  View,
+} from "react-native";
+import { setStorageValue } from "../../constants/Storage";
+import { post } from "../../api";
 
 type Value = {
   email: string;
@@ -39,55 +45,46 @@ type Value = {
 
 const Login = () => {
   const router = useRouter();
-  const saveToken = useTokenStore((state: any) => state.saveToken);
-  const useAccess_token = useTokenStore((state) => state.access_token);
-  const user_id = useTokenStore((state) => state.user_id);
+  const saveToken = useTokenStore((state: any) => state.setState);
   const [value, setValue] = useState<Value>({ email: "", password: "" });
   const { handleSubmit } = useForm<Value>();
   const [rememberMe, setRememberMe] = useState<boolean>(false);
-
-  async function loadToken() {
-    let user_id = await getValueFor("userId");
-    let token = await getValueFor("token");
-
-    if (token) {
-      console.log("idFromLocal", user_id);
-
-      saveToken({ access_token: token, user_id: user_id });
-      redirectPath();
-    }
-  }
 
   function redirectPath() {
     setTimeout(() => !!router && router.push("/planTrip"), 250);
   }
 
-  useEffect(() => {
-    loadToken();
-  }, []);
+  const [error, setError] = useState("");
 
   const onSubmit = async () => {
-    const result = await axios.post(`${back_end_server}/auth/sign-in`, value);
+    try {
+      // const result = await axios.post(`${back_end_server}/auth/sign-in`, value);
+      const result = await post(`/auth/sign-in`, value);
+      console.log("login result:", result);
 
-    // Login success
-    if (result.data.access_token) {
-      saveToken({
-        access_token: result.data.access_token,
-        user_id: result.data.user_id,
-      });
+      // Login success
+      if (result.access_token) {
+        saveToken({
+          access_token: result.access_token,
+          user_id: result.user_id,
+        });
 
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${result.data.access_token}`;
+        // axios.defaults.headers.common[
+        //   "Authorization"
+        // ] = `Bearer ${result.data.access_token}`;
 
-      if (rememberMe) {
-        await saveValue("userId", result.data.user_id + "");
-        await saveValue("token", result.data.access_token);
+        if (rememberMe) {
+          await setStorageValue("userId", result.user_id + "");
+          await setStorageValue("token", result.access_token);
+        }
+
+        redirectPath();
+      } else {
+        // Login failed
       }
-
-      redirectPath();
-    } else {
-      // Login failed
+    } catch (error) {
+      console.log("login error:", error);
+      setError(String(error));
     }
   };
 
@@ -103,7 +100,7 @@ const Login = () => {
       <Center w="100%">
         <Box safeArea p="2" py="8" w="90%" maxW="290">
           <Image
-            source={require("../../assets/images/icon.png")}
+            source={require("../../assets/photos/image5.jpg")}
             height={"40%"}
             mb={3}
           />
@@ -163,6 +160,11 @@ const Login = () => {
                 </Link>
               </Box>
             </FormControl>
+
+            <View>
+              <Text>{error}</Text>
+            </View>
+
             <Button
               onPress={handleSubmit(onSubmit)}
               mt="2"

@@ -30,7 +30,7 @@ import {
   faTree,
   faUtensils,
 } from "@fortawesome/free-solid-svg-icons";
-import { usePromptStore } from "../../../zustand/usePromptStore";
+import { usePromptStore } from "../../zustand/usePromptStore";
 import {
   color_box_BG,
   color_button_BG,
@@ -38,7 +38,7 @@ import {
   color_icon_border,
   colour_container_bg,
   colour_input_text,
-} from "../../../components/css/colors";
+} from "../../components/css/colors";
 //@ts-ignore
 import { GPT_server } from "@env";
 import { Dropdown } from "react-native-element-dropdown";
@@ -46,7 +46,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import axios from "axios";
 import { TapGestureHandler } from "react-native-gesture-handler";
-import { useChatGPTRespond } from "../../../zustand/useChatGPTRespondStore";
+import { useChatGPTRespond } from "../../zustand/useChatGPTRespondStore";
 import Spinner from "react-native-loading-spinner-overlay";
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import DatePicker from "react-native-date-picker";
@@ -54,7 +54,7 @@ import DateTimePicker, {
   DateTimePickerAndroid,
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import { useTrip } from "../../../context/personalTripContext";
+import { useTrip } from "../../context/personalTripContext";
 type LocationTabs = {
   id: number;
   text: string;
@@ -80,7 +80,7 @@ function CreateInputTab() {
   }
   /* ---------------------------- tripsContext end ---------------------------- */
 
-  const [showBudget, setShowBudget] = useState<string>("");
+  const [budgetDraft, setBudgetDraft] = useState<string>("");
   const [selectTab, setSelectTab] = useState(0);
   const [loadingScreen, setLoadingScreen] = useState(false);
   const [topOptionValues, setTopOptionValues] = useState<Input>({
@@ -94,7 +94,7 @@ function CreateInputTab() {
     cuisine_type: null,
     activity_type: null,
   });
-  const saveRespond = useChatGPTRespond((state: any) => state.saveRespond);
+  const saveRespond = useChatGPTRespond((store) => store.saveRespond);
   const router = useRouter();
   const [formStartTime, setFormStartTime] = useState<Date>(new Date());
   const [formEndTime, setFormEndTime] = useState<Date>(new Date());
@@ -201,7 +201,7 @@ function CreateInputTab() {
     EndTime.push({ label: `${h}pm`, value: `${h + 12}:00` });
   }
 
-  function touchScreen() {
+  function dismissKeyboard() {
     Keyboard.dismiss();
   }
 
@@ -218,42 +218,40 @@ function CreateInputTab() {
     return showTime;
   }
 
-  function checkBudgetInput(input: any) {
-    console.log("leave focus: " + topOptionValues.budget);
-
-    if (/^\d+$/.test(input)) {
-      if (input >= 5000) {
-        setTopOption("5000", "budget");
-        setShowBudget("5000");
-      }
-      if (input <= 1000) {
-        setTopOption("1000", "budget");
-        setShowBudget("1000");
-      }
-
-      setTopOption(input, "budget");
-    }
-  }
-
-  const [date, setDate] = useState(new Date());
-  const [show, setShow] = useState(false);
-
-  const onChange = (event: any, selectedDate: any) => {
-    const currentDate = selectedDate || date;
-    setDate(currentDate);
-  };
-
   function handleIndexChange(value: number) {
     setSelectTab(value);
     setTopOption(String(value + 1), "group_size");
   }
 
-  function handleInput(text: string) {
-    if (/^\d+$/.test(text)) setShowBudget(text);
+  function budgetDraftOnChange(text: string) {
+    if (/^\d+$/.test(text)) {
+      setBudgetDraft(text);
+    }
+  }
+
+  function budgetDraftOnEndEditing(text: string) {
+    if (text == "") {
+      return;
+    }
+
+    const budget = +text;
+    if (!budget) {
+      return;
+    }
+
+    if (budget >= 5000) {
+      setTopOption("5000", "budget");
+      setBudgetDraft("5000");
+    } else if (budget <= 1000) {
+      setTopOption("1000", "budget");
+      setBudgetDraft("1000");
+    } else {
+      setTopOption(text, "budget");
+    }
   }
 
   return (
-    <TapGestureHandler onHandlerStateChange={touchScreen} numberOfTaps={1}>
+    <TapGestureHandler onHandlerStateChange={dismissKeyboard} numberOfTaps={1}>
       <SafeAreaView style={styles.SafeAreaView}>
         <View style={styles.view_bg}>
           <Spinner
@@ -508,13 +506,12 @@ function CreateInputTab() {
 
                 <Input
                   fontSize={15}
-                  value={showBudget}
+                  value={budgetDraft}
                   onEndEditing={(e) => {
-                    console.log(e.nativeEvent.text);
-                    checkBudgetInput(e.nativeEvent.text);
+                    budgetDraftOnEndEditing(e.nativeEvent.text);
                   }}
                   onChangeText={(e) => {
-                    handleInput(e);
+                    budgetDraftOnChange(e);
                   }}
                   placeholder={"Input your budget 1000 - 5000"}
                 />

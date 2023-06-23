@@ -68,7 +68,7 @@ export default function Calendar(props: { data: TripLocation[] }) {
         eventContainerStyle={styles.eventContainer}
         gridColumnStyle={styles.gridColumn}
         gridRowStyle={styles.gridRow}
-        hourContainerStyle={styles.hourContainer}
+        // hourContainerStyle={styles.hourContainer} // TODO check if it exist
         events={events}
         EventComponent={MyEventComponent}
         selectedDate={new Date(2023, 1, 22)}

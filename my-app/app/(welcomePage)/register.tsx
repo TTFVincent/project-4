@@ -30,6 +30,8 @@ import { IInputComponentType } from "native-base/lib/typescript/components/primi
 import { back_end_server } from "@env";
 import { hashPassword } from "../../components/authentication/hash";
 import { useRouter } from "expo-router";
+import { useTokenStore } from "../../zustand/useTokenStore";
+
 export type SetDate = {
   day: string;
   month: string;
@@ -51,7 +53,10 @@ const Register = () => {
     year: "",
   });
 
+  const router = useRouter();
+  const saveToken = useTokenStore((state: any) => state.setState);
   const saveDate = useRegisterStore((state: any) => state.saveDate);
+  const loginState = useTokenStore((state: any) => state.state);
   saveDate(date);
 
   const formInfo = useRef<RegisterForm>({
@@ -145,7 +150,10 @@ const Register = () => {
         body: JSON.stringify(testUser),
       });
       const result = await response.json();
-
+      saveToken(result.access_token);
+      if (loginState.token) {
+        router.push("/planTrip");
+      }
       console.log(result);
     }
   };

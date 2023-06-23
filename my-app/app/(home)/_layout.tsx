@@ -1,77 +1,82 @@
-import React from "react";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Link, Tabs } from "expo-router";
-import { Pressable, useColorScheme } from "react-native";
-// import { createStackNavigator } from '@react-navigation/stack';
-import Colors from "../../constants/Colors";
+import {
+  DrawerContentScrollView,
+  DrawerItem,
+  DrawerItemList,
+  createDrawerNavigator,
+} from "@react-navigation/drawer";
+import { useColorScheme } from "react-native";
+import PlanTrip from "./planTrip";
 import { useTokenStore } from "../../zustand/useTokenStore";
 import { color_header_backGround } from "../../components/css/colors";
-// import Index from "./index"
-// import { Keyboard } from "react-native";
-// import { KeyboardAvoidingView } from "react-native";
-// import { NativeBaseProvider, View } from "native-base";
-// import { TouchableWithoutFeedback } from "react-native";
-// import { SafeAreaView } from "react-native-safe-area-context";
+import Profile from "./profile";
+import React from "react";
+import MyTripPage from "./myTripPage";
+import { deleteStorageValue } from "../../constants/Storage";
+import { TripsProvider } from "../../context/personalTripContext";
+import { useRouter } from "expo-router";
+import { DrawerContentComponentProps } from "@react-navigation/drawer/lib/typescript/src/types";
 
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+const Drawer = createDrawerNavigator();
 
-export default function TabLayout() {
+function CustomDrawerContent(props: DrawerContentComponentProps) {
+  const setTokenState = useTokenStore((store) => store.setState);
   const colorScheme = useColorScheme();
-  const isLoginToken = useTokenStore((state: any) => state.access_token);
+  const router = useRouter();
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          headerShown: false,
-          // tabBarStyle: {display: "none"},
-          // href: isLoginToken ? "/planTrip" : "/",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+    <DrawerContentScrollView {...props}>
+      <DrawerItemList {...props} />
+      <DrawerItem
+        label="Logout"
+        onPress={() => {
+          setTokenState(null);
+          deleteStorageValue("token");
+          router.push("/welcomePage");
         }}
       />
-      <Tabs.Screen
-        name="register"
-        options={{
-          // tabBarStyle: { display: "none" },
+    </DrawerContentScrollView>
+  );
+}
 
-          headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-
-      <Tabs.Screen
-        name="(sidenav)"
-        options={{
-          // href: isLoginToken ? "/planTrip" : "/",
-          headerStyle: { backgroundColor: color_header_backGround },
-          headerShown: false,
-          headerTitleAlign: "center",
-          title: "Plan Trip",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="welcomePage"
-        options={{
-          title: "welcomePage",
-          // href: isLoginToken ? "/googleMap" : "/",
-          headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="map" color={color} />,
-        }}
-      />
-    </Tabs>
+export default function sideNav() {
+  return (
+    <TripsProvider>
+      <Drawer.Navigator
+        useLegacyImplementation
+        initialRouteName="planTrip"
+        drawerContent={(props) => <CustomDrawerContent {...props} />}
+      >
+        <Drawer.Screen
+          name="planTrip"
+          component={PlanTrip}
+          options={{
+            headerStyle: { backgroundColor: color_header_backGround },
+            headerShown: true,
+            headerTitleAlign: "center",
+            title: "Plan Trip",
+          }}
+        />
+        <Drawer.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            headerStyle: { backgroundColor: color_header_backGround },
+            headerShown: true,
+            headerTitleAlign: "center",
+            title: "Profile",
+          }}
+        />
+        <Drawer.Screen
+          name="myTripPage"
+          component={MyTripPage}
+          options={{
+            headerStyle: { backgroundColor: color_header_backGround },
+            headerShown: true,
+            headerTitleAlign: "center",
+            title: "MyTrip",
+          }}
+        />
+      </Drawer.Navigator>
+    </TripsProvider>
   );
 }

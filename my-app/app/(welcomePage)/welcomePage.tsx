@@ -21,7 +21,12 @@ import { StatusBar } from "react-native";
 
 export default function welcomePage() {
   const router = useRouter();
-  const [images, setImages] = React.useState<string[]>([]);
+  const [images, setImages] = React.useState<string[]>([
+    require("../../assets/photos/image2.jpg"),
+    require("../../assets/photos/image3.jpg"),
+    require("../../assets/photos/image4.jpg"),
+  ]);
+
   return (
     <NativeBaseProvider>
       <View style={style.body}>
@@ -61,7 +66,7 @@ export default function welcomePage() {
             <Button
               style={style.buttons}
               onPress={() => {
-                router.push("/");
+                router.push("/login");
               }}
             >
               Login

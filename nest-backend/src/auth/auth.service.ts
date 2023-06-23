@@ -30,10 +30,10 @@ export class AuthService {
   async signIn(email: string, password: string): Promise<any> {
     const user = await this.usersService.findOneByEmail(email);
     if (!user) {
-      throw new NotFoundException();
+      throw new NotFoundException('user not found');
     }
     if (!(await bcrypt.compare(password, user.password))) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('password not matched');
     }
     const payload: JwtPayload = { email: user.email, sub: user.id };
     return {
@@ -47,15 +47,19 @@ export class AuthService {
     username: string,
     password: string,
   ): Promise<any> {
-    const user = await this.usersService.create({
-      email,
-      username,
-      password,
-    });
-    const payload = { email: user.email, sub: user.id };
-    return {
-      user_id: user.id,
-      access_token: await this.jwtService.signAsync(payload),
-    };
+    try {
+      const user = await this.usersService.create({
+        email,
+        username,
+        password,
+      });
+      const payload = { email: user.email, sub: user.id };
+      return {
+        user_id: user.id,
+        access_token: await this.jwtService.signAsync(payload),
+      };
+    } catch {
+      throw new NotFoundException('User already exist');
+    }
   }
 }

@@ -1,5 +1,17 @@
 {
     "cSpell.words": [
         "colour"
+    ],
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "project4",
+            "username": "echo",
+            "password": "echo",
+            "database": "tecky_project_4_nest"
+        }
     ]
 }

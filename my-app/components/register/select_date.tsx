@@ -1,14 +1,14 @@
 import { Box, CheckIcon, HStack, Select, Text } from "native-base";
 import { colour_label_text } from "../css/colors";
 import { useState } from "react";
+import React from "react";
 
 export type SetDate = {
-    setdate: Function
-}
-  
+  setdate: Function;
+};
 
 export function Select_date({ setdate }: SetDate) {
-    // const {setdate} = props
+  // const {setdate} = props
   let dayList = [];
   for (let d = 1; d <= 31; d++) {
     dayList.push(d);
@@ -38,7 +38,11 @@ export function Select_date({ setdate }: SetDate) {
               bg: "teal.600",
               endIcon: <CheckIcon size="5" />,
             }}
-            mt={1} onValueChange={itemValue => setdate( (v:any) => ({...v, day: itemValue}))}>
+            mt={1}
+            onValueChange={(itemValue) =>
+              setdate((v: any) => ({ ...v, day: itemValue }))
+            }
+          >
             {dayList.map((e) => (
               <Select.Item key={e} label={`${e}`} value={`${e}`} />
             ))}
@@ -54,7 +58,10 @@ export function Select_date({ setdate }: SetDate) {
               bg: "teal.600",
               endIcon: <CheckIcon size="5" />,
             }}
-            mt={1} onValueChange={itemValue => setdate( (v:any) => ({...v, month: itemValue}))}
+            mt={1}
+            onValueChange={(itemValue) =>
+              setdate((v: any) => ({ ...v, month: itemValue }))
+            }
           >
             {monthList.map((e) => (
               <Select.Item key={e} label={`${e}`} value={`${e}`} />
@@ -72,7 +79,10 @@ export function Select_date({ setdate }: SetDate) {
             bg: "teal.600",
             endIcon: <CheckIcon size="5" />,
           }}
-          mt={1} onValueChange={itemValue => setdate( (v:any) => ({...v, year: itemValue}))}
+          mt={1}
+          onValueChange={(itemValue) =>
+            setdate((v: any) => ({ ...v, year: itemValue }))
+          }
         >
           {yearList.map((e) => (
             <Select.Item key={e} label={`${e}`} value={`${e}`} />
