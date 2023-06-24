@@ -20,6 +20,7 @@ import {
   Slider,
   Pressable,
   Modal,
+  KeyboardAvoidingView,
 } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -269,347 +270,356 @@ function CreateInputTab() {
   }
 
   return (
-    <TapGestureHandler onHandlerStateChange={touchScreen} numberOfTaps={1}>
-      <SafeAreaView style={styles.SafeAreaView}>
-        <View style={styles.view_bg}>
-          <Spinner
-            visible={loadingScreen}
-            textContent={"Loading..."}
-            textStyle={styles.spinnerTextStyle}
-          />
-          <Box style={styles.topContainer}>
-            <ScrollView>
-              {/* ------------------------------ interests_new tab ------------------------------  */}
-              <Box marginTop="20px">
-                <Flex flexDir={"row"} justifyContent={"space-around"}>
-                  <Box>
-                    <Button
-                      style={
-                        topOptionValues.interests_new == "Art"
-                          ? styles.interestNewButonsSelected
-                          : styles.interestNewButons
-                      }
-                      onPress={() => setTopOption("Art", "interests_new")}
-                    >
-                      <FontAwesomeIcon
-                        color="#195CB2"
-                        size={25}
-                        icon={faPalette}
-                      />
-                    </Button>
-                    <Text textAlign={"center"}>Art</Text>
-                  </Box>
-                  <Box>
-                    <Button
-                      style={
-                        topOptionValues.interests_new == "Food"
-                          ? styles.interestNewButonsSelected
-                          : styles.interestNewButons
-                      }
-                      onPress={() => setTopOption("Food", "interests_new")}
-                    >
-                      <FontAwesomeIcon
-                        color="#195CB2"
-                        size={25}
-                        icon={faUtensils}
-                      />
-                    </Button>
-                    <Text textAlign={"center"}>Food</Text>
-                  </Box>
+    // <TapGestureHandler onHandlerStateChange={touchScreen} numberOfTaps={1}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <SafeAreaView style={styles.SafeAreaView}>
+          <View style={styles.view_bg}>
+            <Spinner
+              visible={loadingScreen}
+              textContent={"Loading..."}
+              textStyle={styles.spinnerTextStyle}
+            />
+            <Box style={styles.topContainer}>
+              <ScrollView>
+                {/* ------------------------------ interests_new tab ------------------------------  */}
+                <Box marginTop="20px">
+                  <Flex flexDir={"row"} justifyContent={"space-around"}>
+                    <Box>
+                      <Button
+                        style={
+                          topOptionValues.interests_new == "Art"
+                            ? styles.interestNewButonsSelected
+                            : styles.interestNewButons
+                        }
+                        onPress={() => setTopOption("Art", "interests_new")}
+                      >
+                        <FontAwesomeIcon
+                          color="#195CB2"
+                          size={25}
+                          icon={faPalette}
+                        />
+                      </Button>
+                      <Text textAlign={"center"}>Art</Text>
+                    </Box>
+                    <Box>
+                      <Button
+                        style={
+                          topOptionValues.interests_new == "Food"
+                            ? styles.interestNewButonsSelected
+                            : styles.interestNewButons
+                        }
+                        onPress={() => setTopOption("Food", "interests_new")}
+                      >
+                        <FontAwesomeIcon
+                          color="#195CB2"
+                          size={25}
+                          icon={faUtensils}
+                        />
+                      </Button>
+                      <Text textAlign={"center"}>Food</Text>
+                    </Box>
 
-                  <Box>
-                    <Button
-                      style={
-                        topOptionValues.interests_new == "Music"
-                          ? styles.interestNewButonsSelected
-                          : styles.interestNewButons
-                      }
-                      onPress={() => setTopOption("Music", "interests_new")}
-                    >
-                      <FontAwesomeIcon
-                        color="#195CB2"
-                        size={25}
-                        icon={faMusic}
-                      />
-                    </Button>
-                    <Text textAlign={"center"}>Music</Text>
-                  </Box>
-                  <Box>
-                    <Button
-                      style={
-                        topOptionValues.interests_new == "Sport"
-                          ? styles.interestNewButonsSelected
-                          : styles.interestNewButons
-                      }
-                      onPress={() => setTopOption("Sport", "interests_new")}
-                    >
-                      <FontAwesomeIcon
-                        color="#195CB2"
-                        size={25}
-                        icon={faBaseball}
-                      />
-                    </Button>
-                    <Text textAlign={"center"}>Sport</Text>
-                  </Box>
-                  <Box>
-                    <Button
-                      style={
-                        topOptionValues.interests_new == "History"
-                          ? styles.interestNewButonsSelected
-                          : styles.interestNewButons
-                      }
-                      onPress={() => setTopOption("History", "interests_new")}
-                    >
-                      <FontAwesomeIcon
-                        color="#195CB2"
-                        size={25}
-                        icon={faLandmark}
-                      />
-                    </Button>
-                    <Text textAlign={"center"}>History</Text>
-                  </Box>
-                  <Box>
-                    <Button
-                      style={
-                        topOptionValues.interests_new == "Nature"
-                          ? styles.interestNewButonsSelected
-                          : styles.interestNewButons
-                      }
-                      onPress={() => setTopOption("Nature", "interests_new")}
-                    >
-                      <FontAwesomeIcon
-                        color="#195CB2"
-                        size={25}
-                        icon={faTree}
-                      />
-                    </Button>
-                    <Text textAlign={"center"}>Nature</Text>
-                  </Box>
-                </Flex>
-              </Box>
+                    <Box>
+                      <Button
+                        style={
+                          topOptionValues.interests_new == "Music"
+                            ? styles.interestNewButonsSelected
+                            : styles.interestNewButons
+                        }
+                        onPress={() => setTopOption("Music", "interests_new")}
+                      >
+                        <FontAwesomeIcon
+                          color="#195CB2"
+                          size={25}
+                          icon={faMusic}
+                        />
+                      </Button>
+                      <Text textAlign={"center"}>Music</Text>
+                    </Box>
+                    <Box>
+                      <Button
+                        style={
+                          topOptionValues.interests_new == "Sport"
+                            ? styles.interestNewButonsSelected
+                            : styles.interestNewButons
+                        }
+                        onPress={() => setTopOption("Sport", "interests_new")}
+                      >
+                        <FontAwesomeIcon
+                          color="#195CB2"
+                          size={25}
+                          icon={faBaseball}
+                        />
+                      </Button>
+                      <Text textAlign={"center"}>Sport</Text>
+                    </Box>
+                    <Box>
+                      <Button
+                        style={
+                          topOptionValues.interests_new == "History"
+                            ? styles.interestNewButonsSelected
+                            : styles.interestNewButons
+                        }
+                        onPress={() => setTopOption("History", "interests_new")}
+                      >
+                        <FontAwesomeIcon
+                          color="#195CB2"
+                          size={25}
+                          icon={faLandmark}
+                        />
+                      </Button>
+                      <Text textAlign={"center"}>History</Text>
+                    </Box>
+                    <Box>
+                      <Button
+                        style={
+                          topOptionValues.interests_new == "Nature"
+                            ? styles.interestNewButonsSelected
+                            : styles.interestNewButons
+                        }
+                        onPress={() => setTopOption("Nature", "interests_new")}
+                      >
+                        <FontAwesomeIcon
+                          color="#195CB2"
+                          size={25}
+                          icon={faTree}
+                        />
+                      </Button>
+                      <Text textAlign={"center"}>Nature</Text>
+                    </Box>
+                  </Flex>
+                </Box>
 
-              {/* ------------------------------ number of people tab ------------------------------  */}
-              <Box marginTop="20px" marginX="20px">
-                <Text style={styles.labelText}>Select number of people</Text>
-                <SegmentedControlTab
-                  values={["1", "2", "3", "4", "5"]}
-                  selectedIndex={selectTab}
-                  onTabPress={(e) => {
-                    handleIndexChange(e);
-                  }}
-                />
-              </Box>
+                {/* ------------------------------ number of people tab ------------------------------  */}
+                <Box marginTop="20px" marginX="20px">
+                  <Text style={styles.labelText}>Select number of people</Text>
+                  <SegmentedControlTab
+                    values={["1", "2", "3", "4", "5"]}
+                    selectedIndex={selectTab}
+                    onTabPress={(e) => {
+                      handleIndexChange(e);
+                    }}
+                  />
+                </Box>
 
-              {/* ------------------------------ travel Style tab------------------------------ */}
-              <Box px={"5%"} marginTop="20px" width={"100%"}>
-                <Text style={styles.labelText}>Select your travel style</Text>
-                <Dropdown
-                  placeholder={
-                    topOptionValues.travel_style
-                      ? topOptionValues.travel_style
-                      : "Select Travel Style"
-                  }
-                  placeholderStyle={styles.dropdown_placeHolder}
-                  data={travelStyle}
-                  onChange={(item) => {
-                    setTopOption(item.value, "travel_style");
-                  }}
-                  labelField="label"
-                  valueField="value"
-                  style={styles.dropdown}
-                />
-              </Box>
+                {/* ------------------------------ travel Style tab------------------------------ */}
+                <Box px={"5%"} marginTop="20px" width={"100%"}>
+                  <Text style={styles.labelText}>Select your travel style</Text>
+                  <Dropdown
+                    placeholder={
+                      topOptionValues.travel_style
+                        ? topOptionValues.travel_style
+                        : "Select Travel Style"
+                    }
+                    placeholderStyle={styles.dropdown_placeHolder}
+                    data={travelStyle}
+                    onChange={(item) => {
+                      setTopOption(item.value, "travel_style");
+                    }}
+                    labelField="label"
+                    valueField="value"
+                    style={styles.dropdown}
+                  />
+                </Box>
 
-              {/* ------------------------------ travel Cuisine tab------------------------------ */}
-              <Box px={"5%"} marginTop="20px" width={"100%"}>
-                <Text style={styles.labelText}>Select your cuisine type</Text>
-                <Dropdown
-                  placeholderStyle={styles.dropdown_placeHolder}
-                  placeholder={
-                    topOptionValues.cuisine_type
-                      ? topOptionValues.cuisine_type
-                      : "Select Cuisine Type"
-                  }
-                  data={cuisine_type}
-                  onChange={(item) => {
-                    setTopOption(item.value, "cuisine_type");
-                  }}
-                  labelField="label"
-                  valueField="value"
-                  style={styles.dropdown}
-                  maxHeight={200}
-                />
-              </Box>
+                {/* ------------------------------ travel Cuisine tab------------------------------ */}
+                <Box px={"5%"} marginTop="20px" width={"100%"}>
+                  <Text style={styles.labelText}>Select your cuisine type</Text>
+                  <Dropdown
+                    placeholderStyle={styles.dropdown_placeHolder}
+                    placeholder={
+                      topOptionValues.cuisine_type
+                        ? topOptionValues.cuisine_type
+                        : "Select Cuisine Type"
+                    }
+                    data={cuisine_type}
+                    onChange={(item) => {
+                      setTopOption(item.value, "cuisine_type");
+                    }}
+                    labelField="label"
+                    valueField="value"
+                    style={styles.dropdown}
+                    maxHeight={200}
+                  />
+                </Box>
 
-              {/* ------------------------------ travel Activity tab------------------------------ */}
-              <Box px={"5%"} marginTop="20px" width={"100%"}>
-                <Text style={styles.labelText}>Select your activity type</Text>
-                <Dropdown
-                  placeholderStyle={styles.dropdown_placeHolder}
-                  placeholder={
-                    topOptionValues.activity_type
-                      ? topOptionValues.activity_type
-                      : "Select Activity Type"
-                  }
-                  data={activityType}
-                  onChange={(item) => {
-                    setTopOption(item.value, "activity_type");
-                  }}
-                  labelField="label"
-                  valueField="value"
-                  style={styles.dropdown}
-                  maxHeight={500}
-                />
-              </Box>
+                {/* ------------------------------ travel Activity tab------------------------------ */}
+                <Box px={"5%"} marginTop="20px" width={"100%"}>
+                  <Text style={styles.labelText}>
+                    Select your activity type
+                  </Text>
+                  <Dropdown
+                    placeholderStyle={styles.dropdown_placeHolder}
+                    placeholder={
+                      topOptionValues.activity_type
+                        ? topOptionValues.activity_type
+                        : "Select Activity Type"
+                    }
+                    data={activityType}
+                    onChange={(item) => {
+                      setTopOption(item.value, "activity_type");
+                    }}
+                    labelField="label"
+                    valueField="value"
+                    style={styles.dropdown}
+                    maxHeight={500}
+                  />
+                </Box>
 
-              {/* ------------------------------ Time Picker tab------------------------------ */}
+                {/* ------------------------------ Time Picker tab------------------------------ */}
 
-              <Box
-                px={"5%"}
-                marginTop="20px"
-                width={"100%"}
-                display={"flex"}
-                flexDir={"row"}
-                justifyContent={"space-around"}
-              >
-                <Center>
-                  <Text style={styles.labelText}>Starting time type</Text>
-                  {Platform.OS === "android" && (
-                    <Pressable
-                      onPress={() => {
-                        //@ts-ignore
-                        DateTimePickerAndroid.open(startDateTimePickerProps);
-                      }}
-                    >
-                      <Box style={styles.timeButtons}>
-                        <Text fontSize={"3xl"} style={styles.timeTextDisplay}>
-                          {topOptionValues.start_time
-                            ? topOptionValues.start_time
-                            : "00:00"}
-                        </Text>
-                      </Box>
-                    </Pressable>
-                  )}
-                  {Platform.OS === "ios" && (
-                    <DateTimePicker {...startDateTimePickerProps} />
-                  )}
-                </Center>
-                <Center>
-                  <Text style={styles.labelText}> Ending time type</Text>
-                  {Platform.OS === "android" && (
-                    <Pressable
-                      onPress={() => {
-                        //@ts-ignore
-                        DateTimePickerAndroid.open(endDateTimePickerProps);
-                      }}
-                    >
-                      <Box style={styles.timeButtons}>
-                        <Text fontSize={"3xl"} style={styles.timeTextDisplay}>
-                          {topOptionValues.end_time
-                            ? topOptionValues.end_time
-                            : "00:00"}
-                        </Text>
-                      </Box>
-                    </Pressable>
-                  )}
-                  {Platform.OS === "ios" && (
-                    <DateTimePicker {...endDateTimePickerProps} />
-                  )}
-                </Center>
-              </Box>
-
-              {/* ------------------------------- budget tab ------------------------------- */}
-              <Box marginX="20px" marginTop="20px">
-                <Text style={styles.labelText}>Input your budget</Text>
-
-                <Input
-                  fontSize={15}
-                  value={showBudget}
-                  onEndEditing={(e) => {
-                    console.log(e.nativeEvent.text);
-                    checkBudgetInput(e.nativeEvent.text);
-                  }}
-                  onChangeText={(e) => {
-                    handleInput(e);
-                  }}
-                  placeholder={"Input your budget 1000 - 5000"}
-                />
-              </Box>
-
-              {/* ------------------------------- Destination tab ------------------------------- */}
-              <Box marginX="20px" marginTop="20px">
-                <Text style={styles.labelText}>
-                  Input the country and the city
-                </Text>
-                <Input
-                  fontSize={15}
-                  onEndEditing={(e) => {
-                    setTopOption(e.nativeEvent.text, "destination");
-                  }}
-                  onChangeText={(e) => {
-                    setDestinationBuffer(e);
-                  }}
-                  placeholder={"Eg: Japan Tokyo"}
-                  value={destinationBuffer}
-                />
-              </Box>
-              <Center>
-                <Button
-                  marginTop={"20px"}
-                  style={styles.Button_planTrip}
-                  onPress={() => setModalVisible(true)}
-                  fontSize={"sm"}
+                <Box
+                  px={"5%"}
+                  marginTop="20px"
+                  width={"100%"}
+                  display={"flex"}
+                  flexDir={"row"}
+                  justifyContent={"space-around"}
                 >
-                  Pick By Location
-                </Button>
-              </Center>
+                  <Center>
+                    <Text style={styles.labelText}>Starting time type</Text>
+                    {Platform.OS === "android" && (
+                      <Pressable
+                        onPress={() => {
+                          //@ts-ignore
+                          DateTimePickerAndroid.open(startDateTimePickerProps);
+                        }}
+                      >
+                        <Box style={styles.timeButtons}>
+                          <Text fontSize={"3xl"} style={styles.timeTextDisplay}>
+                            {topOptionValues.start_time
+                              ? topOptionValues.start_time
+                              : "00:00"}
+                          </Text>
+                        </Box>
+                      </Pressable>
+                    )}
+                    {Platform.OS === "ios" && (
+                      <DateTimePicker {...startDateTimePickerProps} />
+                    )}
+                  </Center>
+                  <Center>
+                    <Text style={styles.labelText}> Ending time type</Text>
+                    {Platform.OS === "android" && (
+                      <Pressable
+                        onPress={() => {
+                          //@ts-ignore
+                          DateTimePickerAndroid.open(endDateTimePickerProps);
+                        }}
+                      >
+                        <Box style={styles.timeButtons}>
+                          <Text fontSize={"3xl"} style={styles.timeTextDisplay}>
+                            {topOptionValues.end_time
+                              ? topOptionValues.end_time
+                              : "00:00"}
+                          </Text>
+                        </Box>
+                      </Pressable>
+                    )}
+                    {Platform.OS === "ios" && (
+                      <DateTimePicker {...endDateTimePickerProps} />
+                    )}
+                  </Center>
+                </Box>
 
-              <Center>
+                {/* ------------------------------- budget tab ------------------------------- */}
+                <Box marginX="20px" marginTop="20px">
+                  <Text style={styles.labelText}>Input your budget</Text>
+
+                  <Input
+                    fontSize={15}
+                    value={showBudget}
+                    onEndEditing={(e) => {
+                      console.log(e.nativeEvent.text);
+                      checkBudgetInput(e.nativeEvent.text);
+                    }}
+                    onChangeText={(e) => {
+                      handleInput(e);
+                    }}
+                    placeholder={"Input your budget 1000 - 5000"}
+                  />
+                </Box>
+
+                {/* ------------------------------- Destination tab ------------------------------- */}
+                <Box marginX="20px" marginTop="20px">
+                  <Text style={styles.labelText}>
+                    Input the country and the city
+                  </Text>
+                  <Input
+                    fontSize={15}
+                    onEndEditing={(e) => {
+                      setTopOption(e.nativeEvent.text, "destination");
+                    }}
+                    onChangeText={(e) => {
+                      setDestinationBuffer(e);
+                    }}
+                    placeholder={"Eg: Japan Tokyo"}
+                    value={destinationBuffer}
+                  />
+                </Box>
+                <Center>
+                  <Button
+                    marginTop={"20px"}
+                    style={styles.Button_planTrip}
+                    onPress={() => setModalVisible(true)}
+                    fontSize={"sm"}
+                  >
+                    Pick By Location
+                  </Button>
+                </Center>
+
+                <Center>
+                  <Button
+                    marginTop={"20px"}
+                    style={styles.Button_planTrip}
+                    onPress={async () => onSubmit()}
+                    fontSize={"sm"}
+                  >
+                    Plan Trip
+                  </Button>
+                </Center>
+              </ScrollView>
+            </Box>
+          </View>
+          <Modal
+            isOpen={modalVisible}
+            onClose={() => setModalVisible(false)}
+            initialFocusRef={initialRef}
+            finalFocusRef={finalRef}
+            size={"xl"}
+          >
+            <Modal.Content>
+              <Modal.CloseButton />
+              <Modal.Header>
+                <Box h={300} justifyContent="center" alignItems="center">
+                  <MapPicker
+                    defaultLocation={{ latitude: 22.3, longitude: 114.17 }}
+                    setRegionString={setRegionString}
+                  />
+                </Box>
+              </Modal.Header>
+              <Modal.Body>{regionString}</Modal.Body>
+              <Modal.Footer justifyContent={"center"}>
                 <Button
-                  marginTop={"20px"}
-                  style={styles.Button_planTrip}
-                  onPress={async () => onSubmit()}
-                  fontSize={"sm"}
+                  onPress={() => {
+                    setTopOption(regionString, "destination");
+                    setDestinationBuffer(regionString);
+                    setModalVisible(false);
+                  }}
                 >
-                  Plan Trip
+                  Save
                 </Button>
-              </Center>
-            </ScrollView>
-          </Box>
-        </View>
-        <Modal
-          isOpen={modalVisible}
-          onClose={() => setModalVisible(false)}
-          initialFocusRef={initialRef}
-          finalFocusRef={finalRef}
-          size={"xl"}
-        >
-          <Modal.Content>
-            <Modal.CloseButton />
-            <Modal.Header>
-              <Box h={300} justifyContent="center" alignItems="center">
-                <MapPicker
-                  defaultLocation={{ latitude: 22.3, longitude: 114.17 }}
-                  setRegionString={setRegionString}
-                ></MapPicker>
-              </Box>
-            </Modal.Header>
-            <Modal.Body>{regionString}</Modal.Body>
-            <Modal.Footer justifyContent={"center"}>
-              <Button
-                onPress={() => {
-                  setTopOption(regionString, "destination");
-                  setDestinationBuffer(regionString);
-                  setModalVisible(false);
-                }}
-              >
-                Save
-              </Button>
-            </Modal.Footer>
-          </Modal.Content>
-        </Modal>
-      </SafeAreaView>
-    </TapGestureHandler>
+              </Modal.Footer>
+            </Modal.Content>
+          </Modal>
+        </SafeAreaView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
+    // </TapGestureHandler>
   );
 }
 

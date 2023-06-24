@@ -8,6 +8,8 @@ import {
   Spacer,
   View,
   Text,
+  HStack,
+  ZStack,
 } from "native-base";
 import { useRouter } from "expo-router";
 import { StyleSheet } from "react-native";
@@ -18,6 +20,11 @@ import {
 // @ts-ignore
 import { SliderBox } from "react-native-image-slider-box";
 import { StatusBar } from "react-native";
+import { RobotoBoldText, RobotoText } from "../../components/StyledText";
+import {
+  ButtonShadowProps,
+  SecondaryButtonProps,
+} from "../../constants/Button";
 
 export default function welcomePage() {
   const router = useRouter();
@@ -31,16 +38,14 @@ export default function welcomePage() {
     <NativeBaseProvider>
       <View style={style.body}>
         <Center flex={1}>
-          <Box style={style.headerContainer}>
-            <Text fontWeight={"bold"} fontSize={"4xl"}>
-              Lazy Trip Planner
-            </Text>
-          </Box>
+          <RobotoBoldText textAlign={"center"} fontSize={"3xl"}>
+            Wanderlust AI
+          </RobotoBoldText>
 
-          <Box style={style.textContainer}>
-            <Text fontSize={"lg"}>
-              you can plan your trip with just one click
-            </Text>
+          <Box w="60%">
+            <RobotoText fontSize={"sm"}>
+              Let AI do the work, so you can enjoy your trip
+            </RobotoText>
           </Box>
 
           <View style={style.slideViewContainer}>
@@ -61,27 +66,34 @@ export default function welcomePage() {
             <StatusBar />
           </View>
 
-          <Flex direction="row">
-            <Spacer />
-            <Button
-              style={style.buttons}
-              onPress={() => {
-                router.push("/login");
-              }}
-            >
-              Login
-            </Button>
-            <Spacer />
-            <Button
-              style={style.buttons}
-              onPress={async () => {
-                router.push("/register");
-              }}
-            >
-              Register
-            </Button>
-            <Spacer />
-          </Flex>
+          <HStack w="100%" h="6%" justifyContent="space-evenly">
+            <ZStack w="30%" reversed>
+              <Button
+                {...SecondaryButtonProps}
+                w="100%"
+                h="95%"
+                onPress={() => {
+                  router.push("/login");
+                }}
+              >
+                <RobotoText>LOGIN</RobotoText>
+              </Button>
+              <Box {...ButtonShadowProps} w="100%" h="95%" />
+            </ZStack>
+            <ZStack w="30%" reversed>
+              <Button
+                {...SecondaryButtonProps}
+                w="100%"
+                h="95%"
+                onPress={async () => {
+                  router.push("/register");
+                }}
+              >
+                <RobotoText>REGISTER</RobotoText>
+              </Button>
+              <Box {...ButtonShadowProps} w="100%" h="95%" />
+            </ZStack>
+          </HStack>
         </Center>
       </View>
     </NativeBaseProvider>
@@ -101,8 +113,6 @@ const style = StyleSheet.create({
   headerContainer: {
     justifyContent: "center",
     alignItems: "center",
-    width: 327,
-    height: 102,
   },
   textContainer: {
     justifyContent: "center",

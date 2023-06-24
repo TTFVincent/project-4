@@ -23,10 +23,11 @@ export default function TabLayout() {
         headerStyle: {
           backgroundColor: "#fff",
         },
-        headerTintColor: "#333333",
         headerTitleStyle: {
+          fontFamily: "RobotoMono",
           fontWeight: "bold",
         },
+        headerTintColor: "#333333",
       }}
     >
       <Stack.Screen

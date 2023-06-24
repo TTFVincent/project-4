@@ -53,6 +53,11 @@ export default function sideNav() {
           component={PlanTrip}
           options={{
             headerStyle: { backgroundColor: color_header_backGround },
+            headerTitleStyle: {
+              color: "#000000",
+              fontFamily: "RobotoMono",
+              fontWeight: "bold",
+            },
             headerShown: true,
             headerTitleAlign: "center",
             title: "Plan Trip",
@@ -63,6 +68,11 @@ export default function sideNav() {
           component={Profile}
           options={{
             headerStyle: { backgroundColor: color_header_backGround },
+            headerTitleStyle: {
+              color: "#000000",
+              fontFamily: "RobotoMono",
+              fontWeight: "bold",
+            },
             headerShown: true,
             headerTitleAlign: "center",
             title: "Profile",
@@ -73,6 +83,11 @@ export default function sideNav() {
           component={MyTripPage}
           options={{
             headerStyle: { backgroundColor: color_header_backGround },
+            headerTitleStyle: {
+              color: "#000000",
+              fontFamily: "RobotoMono",
+              fontWeight: "bold",
+            },
             headerShown: true,
             headerTitleAlign: "center",
             title: "MyTrip",

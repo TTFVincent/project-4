@@ -14,8 +14,15 @@ import {
   Select,
   Flex,
   HStack,
+  KeyboardAvoidingView,
+  ZStack,
 } from "native-base";
-import { Keyboard, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import {
+  Keyboard,
+  Platform,
+  StyleSheet,
+  TouchableWithoutFeedback,
+} from "react-native";
 import {
   colour_container_bg,
   colour_input_text,
@@ -31,6 +38,8 @@ import { back_end_server } from "@env";
 import { hashPassword } from "../../components/authentication/hash";
 import { useRouter } from "expo-router";
 import { useTokenStore } from "../../zustand/useTokenStore";
+import { ButtonShadowProps, PrimaryButtonProps } from "../../constants/Button";
+import { RobotoBoldText, RobotoText } from "../../components/StyledText";
 
 export type SetDate = {
   day: string;
@@ -70,8 +79,8 @@ const Register = () => {
     return state ? (
       <>
         <FormControl>
-          <FormControl.Label _text={{ color: colour_label_text }}>
-            Password
+          <FormControl.Label>
+            <RobotoText>Password</RobotoText>
           </FormControl.Label>
           <Input
             onChangeText={(value: any) => {
@@ -81,9 +90,9 @@ const Register = () => {
             type="password"
           />
         </FormControl>
-        <FormControl>
+        <FormControl mt={3}>
           <FormControl.Label>
-            <Text color={colour_label_text}>Confirm Password</Text>
+            <RobotoText>Confirm Password</RobotoText>
           </FormControl.Label>
           <Input
             onChangeText={(value: any) => {
@@ -97,8 +106,8 @@ const Register = () => {
     ) : (
       <>
         <FormControl>
-          <FormControl.Label _text={{ color: colour_label_text }}>
-            Password
+          <FormControl.Label>
+            <RobotoText>Password</RobotoText>
           </FormControl.Label>
           <Input
             isRequired={true}
@@ -109,9 +118,9 @@ const Register = () => {
             type="password"
           />
         </FormControl>
-        <FormControl>
+        <FormControl mt={3}>
           <FormControl.Label>
-            <Text color={colour_label_text}>Confirm Password</Text>
+            <RobotoText>Confirm Password</RobotoText>
           </FormControl.Label>
           <Input
             isRequired={true}
@@ -160,60 +169,47 @@ const Register = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Center w="100%">
-        <Box safeArea p="2" w="90%" maxW="290" py="8">
-          <Heading
-            size="lg"
-            color={colour_label_text}
-            _dark={{
-              color: "warmGray.50",
-            }}
-            fontWeight="semibold"
-          >
-            Sign up
-          </Heading>
-          <VStack space={3} mt="5">
-            <FormControl>
-              <FormControl.Label>
-                <Text color={colour_label_text}>User Name</Text>
-              </FormControl.Label>
-              <Input
-                isRequired={true}
-                onChangeText={(value: any) => {
-                  formInfo.current.user_name = value;
-                }}
-                color={colour_input_text}
-              />
-            </FormControl>
-            <Select_date setdate={setdate} />
-            <FormControl>
-              <FormControl.Label>
-                <Text color={colour_label_text}>Email</Text>
-              </FormControl.Label>
-              <Input
-                isRequired={true}
-                onChangeText={(value: any) => {
-                  formInfo.current.email = value;
-                }}
-                color={colour_input_text}
-              />
-            </FormControl>
-
-            <ShowPasswordCheck />
-
-            <Button
-              mt="2"
-              colorScheme="indigo"
-              onPress={() => {
-                onSubmit();
-                console.log();
+      <Box safeArea p="2" w="100%" maxW="290">
+        <RobotoBoldText fontSize={"md"}>
+          Your first step towards greatness!
+        </RobotoBoldText>
+        <VStack space={3} mt="5">
+          <FormControl>
+            <FormControl.Label>
+              <RobotoText>User Name</RobotoText>
+            </FormControl.Label>
+            <Input
+              isRequired={true}
+              onChangeText={(value: any) => {
+                formInfo.current.user_name = value;
               }}
-            >
-              Sign up
+              color={colour_input_text}
+            />
+          </FormControl>
+          {/* <Select_date setdate={setdate} /> */}
+          <FormControl>
+            <FormControl.Label>
+              <RobotoText>Email</RobotoText>
+            </FormControl.Label>
+            <Input
+              isRequired={true}
+              onChangeText={(value: any) => {
+                formInfo.current.email = value;
+              }}
+              color={colour_input_text}
+            />
+          </FormControl>
+
+          <ShowPasswordCheck />
+
+          <ZStack mt={3} m="auto" w="80%" h="14%" reversed>
+            <Button w="100%" h="95%" onPress={onSubmit} {...PrimaryButtonProps}>
+              <RobotoText>SIGN UP</RobotoText>
             </Button>
-          </VStack>
-        </Box>
-      </Center>
+            <Box {...ButtonShadowProps} w="100%" h="95%" />
+          </ZStack>
+        </VStack>
+      </Box>
     </TouchableWithoutFeedback>
   );
 };
@@ -221,18 +217,14 @@ const Register = () => {
 export default () => {
   return (
     <NativeBaseProvider>
-      <ScrollView style={styles.container}>
-        <Center overflowY="scroll" flex={1} px="3">
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <Center bg={colour_container_bg} flex={1} w="100%">
           <Register />
         </Center>
-      </ScrollView>
+      </KeyboardAvoidingView>
     </NativeBaseProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colour_container_bg,
-  },
-  inputText: {},
-});

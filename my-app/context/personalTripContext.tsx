@@ -47,6 +47,8 @@ async function loadLocalTrip(
 
 async function saveLocalTrip(
   trip: TripLocation[],
+  trips: Trip[],
+  setTrips: Dispatch<SetStateAction<Trip[]>>,
   maxTripIndex: string,
   setMaxTripIndex: Dispatch<SetStateAction<string>>
 ): Promise<void> {
@@ -55,8 +57,7 @@ async function saveLocalTrip(
     const newMaxTripIndex = `${+maxTripIndex + 1}`;
     await setStorageValue("maxTripIndex", newMaxTripIndex);
     setMaxTripIndex(newMaxTripIndex);
-
-    console.log("save Trip");
+    setTrips([...trips, { id: maxTripIndex, trip }]);
   } catch (err) {
     console.error(err);
   }
@@ -77,7 +78,7 @@ export function TripsProvider(props: { children: ReactNode }) {
     <TripContext.Provider
       value={{
         saveLocalTrip: (trip: TripLocation[]) =>
-          saveLocalTrip(trip, maxTripIndex, setMaxTripIndex),
+          saveLocalTrip(trip, trips, setTrips, maxTripIndex, setMaxTripIndex),
         deleteLocalTrip,
         trips,
       }}
