@@ -13,14 +13,22 @@ import {
 } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Trip } from "../constants/TripLocation";
-import { useChatGPTRespond } from "../zustand/useChatGPTRespondStore";
+import {
+  UseChatGPTResponse,
+  useChatGPTResponse,
+} from "../zustand/useChatGPTResponseStore";
 import { useRouter } from "expo-router";
 
 export default function BasicSwipeList(props: {
   data: Trip[];
   setData: Dispatch<SetStateAction<Trip[]>>;
 }) {
-  const saveRespond = useChatGPTRespond((state: any) => state.saveRespond);
+  const saveResponse = useChatGPTResponse(
+    (state: UseChatGPTResponse) => state.saveResponse
+  );
+  const response = useChatGPTResponse(
+    (state: UseChatGPTResponse) => state.response
+  );
   const router = useRouter();
 
   const closeRow = (rowMap: RowMap<Trip>, rowKey: string) => {
@@ -40,7 +48,7 @@ export default function BasicSwipeList(props: {
   };
 
   function onPressRow(trip: Trip) {
-    saveRespond(trip.trip);
+    saveResponse(trip.trip);
     router.push("/calendarPage");
   }
 

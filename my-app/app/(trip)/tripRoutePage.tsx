@@ -9,20 +9,22 @@ import BasicSwipeList from "../../components/SwipeList";
 import { TripLocation, sampleTrip } from "../../constants/TripLocation";
 import Map from "../../components/Map";
 import { useLocalSearchParams } from "expo-router";
-import { useChatGPTRespond } from "../../zustand/useChatGPTRespondStore";
+import {
+  UseChatGPTResponse,
+  useChatGPTResponse,
+} from "../../zustand/useChatGPTResponseStore";
 
 export default function tripRoutePage() {
-  const respond = useChatGPTRespond((state: any) => state.respond);
+  const response = useChatGPTResponse(
+    (state: UseChatGPTResponse) => state.response
+  );
+  if (!response) throw new Error("Invalid trip");
   const { locationId, extra } = useLocalSearchParams();
-  const [tripData, setTripData] = useState<TripLocation[]>(respond);
+  const [tripData, setTripData] = useState<TripLocation[]>(response);
 
   return (
     <View style={styles.container}>
       <Map data={tripData} defaultLocationId={locationId as string} />
-      {/* <Text style={styles.text}>{prompt}</Text>
-      <Text style={styles.text}>{GOOGLE_MAP_KEY}</Text>
-      <Text style={styles.text}>token: {token}</Text> 
-    <BasicSwipeList data={tripData} setData={setTripData} />*/}
     </View>
   );
 }

@@ -19,6 +19,7 @@ import {
   Text,
   Slider,
   Pressable,
+  Modal,
 } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -46,7 +47,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import axios from "axios";
 import { TapGestureHandler } from "react-native-gesture-handler";
-import { useChatGPTRespond } from "../../zustand/useChatGPTRespondStore";
+import {
+  UseChatGPTResponse,
+  useChatGPTResponse,
+} from "../../zustand/useChatGPTResponseStore";
 import Spinner from "react-native-loading-spinner-overlay";
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import DatePicker from "react-native-date-picker";
@@ -55,6 +59,8 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { useTrip } from "../../context/personalTripContext";
+import MapPicker from "../../components/MapPicker";
+
 type LocationTabs = {
   id: number;
   text: string;
@@ -80,7 +86,15 @@ function CreateInputTab() {
   }
   /* ---------------------------- tripsContext end ---------------------------- */
 
-  const [budgetDraft, setBudgetDraft] = useState<string>("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const initialRef = useRef(null);
+  const finalRef = useRef(null);
+
+  const [regionString, setRegionString] = useState<string>("");
+
+  const [destinationBuffer, setDestinationBuffer] = useState<string>("");
+
+  const [showBudget, setShowBudget] = useState<string>("");
   const [selectTab, setSelectTab] = useState(0);
   const [loadingScreen, setLoadingScreen] = useState(false);
   const [topOptionValues, setTopOptionValues] = useState<Input>({
@@ -94,7 +108,9 @@ function CreateInputTab() {
     cuisine_type: null,
     activity_type: null,
   });
-  const saveRespond = useChatGPTRespond((store) => store.saveRespond);
+  const saveResponse = useChatGPTResponse(
+    (state: UseChatGPTResponse) => state.saveResponse
+  );
   const router = useRouter();
   const [formStartTime, setFormStartTime] = useState<Date>(new Date());
   const [formEndTime, setFormEndTime] = useState<Date>(new Date());
@@ -143,13 +159,13 @@ function CreateInputTab() {
 
     try {
       const res = JSON.parse(resText);
-      console.log("chatGPT respond: ", res);
-      saveRespond(res);
+      console.log("chatGPT Response: ", res);
+      saveResponse(res);
       setLoadingScreen(false);
       tripsContext.saveLocalTrip(res);
       router.push("/calendarPage");
     } catch {
-      console.log("chatGPT respond text: ", resText);
+      console.log("chatGPT Response text: ", resText);
       setLoadingScreen(false);
     }
 
@@ -201,7 +217,7 @@ function CreateInputTab() {
     EndTime.push({ label: `${h}pm`, value: `${h + 12}:00` });
   }
 
-  function dismissKeyboard() {
+  function touchScreen() {
     Keyboard.dismiss();
   }
 
@@ -218,40 +234,42 @@ function CreateInputTab() {
     return showTime;
   }
 
+  function checkBudgetInput(input: any) {
+    console.log("leave focus: " + topOptionValues.budget);
+
+    if (/^\d+$/.test(input)) {
+      if (input >= 5000) {
+        setTopOption("5000", "budget");
+        setShowBudget("5000");
+      }
+      if (input <= 1000) {
+        setTopOption("1000", "budget");
+        setShowBudget("1000");
+      }
+
+      setTopOption(input, "budget");
+    }
+  }
+
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+
+  const onChange = (event: any, selectedDate: any) => {
+    const currentDate = selectedDate || date;
+    setDate(currentDate);
+  };
+
   function handleIndexChange(value: number) {
     setSelectTab(value);
     setTopOption(String(value + 1), "group_size");
   }
 
-  function budgetDraftOnChange(text: string) {
-    if (/^\d+$/.test(text)) {
-      setBudgetDraft(text);
-    }
-  }
-
-  function budgetDraftOnEndEditing(text: string) {
-    if (text == "") {
-      return;
-    }
-
-    const budget = +text;
-    if (!budget) {
-      return;
-    }
-
-    if (budget >= 5000) {
-      setTopOption("5000", "budget");
-      setBudgetDraft("5000");
-    } else if (budget <= 1000) {
-      setTopOption("1000", "budget");
-      setBudgetDraft("1000");
-    } else {
-      setTopOption(text, "budget");
-    }
+  function handleInput(text: string) {
+    if (/^\d+$/.test(text)) setShowBudget(text);
   }
 
   return (
-    <TapGestureHandler onHandlerStateChange={dismissKeyboard} numberOfTaps={1}>
+    <TapGestureHandler onHandlerStateChange={touchScreen} numberOfTaps={1}>
       <SafeAreaView style={styles.SafeAreaView}>
         <View style={styles.view_bg}>
           <Spinner
@@ -506,12 +524,13 @@ function CreateInputTab() {
 
                 <Input
                   fontSize={15}
-                  value={budgetDraft}
+                  value={showBudget}
                   onEndEditing={(e) => {
-                    budgetDraftOnEndEditing(e.nativeEvent.text);
+                    console.log(e.nativeEvent.text);
+                    checkBudgetInput(e.nativeEvent.text);
                   }}
                   onChangeText={(e) => {
-                    budgetDraftOnChange(e);
+                    handleInput(e);
                   }}
                   placeholder={"Input your budget 1000 - 5000"}
                 />
@@ -526,11 +545,24 @@ function CreateInputTab() {
                   fontSize={15}
                   onEndEditing={(e) => {
                     setTopOption(e.nativeEvent.text, "destination");
-                    console.log();
+                  }}
+                  onChangeText={(e) => {
+                    setDestinationBuffer(e);
                   }}
                   placeholder={"Eg: Japan Tokyo"}
+                  value={destinationBuffer}
                 />
               </Box>
+              <Center>
+                <Button
+                  marginTop={"20px"}
+                  style={styles.Button_planTrip}
+                  onPress={() => setModalVisible(true)}
+                  fontSize={"sm"}
+                >
+                  Pick By Location
+                </Button>
+              </Center>
 
               <Center>
                 <Button
@@ -545,6 +577,37 @@ function CreateInputTab() {
             </ScrollView>
           </Box>
         </View>
+        <Modal
+          isOpen={modalVisible}
+          onClose={() => setModalVisible(false)}
+          initialFocusRef={initialRef}
+          finalFocusRef={finalRef}
+          size={"xl"}
+        >
+          <Modal.Content>
+            <Modal.CloseButton />
+            <Modal.Header>
+              <Box h={300} justifyContent="center" alignItems="center">
+                <MapPicker
+                  defaultLocation={{ latitude: 22.3, longitude: 114.17 }}
+                  setRegionString={setRegionString}
+                ></MapPicker>
+              </Box>
+            </Modal.Header>
+            <Modal.Body>{regionString}</Modal.Body>
+            <Modal.Footer justifyContent={"center"}>
+              <Button
+                onPress={() => {
+                  setTopOption(regionString, "destination");
+                  setDestinationBuffer(regionString);
+                  setModalVisible(false);
+                }}
+              >
+                Save
+              </Button>
+            </Modal.Footer>
+          </Modal.Content>
+        </Modal>
       </SafeAreaView>
     </TapGestureHandler>
   );

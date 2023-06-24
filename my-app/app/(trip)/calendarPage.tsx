@@ -13,10 +13,16 @@ import {
   Button,
 } from "native-base";
 import { TripLocation, sampleTrip } from "../../constants/TripLocation";
-import { useChatGPTRespond } from "../../zustand/useChatGPTRespondStore";
+import {
+  UseChatGPTResponse,
+  useChatGPTResponse,
+} from "../../zustand/useChatGPTResponseStore";
 
 export default function CalendarPage() {
-  const respond = useChatGPTRespond((state: any) => state.respond);
+  const response = useChatGPTResponse(
+    (state: UseChatGPTResponse) => state.response
+  );
+  if (!response) throw new Error("Invalid trip");
   const monthNames = [
     "January",
     "February",
@@ -34,7 +40,7 @@ export default function CalendarPage() {
   const weekDayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const today = new Date();
   const todayWeekStartDate = today.getDate() - today.getDay();
-  const [tripData, setTripData] = useState<TripLocation[]>(respond);
+  const [tripData, setTripData] = useState<TripLocation[]>(response);
   return (
     <NativeBaseProvider>
       <SafeAreaView style={styles.container}>
