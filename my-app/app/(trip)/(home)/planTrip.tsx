@@ -31,7 +31,7 @@ import {
   faTree,
   faUtensils,
 } from "@fortawesome/free-solid-svg-icons";
-import { usePromptStore } from "../../zustand/usePromptStore";
+import { usePromptStore } from "../../../zustand/usePromptStore";
 import {
   color_box_BG,
   color_button_BG,
@@ -39,7 +39,7 @@ import {
   color_icon_border,
   colour_container_bg,
   colour_input_text,
-} from "../../components/css/colors";
+} from "../../../components/css/colors";
 //@ts-ignore
 import { GPT_server } from "@env";
 import { Dropdown } from "react-native-element-dropdown";
@@ -50,7 +50,7 @@ import { TapGestureHandler } from "react-native-gesture-handler";
 import {
   UseChatGPTResponse,
   useChatGPTResponse,
-} from "../../zustand/useChatGPTResponseStore";
+} from "../../../zustand/useChatGPTResponseStore";
 import Spinner from "react-native-loading-spinner-overlay";
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import DatePicker from "react-native-date-picker";
@@ -58,8 +58,8 @@ import DateTimePicker, {
   DateTimePickerAndroid,
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import { useTrip } from "../../context/personalTripContext";
-import MapPicker from "../../components/MapPicker";
+import { useTrip } from "../../../context/personalTripContext";
+import MapPicker from "../../../components/MapPicker";
 
 type LocationTabs = {
   id: number;

@@ -6,13 +6,13 @@ import {
 } from "@react-navigation/drawer";
 import { useColorScheme } from "react-native";
 import PlanTrip from "./planTrip";
-import { useTokenStore } from "../../zustand/useTokenStore";
-import { color_header_backGround } from "../../components/css/colors";
+import { useTokenStore } from "../../../zustand/useTokenStore";
+import { color_header_backGround } from "../../../components/css/colors";
 import Profile from "./profile";
 import React from "react";
 import MyTripPage from "./myTripPage";
-import { deleteStorageValue } from "../../constants/Storage";
-import { TripsProvider } from "../../context/personalTripContext";
+import { deleteStorageValue } from "../../../constants/Storage";
+import { TripsProvider } from "../../../context/personalTripContext";
 import { useRouter } from "expo-router";
 import { DrawerContentComponentProps } from "@react-navigation/drawer/lib/typescript/src/types";
 
@@ -44,7 +44,9 @@ export default function sideNav() {
       <Drawer.Navigator
         useLegacyImplementation
         initialRouteName="planTrip"
-        drawerContent={(props) => <CustomDrawerContent {...props} />}
+        drawerContent={(props: DrawerContentComponentProps) => (
+          <CustomDrawerContent {...props} />
+        )}
       >
         <Drawer.Screen
           name="planTrip"

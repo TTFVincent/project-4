@@ -11,7 +11,7 @@ import {
   Button,
 } from "native-base";
 import { StyleSheet } from "react-native";
-import { colour_container_bg } from "../../components/css/colors";
+import { colour_container_bg } from "../../../components/css/colors";
 import React from "react";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
@@ -25,8 +25,8 @@ const Upload = async () => {
   });
   const pic = FileSystem.documentDirectory + "picture.png";
   FileSystem.copyAsync({
-    from: "../../assets/images/exit.bmp",
-    to: "../../assets/profilePic",
+    from: "../../../assets/images/exit.bmp",
+    to: "../../../assets/profilePic",
   });
 };
 
@@ -39,7 +39,7 @@ export default function Profile() {
             <Image
               alt="Profile Picture"
               size={"100%"}
-              source={require("../../assets/images/exit.bmp")}
+              source={require("../../../assets/images/exit.bmp")}
             />
           </Box>
           {/* <Button onPress={Upload}>Change Picture</Button> */}

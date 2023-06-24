@@ -30,13 +30,12 @@ export default function TabLayout() {
       }}
     >
       <Stack.Screen
-        name="tripRoutePage"
-        options={
-          {
-            // href: isLoginToken ? "/googleMap" : "/",
-          }
-        }
+        name="(home)"
+        options={{
+          headerShown: false,
+        }}
       />
+      <Stack.Screen name="tripRoutePage" />
       <Stack.Screen
         name="calendarPage"
         options={{
