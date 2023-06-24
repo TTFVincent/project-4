@@ -4,10 +4,21 @@ import React from "react";
 export default function sideNav() {
   return (
     <NativeBaseProvider>
-      <Stack>
-        <Stack.Screen name="welcomePage" />
-        <Stack.Screen name="login" />
-        <Stack.Screen name="register" />
+      <Stack
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: "#fff",
+          },
+          headerTitleStyle: {
+            fontFamily: "RobotoMono",
+            fontWeight: "bold",
+          },
+        }}
+      >
+        <Stack.Screen name="welcomePage" options={{ headerShown: false }} />
+        <Stack.Screen name="login" options={{ title: "" }} />
+        <Stack.Screen name="register" options={{ title: "" }} />
+        <Stack.Screen name="test" />
       </Stack>
     </NativeBaseProvider>
   );

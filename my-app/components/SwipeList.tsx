@@ -11,13 +11,14 @@ import {
   VStack,
   Spacer,
 } from "native-base";
-import { MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { Trip } from "../constants/TripLocation";
 import {
   UseChatGPTResponse,
   useChatGPTResponse,
 } from "../zustand/useChatGPTResponseStore";
 import { useRouter } from "expo-router";
+import { RobotoBoldText, RobotoText } from "./StyledText";
 
 export default function BasicSwipeList(props: {
   data: Trip[];
@@ -54,33 +55,30 @@ export default function BasicSwipeList(props: {
 
   const renderItem = (data: ListRenderItemInfo<Trip>) => (
     <Pressable
+      bgColor="#FFFFFF"
       pl="6"
       pr="5"
-      py="2"
-      bgColor="white"
+      py="3"
       onPress={() => onPressRow(data.item)}
     >
-      <HStack alignItems="center" space={3}>
-        <VStack>
-          <Text
-            color="coolGray.800"
-            _dark={{
-              color: "warmGray.50",
-            }}
-            bold
-          >
-            Trip
-          </Text>
-          <Text
-            color="coolGray.600"
-            _dark={{
-              color: "warmGray.200",
-            }}
-          >
-            {data.item.id}
-          </Text>
+      <HStack
+        borderWidth={1}
+        borderColor="#282828"
+        bgColor="#E6E6E6"
+        alignItems="center"
+        justifyContent="space-between"
+        space={3}
+      >
+        <VStack h={60}>
+          <Box ml={3} my="auto">
+            <RobotoBoldText>Trip #{data.item.id}</RobotoBoldText>
+          </Box>
         </VStack>
-        <Spacer />
+        <VStack h={60}>
+          <Box mr={5} my="auto">
+            <FontAwesome size={28} name="angle-right" />
+          </Box>
+        </VStack>
       </HStack>
     </Pressable>
   );
@@ -102,7 +100,12 @@ export default function BasicSwipeList(props: {
       >
         <VStack alignItems="center" space={2}>
           <Icon as={<MaterialIcons name="delete" />} color="white" size="xs" />
-          <Text color="white" fontSize="xs" fontWeight="medium">
+          <Text
+            fontFamily="RobotoMono"
+            color="white"
+            fontSize="xs"
+            fontWeight="medium"
+          >
             Delete
           </Text>
         </VStack>

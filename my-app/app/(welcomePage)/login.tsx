@@ -14,6 +14,10 @@ import {
   Link,
   Image,
   Checkbox,
+  Spacer,
+  ScrollView,
+  KeyboardAvoidingView,
+  ZStack,
 } from "native-base";
 import { useForm } from "react-hook-form";
 //@ts-ignore
@@ -30,9 +34,12 @@ import {
   TouchableWithoutFeedback,
   StyleSheet,
   View,
+  Platform,
 } from "react-native";
 import { setStorageValue } from "../../constants/Storage";
 import { post } from "../../api";
+import { ButtonShadowProps, PrimaryButtonProps } from "../../constants/Button";
+import { RobotoText, RobotoBoldText } from "../../components/StyledText";
 
 type Value = {
   email: string;
@@ -93,103 +100,85 @@ const Login = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Center w="100%">
-        <Box safeArea p="2" py="8" w="90%" maxW="290">
+      <KeyboardAvoidingView
+        flex={1}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <Box safeArea p="2" w="100%" maxW="290">
           <Image
             source={require("../../assets/photos/image5.jpg")}
             height={"40%"}
             mb={3}
           />
 
-          <Center>
-            <Heading
-              size="sm"
-              fontWeight="600"
-              color="coolGray.800"
-              _dark={{
-                color: "warmGray.50",
-              }}
-            >
-              Welcome
-            </Heading>
-          </Center>
+          <RobotoBoldText fontSize={"md"}>
+            Unlock Full Potential!
+          </RobotoBoldText>
 
-          <VStack space={3} mt="5">
+          <VStack mt={2}>
             <FormControl>
-              <FormControl.Label>Email ID</FormControl.Label>
+              <FormControl.Label>
+                <RobotoText>Email ID</RobotoText>
+              </FormControl.Label>
               <Input
                 color={colour_input_text}
                 onChangeText={(event) => updateFormValue(event, "email")}
               />
             </FormControl>
             <FormControl>
-              <FormControl.Label>Password</FormControl.Label>
+              <FormControl.Label>
+                <RobotoText>Password</RobotoText>
+              </FormControl.Label>
               <Input
                 color={colour_input_text}
                 onChangeText={(event) => updateFormValue(event, "password")}
                 type="password"
               />
-              <Box
-                display={"flex"}
-                justifyContent={"space-between"}
-                flexDir={"row"}
-                alignItems={"center"}
-              >
+              <Box>
+                <Link alignSelf="flex-end">
+                  <RobotoText fontSize={"xs"}>Forget Password?</RobotoText>
+                </Link>
+              </Box>
+              <Box>
                 <Checkbox
                   value="true"
                   onChange={(e) => {
                     setRememberMe(e);
                   }}
-                  style={style.checkbox}
                 >
-                  Remeber me
+                  <RobotoText fontSize={"xs"}>Remember me</RobotoText>
                 </Checkbox>
-                <Link
-                  _text={{
-                    fontSize: "xs",
-                    fontWeight: "500",
-                    color: "indigo.500",
-                  }}
-                  alignSelf="flex-end"
-                >
-                  Forget Password?
-                </Link>
               </Box>
             </FormControl>
 
             <View>
-              <Text>{error}</Text>
+              <RobotoText>{error}</RobotoText>
             </View>
-
-            <Button
-              onPress={handleSubmit(onSubmit)}
-              mt="2"
-              colorScheme="indigo"
-            >
-              Sign in
-            </Button>
-            <HStack mt="2" justifyContent="center">
-              <Text
-                fontSize="sm"
-                color="coolGray.600"
-                _dark={{
-                  color: "warmGray.200",
-                }}
+            <ZStack m="auto" w="80%" h="15%" reversed>
+              <Button
+                w="100%"
+                h="95%"
+                onPress={handleSubmit(onSubmit)}
+                {...PrimaryButtonProps}
               >
-                Do not have an account.
-              </Text>
-              <Text
+                <RobotoText>SIGN IN</RobotoText>
+              </Button>
+              <Box {...ButtonShadowProps} w="100%" h="95%" />
+            </ZStack>
+            <HStack mt="2" justifyContent="center">
+              <RobotoText>Do not have an account.</RobotoText>
+              <RobotoText
                 onPress={() => {
                   router.push("/register");
                 }}
                 color={colour_label_text}
               >
                 Sign Up
-              </Text>
+              </RobotoText>
             </HStack>
           </VStack>
         </Box>
-      </Center>
+      </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 };
@@ -203,10 +192,3 @@ export default () => {
     </NativeBaseProvider>
   );
 };
-
-const style = StyleSheet.create({
-  checkbox: {
-    width: 18,
-    height: 18,
-  },
-});

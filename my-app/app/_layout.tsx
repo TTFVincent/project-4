@@ -33,6 +33,8 @@ export const unstable_settings = {
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    RobotoMono: require("../assets/fonts/RobotoMono/static/RobotoMono-Regular.ttf"),
+    RobotoMonoBold: require("../assets/fonts/RobotoMono/static/RobotoMono-Bold.ttf"),
     ...FontAwesome.font,
   });
 
