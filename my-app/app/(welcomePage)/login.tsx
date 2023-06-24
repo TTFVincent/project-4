@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "expo-router";
 import {
   Box,
@@ -14,12 +14,8 @@ import {
   Link,
   Image,
   Checkbox,
-  Spacer,
-  ScrollView,
 } from "native-base";
-import * as bcrypt from "bcryptjs";
 import { useForm } from "react-hook-form";
-import { hashPassword } from "../../components/authentication/hash";
 //@ts-ignore
 import { back_end_server } from "@env";
 import { useTokenStore } from "../../zustand/useTokenStore";

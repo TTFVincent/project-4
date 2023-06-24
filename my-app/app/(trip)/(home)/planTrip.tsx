@@ -72,10 +72,10 @@ type Input = {
   group_size: null | string;
   start_time: null | string;
   end_time: null | string;
-  interests_new: null | string;
+  interests_new: null | string[];
   destination: null | string;
   cuisine_type: null | string;
-  activity_type: null | string;
+  // activity_type: null | string;
 };
 
 function CreateInputTab() {
@@ -106,7 +106,7 @@ function CreateInputTab() {
     interests_new: null,
     destination: null,
     cuisine_type: null,
-    activity_type: null,
+    // activity_type: null,
   });
   const saveResponse = useChatGPTResponse(
     (state: UseChatGPTResponse) => state.saveResponse
@@ -183,18 +183,9 @@ function CreateInputTab() {
     });
   }
 
-  const activityType = [
-    { label: "Out door", value: "Out door" },
-    { label: "Shopping", value: "Shopping" },
-    { label: "NightLife", value: "NightLife" },
-    { label: "Museums", value: "Museums" },
-    { label: "Beach", value: "Beach" },
-  ];
-
   const travelStyle = [
-    { label: "Road trip", value: "Road trip" },
-    { label: "Luxury", value: "Luxury travel" },
-    { label: "Budget", value: "Budget travel" },
+    { label: "Luxury", value: "more luxury and better services" },
+    { label: "Budget", value: "with in a Budget catagories" },
   ];
   const cuisine_type = [
     { label: "Italian cuisine", value: "Italian cuisine" },
@@ -221,19 +212,6 @@ function CreateInputTab() {
     Keyboard.dismiss();
   }
 
-  function toTime() {
-    let showTime = { start_time: "", end_time: "" };
-    let startTime = topOptionValues.start_time;
-    let endTime = topOptionValues.end_time;
-    if (startTime) {
-      showTime["start_time"] = startTime.toString().slice(0, -2);
-    }
-    if (endTime) {
-      showTime["end_time"] = endTime.toString().slice(0, -2);
-    }
-    return showTime;
-  }
-
   function checkBudgetInput(input: any) {
     console.log("leave focus: " + topOptionValues.budget);
 
@@ -252,12 +230,6 @@ function CreateInputTab() {
   }
 
   const [date, setDate] = useState(new Date());
-  const [show, setShow] = useState(false);
-
-  const onChange = (event: any, selectedDate: any) => {
-    const currentDate = selectedDate || date;
-    setDate(currentDate);
-  };
 
   function handleIndexChange(value: number) {
     setSelectTab(value);
@@ -268,6 +240,41 @@ function CreateInputTab() {
     if (/^\d+$/.test(text)) setShowBudget(text);
   }
 
+  function handleInterestButtons(value: string) {
+    if (
+      topOptionValues.interests_new &&
+      !topOptionValues.interests_new.includes(value)
+    ) {
+      console.log("1");
+      setTopOptionValues({
+        ...topOptionValues,
+        interests_new: [...topOptionValues.interests_new, value],
+      });
+    }
+
+    if (topOptionValues.interests_new == null) {
+      console.log("2");
+
+      setTopOptionValues({
+        ...topOptionValues,
+        interests_new: [value],
+      });
+    }
+    if (topOptionValues.interests_new?.includes(value)) {
+      let array: string[] = [];
+      console.log("3");
+      topOptionValues.interests_new.map((e) => {
+        if (value != e) {
+          array.push(e);
+        }
+      });
+      setTopOptionValues({
+        ...topOptionValues,
+        interests_new: [...array],
+      });
+    }
+  }
+  console.log(topOptionValues.interests_new);
   return (
     <TapGestureHandler onHandlerStateChange={touchScreen} numberOfTaps={1}>
       <SafeAreaView style={styles.SafeAreaView}>
@@ -281,15 +288,19 @@ function CreateInputTab() {
             <ScrollView>
               {/* ------------------------------ interests_new tab ------------------------------  */}
               <Box marginTop="20px">
+                <Text marginLeft={"20px"} style={styles.labelText}>
+                  Activities Option
+                </Text>
+
                 <Flex flexDir={"row"} justifyContent={"space-around"}>
                   <Box>
                     <Button
                       style={
-                        topOptionValues.interests_new == "Art"
+                        topOptionValues.interests_new?.includes("Art")
                           ? styles.interestNewButonsSelected
                           : styles.interestNewButons
                       }
-                      onPress={() => setTopOption("Art", "interests_new")}
+                      onPress={() => handleInterestButtons("Art")}
                     >
                       <FontAwesomeIcon
                         color="#195CB2"
@@ -302,11 +313,11 @@ function CreateInputTab() {
                   <Box>
                     <Button
                       style={
-                        topOptionValues.interests_new == "Food"
+                        topOptionValues.interests_new?.includes("Food")
                           ? styles.interestNewButonsSelected
                           : styles.interestNewButons
                       }
-                      onPress={() => setTopOption("Food", "interests_new")}
+                      onPress={() => handleInterestButtons("Food")}
                     >
                       <FontAwesomeIcon
                         color="#195CB2"
@@ -320,11 +331,11 @@ function CreateInputTab() {
                   <Box>
                     <Button
                       style={
-                        topOptionValues.interests_new == "Music"
+                        topOptionValues.interests_new?.includes("Music")
                           ? styles.interestNewButonsSelected
                           : styles.interestNewButons
                       }
-                      onPress={() => setTopOption("Music", "interests_new")}
+                      onPress={() => handleInterestButtons("Music")}
                     >
                       <FontAwesomeIcon
                         color="#195CB2"
@@ -337,11 +348,11 @@ function CreateInputTab() {
                   <Box>
                     <Button
                       style={
-                        topOptionValues.interests_new == "Sport"
+                        topOptionValues.interests_new?.includes("Sport")
                           ? styles.interestNewButonsSelected
                           : styles.interestNewButons
                       }
-                      onPress={() => setTopOption("Sport", "interests_new")}
+                      onPress={() => handleInterestButtons("Sport")}
                     >
                       <FontAwesomeIcon
                         color="#195CB2"
@@ -354,11 +365,11 @@ function CreateInputTab() {
                   <Box>
                     <Button
                       style={
-                        topOptionValues.interests_new == "History"
+                        topOptionValues.interests_new?.includes("History")
                           ? styles.interestNewButonsSelected
                           : styles.interestNewButons
                       }
-                      onPress={() => setTopOption("History", "interests_new")}
+                      onPress={() => handleInterestButtons("History")}
                     >
                       <FontAwesomeIcon
                         color="#195CB2"
@@ -371,11 +382,11 @@ function CreateInputTab() {
                   <Box>
                     <Button
                       style={
-                        topOptionValues.interests_new == "Nature"
+                        topOptionValues.interests_new?.includes("Nature")
                           ? styles.interestNewButonsSelected
                           : styles.interestNewButons
                       }
-                      onPress={() => setTopOption("Nature", "interests_new")}
+                      onPress={() => handleInterestButtons("Nature")}
                     >
                       <FontAwesomeIcon
                         color="#195CB2"
@@ -441,7 +452,7 @@ function CreateInputTab() {
                 />
               </Box>
 
-              {/* ------------------------------ travel Activity tab------------------------------ */}
+              {/* ------------------------------ travel Activity tab------------------------------
               <Box px={"5%"} marginTop="20px" width={"100%"}>
                 <Text style={styles.labelText}>Select your activity type</Text>
                 <Dropdown
@@ -460,7 +471,7 @@ function CreateInputTab() {
                   style={styles.dropdown}
                   maxHeight={500}
                 />
-              </Box>
+              </Box> */}
 
               {/* ------------------------------ Time Picker tab------------------------------ */}
 
