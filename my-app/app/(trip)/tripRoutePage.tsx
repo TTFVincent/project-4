@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Platform } from "react-native";
-import { Text, View } from "../../components/Themed";
+import { View } from "../../components/Themed";
 import { usePromptStore } from "../../zustand/usePromptStore";
 import { colour_container_bg } from "../../components/css/colors";
 import { useRegisterStore } from "../../zustand/useRegisterStore";
