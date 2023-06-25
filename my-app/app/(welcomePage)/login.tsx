@@ -106,16 +106,13 @@ const Login = () => {
       >
         <Box safeArea p="2" w="100%" maxW="290">
           <Image
-            source={require("../../assets/photos/image5.jpg")}
+            source={require("../../assets/photos/Journey-amico.png")}
             height={"40%"}
-            mb={3}
           />
 
-          <RobotoBoldText fontSize={"md"}>
-            Unlock Full Potential!
-          </RobotoBoldText>
+          <RobotoBoldText fontSize={24}>Unlock Full Potential!</RobotoBoldText>
 
-          <VStack mt={2}>
+          <VStack>
             <FormControl>
               <FormControl.Label>
                 <RobotoText>Email</RobotoText>
@@ -158,11 +155,10 @@ const Login = () => {
                 </Checkbox>
               </Box>
             </FormControl>
-
             <View>
               <RobotoText>{error}</RobotoText>
             </View>
-            <ZStack m="auto" w="80%" h="15%" reversed>
+            <ZStack mt={2} mx="auto" w="80%" h="15%" reversed>
               <Button
                 w="100%"
                 h="95%"
@@ -173,7 +169,7 @@ const Login = () => {
               </Button>
               <Box {...ButtonShadowProps} w="100%" h="95%" />
             </ZStack>
-            <HStack mt="2" justifyContent="center">
+            <HStack mt={2} justifyContent="center">
               <RobotoText>Do not have an account.</RobotoText>
               <RobotoText
                 onPress={() => {

@@ -23,30 +23,45 @@ import { StatusBar } from "react-native";
 import { RobotoBoldText, RobotoText } from "../../components/StyledText";
 import {
   ButtonShadowProps,
+  PrimaryButtonProps,
   SecondaryButtonProps,
 } from "../../constants/Button";
 
 export default function welcomePage() {
   const router = useRouter();
   const [images, setImages] = React.useState<string[]>([
-    require("../../assets/photos/image2.jpg"),
-    require("../../assets/photos/image3.jpg"),
-    require("../../assets/photos/image4.jpg"),
+    require("../../assets/photos/hongkong.jpg"),
+    require("../../assets/photos/japan.jpg"),
+    require("../../assets/photos/france.jpg"),
   ]);
 
   return (
     <NativeBaseProvider>
       <View style={style.body}>
         <Center flex={1}>
-          <RobotoBoldText textAlign={"center"} fontSize={"3xl"}>
-            Wanderlust AI
-          </RobotoBoldText>
-
-          <Box w="60%">
-            <RobotoText fontSize={"sm"}>
-              Let AI do the work, so you can enjoy your trip
-            </RobotoText>
-          </Box>
+          <ZStack w="85%" h="12%" reversed>
+            <Box w="100%" h="95%" {...PrimaryButtonProps}>
+              <RobotoBoldText
+                textAlign={"center"}
+                fontSize={30}
+                letterSpacing={-1}
+              >
+                Wanderlust AI
+              </RobotoBoldText>
+              <Box m="auto" w="95%" bg="#030303">
+                <Text
+                  color="#92F938"
+                  fontFamily="RobotoMono"
+                  fontSize={11}
+                  textAlign="center"
+                  letterSpacing={-2}
+                >
+                  Let AI do the work, so you can enjoy your trip
+                </Text>
+              </Box>
+            </Box>
+            <Box {...ButtonShadowProps} w="100%" h="95%" />
+          </ZStack>
 
           <View style={style.slideViewContainer}>
             <SliderBox

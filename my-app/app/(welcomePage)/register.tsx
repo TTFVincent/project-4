@@ -186,7 +186,7 @@ const Register = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Box safeArea p="2" w="100%" maxW="290">
-        <RobotoBoldText fontSize={"md"}>
+        <RobotoBoldText fontSize={24}>
           Your first step towards greatness!
         </RobotoBoldText>
         <VStack space={3} mt="5">
