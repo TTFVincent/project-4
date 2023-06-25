@@ -42,7 +42,7 @@ export default function Profile() {
               source={require("../../../assets/images/exit.bmp")}
             />
           </Box>
-          {/* <Button onPress={Upload}>Change Picture</Button> */}
+          <Button onPress={Upload}>Change Picture</Button>
           <Text style={styles.NameText}>NAME: {}</Text>
 
           <Box style={styles.buttons}>

@@ -1,13 +1,11 @@
-import { Redirect, useRouter } from "expo-router";
-import { NativeBaseProvider, useToken } from "native-base";
-import React, { useEffect, useState } from "react";
+import { Redirect } from "expo-router";
+import { NativeBaseProvider } from "native-base";
+import React, { useEffect } from "react";
 import { getStorageValue } from "../constants/Storage";
 import { useTokenStore } from "../zustand/useTokenStore";
 import { Text } from "react-native";
 
 export default function index() {
-  const router = useRouter();
-
   const tokenState = useTokenStore((store) => store.state);
   const setTokenState = useTokenStore((store) => store.setState);
 
@@ -15,12 +13,8 @@ export default function index() {
     async function loadToken() {
       let token = await getStorageValue("token");
       setTokenState(token);
-      // if (token) {
-      //   router.push("/planTrip");
-      // } else {
-      //   router.push("/welcomePage");
-      // }
     }
+
     loadToken();
   }, []);
 
