@@ -4,6 +4,7 @@ import { StyleSheet, SafeAreaView } from "react-native";
 import WeekView, { WeekViewEvent } from "react-native-week-view";
 import { TripLocation } from "../constants/TripLocation";
 import { useRouter } from "expo-router";
+import { RobotoBoldText, RobotoText } from "./StyledText";
 
 function MyEventComponent({ event }: { event: WeekViewEvent }) {
   const router = useRouter();
@@ -17,12 +18,14 @@ function MyEventComponent({ event }: { event: WeekViewEvent }) {
       flex={1}
     >
       <Box>
-        <Text style={{ fontSize: 12, fontWeight: "bold", color: "#333333" }}>
+        <RobotoBoldText
+          style={{ fontSize: 12, fontWeight: "bold", color: "#333333" }}
+        >
           {event.title}
-        </Text>
-        <Text style={{ fontSize: 10, color: "#333333" }}>
+        </RobotoBoldText>
+        <RobotoText style={{ fontSize: 10, color: "#333333" }}>
           {event.description}
-        </Text>
+        </RobotoText>
       </Box>
     </Pressable>
   );
@@ -95,10 +98,12 @@ const styles = StyleSheet.create({
     height: 0,
   },
   headerText: {
+    fontFamily: "RobotoMono",
     color: "#333333",
     height: 0,
   },
   hourText: {
+    fontFamily: "RobotoMono",
     color: "#333333",
     textAlign: "right",
     marginRight: 30,

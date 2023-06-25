@@ -20,13 +20,16 @@ import {
   Image,
   HStack,
   Center,
+  ZStack,
 } from "native-base";
 import MapViewDirections from "react-native-maps-directions";
 import { TripLocation } from "../constants/TripLocation";
 import { env } from "../config/env";
 import { globalStyles } from "../config/style";
 import { getLocationImage } from "./locationImage";
-import Geocoder from "react-native-geocoding";
+import { WebView } from "react-native-webview";
+import { RobotoBoldText } from "./StyledText";
+import { ButtonShadowProps } from "../constants/Button";
 
 const image = require("../assets/images/favicon.png");
 
@@ -93,35 +96,58 @@ export default function Map(props: {
           >
             <Callout tooltip>
               <NativeBaseProvider>
-                <Center
-                  bg="#F0F0F0"
-                  borderRadius={10}
-                  p={2}
-                  borderWidth={2}
-                  borderColor={"#EBEDF1"}
-                >
+                <Center bg="#E5F9D3" p={2} borderRadius={5}>
                   {locationPhotos[i] && (
-                    <HStack w={"100%"} space={1} justifyContent="space-evenly">
+                    //     <ZStack m="auto" w="80%" h="15%" reversed>
+                    //   <Button
+                    //     w="100%"
+                    //     h="95%"
+                    //     onPress={handleSubmit(onSubmit)}
+                    //     {...PrimaryButtonProps}
+                    //   >
+                    //     <RobotoText>SIGN IN</RobotoText>
+                    //   </Button>
+                    //   <Box {...ButtonShadowProps} w="100%" h="95%" />
+                    // </ZStack>
+                    <HStack w={"100%"} space={2} justifyContent="space-evenly">
                       {locationPhotos[i].map((locationPhotoURI, j) => {
-                        return (
-                          <Image
-                            borderRadius={20}
-                            key={j}
-                            source={{
-                              uri: locationPhotoURI,
-                              headers: {
-                                Accept: "*/*",
-                              },
-                            }}
-                            alt={`${value.location} ${j}`}
-                            style={{ width: 100, height: 100 }}
-                            resizeMode={"cover"}
-                          ></Image>
+                        return Platform.OS === "android" ? (
+                          <ZStack w={100} h={100} reversed>
+                            <Box w="100%" h="95%">
+                              <WebView
+                                key={j}
+                                style={{
+                                  height: 100,
+                                  resizeMode: "cover",
+                                  flex: 1,
+                                }}
+                                alt={`${value.location} ${j}`}
+                                source={{
+                                  uri: locationPhotoURI,
+                                }}
+                                scalesPageToFit={true}
+                              />
+                            </Box>
+                            <Box {...ButtonShadowProps} w="100%" h="95%" />
+                          </ZStack>
+                        ) : (
+                          <ZStack w={100} h={100} reversed>
+                            <Image
+                              w="100%"
+                              h="95%"
+                              key={j}
+                              source={{
+                                uri: locationPhotoURI,
+                              }}
+                              alt={`${value.location} ${j}`}
+                            />
+                            <Box {...ButtonShadowProps} w="100%" h="95%" />
+                          </ZStack>
                         );
                       })}
                     </HStack>
                   )}
-                  <Text>{value.location}</Text>
+                  <RobotoBoldText>{value.location}</RobotoBoldText>
                 </Center>
               </NativeBaseProvider>
             </Callout>

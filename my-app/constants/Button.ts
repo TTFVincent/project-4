@@ -12,6 +12,13 @@ export const SecondaryButtonProps = {
   borderRadius: 0,
 };
 
+export const TernaryButtonProps = {
+  bgColor: "#EBEDF1",
+  borderWidth: 1,
+  borderColor: "#030303",
+  borderRadius: 0,
+};
+
 export const ButtonShadowProps = {
   bgColor: "#333333",
   mt: "1",

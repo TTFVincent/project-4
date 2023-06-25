@@ -90,7 +90,7 @@ export default function sideNav() {
             },
             headerShown: true,
             headerTitleAlign: "center",
-            title: "MyTrip",
+            title: "My Trips",
           }}
         />
       </Drawer.Navigator>

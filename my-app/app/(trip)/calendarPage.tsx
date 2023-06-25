@@ -11,12 +11,19 @@ import {
   VStack,
   HStack,
   Button,
+  ZStack,
 } from "native-base";
 import { TripLocation, sampleTrip } from "../../constants/TripLocation";
 import {
   UseChatGPTResponse,
   useChatGPTResponse,
 } from "../../zustand/useChatGPTResponseStore";
+import { RobotoText } from "../../components/StyledText";
+import {
+  ButtonShadowProps,
+  PrimaryButtonProps,
+  TernaryButtonProps,
+} from "../../constants/Button";
 
 export default function CalendarPage() {
   const response = useChatGPTResponse(
@@ -52,9 +59,9 @@ export default function CalendarPage() {
           style={styles.header}
         >
           <Box pt="2" pl="10" w="100%" h="50%" bg="white">
-            <Text fontSize="24" color="#333333">
+            <RobotoText fontSize="24">
               {`${monthNames[today.getMonth()]} ${today.getDate()}`}
-            </Text>
+            </RobotoText>
           </Box>
           {/* <HStack w="90%" h="20%" bg="white" justifyContent="space-between">
             <DatePickButton scale="Day" />
@@ -67,6 +74,7 @@ export default function CalendarPage() {
                 const date = todayWeekStartDate + i;
                 return (
                   <WeekDayButton
+                    key={i}
                     weekDay={weekDay}
                     date={`${date}`}
                     active={date === today.getDate()}
@@ -100,22 +108,26 @@ function WeekDayButton(props: {
   active: boolean;
 }) {
   return (
-    <Button
-      p={0}
-      w="12%"
-      h="100%"
-      shadow={props.active ? 0 : 3}
-      bg={props.active ? "#92F938" : "#EBEDF1"}
-      flexDirection={"column"}
-      alignItems={"center"}
-    >
-      <Text fontSize="12" color="#333333" textAlign={"center"}>
-        {props.weekDay}
-      </Text>
-      <Text fontSize="14" color="#333333" textAlign={"center"}>
-        {props.date}
-      </Text>
-    </Button>
+    <ZStack w="12%" h={16} reversed>
+      <Button
+        p={0}
+        w="100%"
+        h="95%"
+        {...(props.active
+          ? { ...PrimaryButtonProps }
+          : { ...TernaryButtonProps })}
+        flexDirection={"column"}
+        alignItems={"center"}
+      >
+        <RobotoText fontSize="12" color="#333333" textAlign={"center"}>
+          {props.weekDay}
+        </RobotoText>
+        <RobotoText fontSize="14" color="#333333" textAlign={"center"}>
+          {props.date}
+        </RobotoText>
+      </Button>
+      <Box {...ButtonShadowProps} w="100%" h="95%" />
+    </ZStack>
   );
 }
 

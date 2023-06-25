@@ -27,6 +27,9 @@ export default function TabLayout() {
           fontFamily: "RobotoMono",
           fontWeight: "bold",
         },
+        headerBackTitleStyle: {
+          fontFamily: "RobotoMono",
+        },
         headerTintColor: "#333333",
       }}
     >
