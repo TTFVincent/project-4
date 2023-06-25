@@ -21,6 +21,7 @@ import {
   Pressable,
   Modal,
   KeyboardAvoidingView,
+  ZStack,
 } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -31,6 +32,9 @@ import {
   faLandmark,
   faTree,
   faUtensils,
+  IconDefinition,
+  faMapLocationDot,
+  faPlaneDeparture,
 } from "@fortawesome/free-solid-svg-icons";
 import { usePromptStore } from "../../../zustand/usePromptStore";
 import {
@@ -61,6 +65,13 @@ import DateTimePicker, {
 } from "@react-native-community/datetimepicker";
 import { useTrip } from "../../../context/personalTripContext";
 import MapPicker from "../../../components/MapPicker";
+import { RobotoBoldText, RobotoText } from "../../../components/StyledText";
+import {
+  ButtonShadowProps,
+  PrimaryButtonProps,
+  SecondaryButtonProps,
+  TernaryButtonProps,
+} from "../../../constants/Button";
 
 type LocationTabs = {
   id: number;
@@ -276,6 +287,26 @@ function CreateInputTab() {
     }
   }
   console.log(topOptionValues.interests_new);
+
+  function ActivityButton(props: { activity: string; icon: IconDefinition }) {
+    return (
+      <Center w="15%">
+        <Button
+          w="90%"
+          {...(topOptionValues.interests_new?.includes(props.activity)
+            ? { ...TernaryButtonProps }
+            : { ...SecondaryButtonProps })}
+          onPress={() => handleInterestButtons(props.activity)}
+        >
+          <FontAwesomeIcon color="#030303" size={25} icon={props.icon} />
+        </Button>
+        <RobotoText fontSize="10" textAlign={"center"}>
+          {props.activity}
+        </RobotoText>
+      </Center>
+    );
+  }
+  //faPalette
   return (
     // <TapGestureHandler onHandlerStateChange={touchScreen} numberOfTaps={1}>
     <KeyboardAvoidingView
@@ -284,134 +315,43 @@ function CreateInputTab() {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <SafeAreaView style={styles.SafeAreaView}>
-          <View style={styles.view_bg}>
+          <Center style={styles.view_bg}>
             <Spinner
               visible={loadingScreen}
               textContent={"Loading..."}
               textStyle={styles.spinnerTextStyle}
             />
-            <Box style={styles.topContainer}>
+            <Box w="90%" style={styles.topContainer}>
               <ScrollView>
                 <View onStartShouldSetResponder={() => true}>
                   {/* ------------------------------ interests_new tab ------------------------------  */}
                   <Box marginTop="20px">
-                    <Text marginLeft={"20px"} style={styles.labelText}>
-                      Activities Option
-                    </Text>
+                    <RobotoBoldText mb={2}>Activities Option</RobotoBoldText>
 
-                    <Flex flexDir={"row"} justifyContent={"space-around"}>
-                      <Box>
-                        <Button
-                          style={
-                            topOptionValues.interests_new?.includes("Art")
-                              ? styles.interestNewButonsSelected
-                              : styles.interestNewButons
-                          }
-                          onPress={() => handleInterestButtons("Art")}
-                        >
-                          <FontAwesomeIcon
-                            color="#195CB2"
-                            size={25}
-                            icon={faPalette}
-                          />
-                        </Button>
-                        <Text textAlign={"center"}>Art</Text>
-                      </Box>
-                      <Box>
-                        <Button
-                          style={
-                            topOptionValues.interests_new?.includes("Food")
-                              ? styles.interestNewButonsSelected
-                              : styles.interestNewButons
-                          }
-                          onPress={() => handleInterestButtons("Food")}
-                        >
-                          <FontAwesomeIcon
-                            color="#195CB2"
-                            size={25}
-                            icon={faUtensils}
-                          />
-                        </Button>
-                        <Text textAlign={"center"}>Food</Text>
-                      </Box>
-
-                      <Box>
-                        <Button
-                          style={
-                            topOptionValues.interests_new?.includes("Music")
-                              ? styles.interestNewButonsSelected
-                              : styles.interestNewButons
-                          }
-                          onPress={() => handleInterestButtons("Music")}
-                        >
-                          <FontAwesomeIcon
-                            color="#195CB2"
-                            size={25}
-                            icon={faMusic}
-                          />
-                        </Button>
-                        <Text textAlign={"center"}>Music</Text>
-                      </Box>
-                      <Box>
-                        <Button
-                          style={
-                            topOptionValues.interests_new?.includes("Sport")
-                              ? styles.interestNewButonsSelected
-                              : styles.interestNewButons
-                          }
-                          onPress={() => handleInterestButtons("Sport")}
-                        >
-                          <FontAwesomeIcon
-                            color="#195CB2"
-                            size={25}
-                            icon={faBaseball}
-                          />
-                        </Button>
-                        <Text textAlign={"center"}>Sport</Text>
-                      </Box>
-                      <Box>
-                        <Button
-                          style={
-                            topOptionValues.interests_new?.includes("History")
-                              ? styles.interestNewButonsSelected
-                              : styles.interestNewButons
-                          }
-                          onPress={() => handleInterestButtons("History")}
-                        >
-                          <FontAwesomeIcon
-                            color="#195CB2"
-                            size={25}
-                            icon={faLandmark}
-                          />
-                        </Button>
-                        <Text textAlign={"center"}>History</Text>
-                      </Box>
-                      <Box>
-                        <Button
-                          style={
-                            topOptionValues.interests_new?.includes("Nature")
-                              ? styles.interestNewButonsSelected
-                              : styles.interestNewButons
-                          }
-                          onPress={() => handleInterestButtons("Nature")}
-                        >
-                          <FontAwesomeIcon
-                            color="#195CB2"
-                            size={25}
-                            icon={faTree}
-                          />
-                        </Button>
-                        <Text textAlign={"center"}>Nature</Text>
-                      </Box>
-                    </Flex>
+                    <HStack justifyContent={"space-around"}>
+                      <ActivityButton activity="Art" icon={faPalette} />
+                      <ActivityButton activity="Food" icon={faUtensils} />
+                      <ActivityButton activity="Music" icon={faMusic} />
+                      <ActivityButton activity="Sport" icon={faBaseball} />
+                      <ActivityButton activity="History" icon={faLandmark} />
+                      <ActivityButton activity="Nature" icon={faTree} />
+                    </HStack>
                   </Box>
 
                   {/* ------------------------------ number of people tab ------------------------------  */}
-                  <Box marginTop="20px" marginX="20px">
-                    <Text style={styles.labelText}>
+                  <Box marginTop="20px">
+                    <RobotoBoldText mb={2}>
                       Select number of people
-                    </Text>
+                    </RobotoBoldText>
                     <SegmentedControlTab
+                      borderRadius={0}
+                      tabsContainerStyle={styles.tabsContainerStyle}
+                      tabStyle={styles.tabStyle}
+                      firstTabStyle={styles.firstTabStyle}
+                      lastTabStyle={styles.lastTabStyle}
+                      tabTextStyle={styles.tabTextStyle}
+                      activeTabStyle={styles.activeTabStyle}
+                      activeTabTextStyle={styles.activeTabTextStyle}
                       values={["1", "2", "3", "4", "5"]}
                       selectedIndex={selectTab}
                       onTabPress={(e) => {
@@ -421,10 +361,10 @@ function CreateInputTab() {
                   </Box>
 
                   {/* ------------------------------ travel Style tab------------------------------ */}
-                  <Box px={"5%"} marginTop="20px" width={"100%"}>
-                    <Text style={styles.labelText}>
+                  <Box marginTop="20px" width={"100%"}>
+                    <RobotoBoldText mb={2}>
                       Select your travel style
-                    </Text>
+                    </RobotoBoldText>
                     <Dropdown
                       placeholder={
                         topOptionValues.travel_style
@@ -443,10 +383,10 @@ function CreateInputTab() {
                   </Box>
 
                   {/* ------------------------------ travel Cuisine tab------------------------------ */}
-                  <Box px={"5%"} marginTop="20px" width={"100%"}>
-                    <Text style={styles.labelText}>
+                  <Box marginTop="20px" width={"100%"}>
+                    <RobotoBoldText mb={2}>
                       Select your cuisine type
-                    </Text>
+                    </RobotoBoldText>
                     <Dropdown
                       placeholderStyle={styles.dropdown_placeHolder}
                       placeholder={
@@ -491,7 +431,6 @@ function CreateInputTab() {
                   {/* ------------------------------ Time Picker tab------------------------------ */}
 
                   <Box
-                    px={"5%"}
                     marginTop="20px"
                     width={"100%"}
                     display={"flex"}
@@ -499,7 +438,7 @@ function CreateInputTab() {
                     justifyContent={"space-around"}
                   >
                     <Center>
-                      <Text style={styles.labelText}>Starting time type</Text>
+                      <RobotoBoldText mb={2}>Starting time</RobotoBoldText>
                       {Platform.OS === "android" && (
                         <Pressable
                           onPress={() => {
@@ -510,14 +449,14 @@ function CreateInputTab() {
                           }}
                         >
                           <Box style={styles.timeButtons}>
-                            <Text
+                            <RobotoText
                               fontSize={"3xl"}
                               style={styles.timeTextDisplay}
                             >
                               {topOptionValues.start_time
                                 ? topOptionValues.start_time
                                 : "00:00"}
-                            </Text>
+                            </RobotoText>
                           </Box>
                         </Pressable>
                       )}
@@ -526,7 +465,7 @@ function CreateInputTab() {
                       )}
                     </Center>
                     <Center>
-                      <Text style={styles.labelText}> Ending time type</Text>
+                      <RobotoBoldText mb={2}>Ending time</RobotoBoldText>
                       {Platform.OS === "android" && (
                         <Pressable
                           onPress={() => {
@@ -553,11 +492,13 @@ function CreateInputTab() {
                   </Box>
 
                   {/* ------------------------------- budget tab ------------------------------- */}
-                  <Box marginX="20px" marginTop="20px">
-                    <Text style={styles.labelText}>Input your budget</Text>
+                  <Box marginTop="20px">
+                    <RobotoBoldText mb={2}>Input your budget</RobotoBoldText>
 
                     <Input
-                      fontSize={15}
+                      fontSize={12}
+                      fontFamily="RobotoMono"
+                      borderRadius={0}
                       value={showBudget}
                       onEndEditing={(e) => {
                         console.log(e.nativeEvent.text);
@@ -571,12 +512,14 @@ function CreateInputTab() {
                   </Box>
 
                   {/* ------------------------------- Destination tab ------------------------------- */}
-                  <Box marginX="20px" marginTop="20px">
-                    <Text style={styles.labelText}>
+                  <Box marginTop="20px">
+                    <RobotoBoldText mb={2}>
                       Input the country and the city
-                    </Text>
+                    </RobotoBoldText>
                     <Input
-                      fontSize={15}
+                      fontSize={12}
+                      fontFamily="RobotoMono"
+                      borderRadius={0}
                       onEndEditing={(e) => {
                         setTopOption(e.nativeEvent.text, "destination");
                       }}
@@ -585,33 +528,42 @@ function CreateInputTab() {
                       }}
                       placeholder={"Eg: Japan Tokyo"}
                       value={destinationBuffer}
+                      InputRightElement={
+                        <Pressable mr={3} onPress={() => setModalVisible(true)}>
+                          <FontAwesomeIcon
+                            color="#030303"
+                            size={25}
+                            icon={faMapLocationDot}
+                          />
+                        </Pressable>
+                      }
                     />
                   </Box>
-                  <Center>
-                    <Button
-                      marginTop={"20px"}
-                      style={styles.Button_planTrip}
-                      onPress={() => setModalVisible(true)}
-                      fontSize={"sm"}
-                    >
-                      Pick By Location
-                    </Button>
-                  </Center>
-
-                  <Center>
-                    <Button
-                      marginTop={"20px"}
-                      style={styles.Button_planTrip}
-                      onPress={async () => onSubmit()}
-                      fontSize={"sm"}
-                    >
-                      Plan Trip
-                    </Button>
+                  <Center m={10}>
+                    <ZStack w="80%" h="12" reversed>
+                      <Button
+                        p={0}
+                        w="100%"
+                        h="95%"
+                        {...PrimaryButtonProps}
+                        onPress={async () => onSubmit()}
+                      >
+                        <RobotoBoldText fontSize={20}>
+                          {"EUREKA! "}
+                          <FontAwesomeIcon
+                            color="#030303"
+                            size={25}
+                            icon={faPlaneDeparture}
+                          />
+                        </RobotoBoldText>
+                      </Button>
+                      <Box {...ButtonShadowProps} w="100%" h="95%" />
+                    </ZStack>
                   </Center>
                 </View>
               </ScrollView>
             </Box>
-          </View>
+          </Center>
           <Modal
             isOpen={modalVisible}
             onClose={() => setModalVisible(false)}
@@ -659,7 +611,9 @@ export default function PlanTrip() {
 }
 
 const styles = StyleSheet.create({
-  timeTextDisplay: {},
+  timeTextDisplay: {
+    fontFamily: "RobotoMono",
+  },
   timeButtons: {
     width: 100,
     height: 50,
@@ -691,19 +645,13 @@ const styles = StyleSheet.create({
     color: "#",
   },
   dropdown: {
-    backgroundColor: "white",
-    borderRadius: 15,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 5,
-    height: 40,
+    backgroundColor: "#E6E6E6",
+    borderWidth: 1,
+    borderColor: "#030303",
   },
   dropdown_placeHolder: {
+    fontSize: 12,
+    fontFamily: "RobotoMono",
     textAlign: "center",
   },
   topContainer: {
@@ -717,5 +665,47 @@ const styles = StyleSheet.create({
     height: 50,
     width: 200,
     borderRadius: 20,
+  },
+  tabsContainerStyle: {
+    borderColor: "#030303",
+    //custom styles
+  },
+  tabStyle: {
+    borderColor: "#030303",
+    backgroundColor: "#ffffff",
+    //custom styles
+  },
+  firstTabStyle: {
+    //custom styles
+  },
+  lastTabStyle: {
+    //custom styles
+  },
+  tabTextStyle: {
+    fontFamily: "RobotoMono",
+    color: "#030303",
+    //custom styles
+  },
+  activeTabStyle: {
+    borderColor: "#030303",
+    backgroundColor: "#e6e6e6",
+    //custom styles
+  },
+  activeTabTextStyle: {
+    fontFamily: "RobotoMono",
+    color: "#030303",
+    //custom styles
+  },
+  tabBadgeContainerStyle: {
+    //custom styles
+  },
+  activeTabBadgeContainerStyle: {
+    //custom styles
+  },
+  tabBadgeStyle: {
+    //custom styles
+  },
+  activeTabBadgeStyle: {
+    //custom styles
   },
 });

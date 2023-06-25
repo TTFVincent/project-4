@@ -60,11 +60,16 @@ export default function MapPicker(props: {
     <MapView
       style={styles.mapContainer}
       provider={PROVIDER_GOOGLE}
-      region={{
+      initialRegion={{
         ...props.defaultLocation,
-        latitudeDelta: 0.5,
-        longitudeDelta: 0.5,
+        latitudeDelta: 0.05,
+        longitudeDelta: 0.05,
       }}
+      // region={{
+      //   ...props.defaultLocation,
+      //   latitudeDelta: 0.005,
+      //   longitudeDelta: 0.005,
+      // }}
       onRegionChange={(region) =>
         setMarkerCoordinates({
           latitude: region.latitude,

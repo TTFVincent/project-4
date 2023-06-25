@@ -11,7 +11,7 @@ import {
   Button,
 } from "native-base";
 import { StyleSheet } from "react-native";
-import { colour_container_bg } from "../../../components/css/colors";
+import { colour_container_bg } from "./css/colors";
 import React from "react";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";

@@ -19,7 +19,6 @@ export default function TabLayout() {
     <Stack
       initialRouteName="calendarPage"
       screenOptions={{
-        title: "Your Trip",
         headerStyle: {
           backgroundColor: "#fff",
         },
@@ -39,10 +38,26 @@ export default function TabLayout() {
           headerShown: false,
         }}
       />
-      <Stack.Screen name="tripRoutePage" />
+      <Stack.Screen
+        name="tripRoutePage"
+        options={{
+          title: "Route",
+          // href: isLoginToken ? "/googleMap" : "/",
+          headerRight: () => (
+            <Pressable onPress={() => router.push("/tripRoutePage")}>
+              <FontAwesome
+                size={28}
+                style={{ marginBottom: 0, marginEnd: 5 }}
+                name="map"
+              />
+            </Pressable>
+          ),
+        }}
+      />
       <Stack.Screen
         name="calendarPage"
         options={{
+          title: "Your Trip",
           // href: isLoginToken ? "/googleMap" : "/",
           headerRight: () => (
             <Pressable onPress={() => router.push("/tripRoutePage")}>

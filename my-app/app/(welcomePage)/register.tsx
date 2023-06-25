@@ -83,6 +83,10 @@ const Register = () => {
             <RobotoText>Password</RobotoText>
           </FormControl.Label>
           <Input
+            fontSize={12}
+            fontFamily="RobotoMono"
+            borderRadius={0}
+            placeholder="Enter your password"
             onChangeText={(value: any) => {
               formInfo.current.password = value;
             }}
@@ -95,6 +99,10 @@ const Register = () => {
             <RobotoText>Confirm Password</RobotoText>
           </FormControl.Label>
           <Input
+            fontSize={12}
+            fontFamily="RobotoMono"
+            placeholder="Enter your password again"
+            borderRadius={0}
             onChangeText={(value: any) => {
               formInfo.current.Confirm_password = value;
             }}
@@ -110,6 +118,10 @@ const Register = () => {
             <RobotoText>Password</RobotoText>
           </FormControl.Label>
           <Input
+            fontSize={12}
+            fontFamily="RobotoMono"
+            placeholder="Enter your password"
+            borderRadius={0}
             isRequired={true}
             onChangeText={(value: any) => {
               formInfo.current.password = value;
@@ -123,6 +135,10 @@ const Register = () => {
             <RobotoText>Confirm Password</RobotoText>
           </FormControl.Label>
           <Input
+            fontSize={12}
+            fontFamily="RobotoMono"
+            placeholder="Enter your password again"
+            borderRadius={0}
             isRequired={true}
             onChangeText={(value: any) => {
               formInfo.current.Confirm_password = value;
@@ -130,7 +146,7 @@ const Register = () => {
             color={colour_input_text}
             type="password"
           />
-          <Text>password is not match</Text>
+          <RobotoText>password is not match</RobotoText>
         </FormControl>
       </>
     );
@@ -179,6 +195,10 @@ const Register = () => {
               <RobotoText>User Name</RobotoText>
             </FormControl.Label>
             <Input
+              fontSize={12}
+              fontFamily="RobotoMono"
+              placeholder="Enter your name"
+              borderRadius={0}
               isRequired={true}
               onChangeText={(value: any) => {
                 formInfo.current.user_name = value;
@@ -192,6 +212,10 @@ const Register = () => {
               <RobotoText>Email</RobotoText>
             </FormControl.Label>
             <Input
+              fontSize={12}
+              fontFamily="RobotoMono"
+              placeholder="Enter your email"
+              borderRadius={0}
               isRequired={true}
               onChangeText={(value: any) => {
                 formInfo.current.email = value;
@@ -202,7 +226,7 @@ const Register = () => {
 
           <ShowPasswordCheck />
 
-          <ZStack mt={3} m="auto" w="80%" h="14%" reversed>
+          <ZStack mt={4} m="auto" w="80%" h="14%" reversed>
             <Button w="100%" h="95%" onPress={onSubmit} {...PrimaryButtonProps}>
               <RobotoText>SIGN UP</RobotoText>
             </Button>

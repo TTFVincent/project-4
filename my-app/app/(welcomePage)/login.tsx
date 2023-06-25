@@ -118,9 +118,13 @@ const Login = () => {
           <VStack mt={2}>
             <FormControl>
               <FormControl.Label>
-                <RobotoText>Email ID</RobotoText>
+                <RobotoText>Email</RobotoText>
               </FormControl.Label>
               <Input
+                fontSize={12}
+                fontFamily="RobotoMono"
+                borderRadius={0}
+                placeholder="Enter your email"
                 color={colour_input_text}
                 onChangeText={(event) => updateFormValue(event, "email")}
               />
@@ -130,13 +134,17 @@ const Login = () => {
                 <RobotoText>Password</RobotoText>
               </FormControl.Label>
               <Input
+                fontSize={12}
+                fontFamily="RobotoMono"
+                borderRadius={0}
+                placeholder="Enter your password"
                 color={colour_input_text}
                 onChangeText={(event) => updateFormValue(event, "password")}
                 type="password"
               />
               <Box>
                 <Link alignSelf="flex-end">
-                  <RobotoText fontSize={"xs"}>Forget Password?</RobotoText>
+                  <RobotoText fontSize={12}>Forget Password?</RobotoText>
                 </Link>
               </Box>
               <Box>
@@ -146,7 +154,7 @@ const Login = () => {
                     setRememberMe(e);
                   }}
                 >
-                  <RobotoText fontSize={"xs"}>Remember me</RobotoText>
+                  <RobotoText fontSize={12}>Remember me</RobotoText>
                 </Checkbox>
               </Box>
             </FormControl>

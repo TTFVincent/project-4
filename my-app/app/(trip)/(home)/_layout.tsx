@@ -8,7 +8,7 @@ import { useColorScheme } from "react-native";
 import PlanTrip from "./planTrip";
 import { useTokenStore } from "../../../zustand/useTokenStore";
 import { color_header_backGround } from "../../../components/css/colors";
-import Profile from "./profile";
+import Profile from "../../../components/profile";
 import React from "react";
 import MyTripPage from "./myTripPage";
 import { deleteStorageValue } from "../../../constants/Storage";
@@ -63,7 +63,7 @@ export default function sideNav() {
             title: "Plan Trip",
           }}
         />
-        <Drawer.Screen
+        {/* <Drawer.Screen
           name="Profile"
           component={Profile}
           options={{
@@ -77,7 +77,7 @@ export default function sideNav() {
             headerTitleAlign: "center",
             title: "Profile",
           }}
-        />
+        /> */}
         <Drawer.Screen
           name="myTripPage"
           component={MyTripPage}
