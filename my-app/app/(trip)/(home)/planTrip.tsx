@@ -338,11 +338,11 @@ function CreateInputTab() {
                       <Box>
                         <Button
                           style={
-                            topOptionValues.interests_new == "Music"
+                            topOptionValues.interests_new?.includes("Music")
                               ? styles.interestNewButonsSelected
                               : styles.interestNewButons
                           }
-                          onPress={() => setTopOption("Music", "interests_new")}
+                          onPress={() => handleInterestButtons("Music")}
                         >
                           <FontAwesomeIcon
                             color="#195CB2"
@@ -355,11 +355,11 @@ function CreateInputTab() {
                       <Box>
                         <Button
                           style={
-                            topOptionValues.interests_new == "Sport"
+                            topOptionValues.interests_new?.includes("Sport")
                               ? styles.interestNewButonsSelected
                               : styles.interestNewButons
                           }
-                          onPress={() => setTopOption("Sport", "interests_new")}
+                          onPress={() => handleInterestButtons("Sport")}
                         >
                           <FontAwesomeIcon
                             color="#195CB2"
@@ -372,13 +372,11 @@ function CreateInputTab() {
                       <Box>
                         <Button
                           style={
-                            topOptionValues.interests_new == "History"
+                            topOptionValues.interests_new?.includes("History")
                               ? styles.interestNewButonsSelected
                               : styles.interestNewButons
                           }
-                          onPress={() =>
-                            setTopOption("History", "interests_new")
-                          }
+                          onPress={() => handleInterestButtons("History")}
                         >
                           <FontAwesomeIcon
                             color="#195CB2"
@@ -391,13 +389,11 @@ function CreateInputTab() {
                       <Box>
                         <Button
                           style={
-                            topOptionValues.interests_new == "Nature"
+                            topOptionValues.interests_new?.includes("Nature")
                               ? styles.interestNewButonsSelected
                               : styles.interestNewButons
                           }
-                          onPress={() =>
-                            setTopOption("Nature", "interests_new")
-                          }
+                          onPress={() => handleInterestButtons("Nature")}
                         >
                           <FontAwesomeIcon
                             color="#195CB2"
